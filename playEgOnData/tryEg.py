@@ -14,15 +14,10 @@ def buildAsRelGraph(ifileName) -> eg.Graph:
     return G
 
 
-
-
-
-
-
 if __name__ == '__main__':
     # G = eg.Graph()
     # G.add_edges([(5,6),(7,8)])
-    # print(G.nodes)
+    # ofile.write(G.nodes)
     # G.edges
     ifileNames = [
         'dataCAIDA/AS_relationships/raw/20230101.as-rel.txt',
@@ -30,16 +25,28 @@ if __name__ == '__main__':
         'dataCAIDA/AS_relationships/raw/20180701.as-rel.txt',
         'dataCAIDA/AS_relationships/raw/20110401.as-rel.txt'
     ]
+    ofile = open('result','w')
     listG = []
     listNodes = []
+    # basic property of each G
     for fn in ifileNames:
         G = buildAsRelGraph(fn)
-        listNodes.append(G.nodes)
-        # print(G.size())
-        print('size',len(G.nodes))
+        # print((list((G.degree()).values()))[:100])
+        # break
+
         listG.append(G)
+        listNodes.append(G.nodes)
+        # ofile.write(G.size())
+        ofile.write('size: '+str(len(G.nodes))+'\n')
+        ofile.write('number of connected comp:'+str(eg.number_connected_components(G))+'\n')
+        ofile.write('average degree:'+str(sum(G.degree())/len(G.degree()))+'\n')
+    # node (AS) number fluctuation between adjacent G
     for i in range(len(listNodes)-1):
-        print(str(i)+'-'+str(i+1)+str(len(set(listNodes[i])-set(listNodes[i+1]))))
-        print(str(i+1)+'-'+str(i)+str(len(set(listNodes[i+1])-set(listNodes[i]))))
+        ofile.write(str(i)+'-'+str(i+1)+' difference:  '+str(len(set(listNodes[i])-set(listNodes[i+1])))+'\n')
+        ofile.write(str(i+1)+'-'+str(i)+' difference:  '+str(len(set(listNodes[i+1])-set(listNodes[i])))+'\n')
+    # max ASN (to roughly check the change)
+    for i in range(len(listNodes)):
+        ofile.write('max ASN in '+str(i)+': '+str(max(listNodes[i]))+'\n')
+
     
     
