@@ -10,7 +10,10 @@ def buildAsRelGraph(ifileName) -> eg.Graph:
         if line[0] == '#': # comment
             continue
         listLine = line.split('|')  # ASN|ASN|type
-        G.add_edge(int(listLine[0]),int(listLine[1]),edge_attr={'type':int(listLine[2])})
+        type_edge = int(listLine[2])
+        G.add_edge(int(listLine[0]),int(listLine[1]),edge_attr={'type':type_edge})
+        if type_edge == 0: # peer edge
+            G.add_edge(int(listLine[1]),int(listLine[0]),edge_attr={'type':type_edge})
     return G
 
 
