@@ -2,9 +2,9 @@
 
 import easygraph as eg 
 
-def buildAsRelGraph(ifileName) -> eg.Graph:
+def buildAsRelGraph(ifileName) -> eg.DiGraph:
     ifile = open(ifileName,'r')
-    G = eg.Graph()
+    G = eg.DiGraph()
 
     for line in ifile:
         if line[0] == '#': # comment
@@ -18,28 +18,31 @@ def buildAsRelGraph(ifileName) -> eg.Graph:
 
 
 if __name__ == '__main__':
-    # G = eg.Graph()
-    # G.add_edges([(5,6),(7,8)])
-    # ofile.write(G.nodes)
-    # G.edges
     ifileNames = [
         'dataCAIDA/AS_relationships/raw/20230101.as-rel.txt',
         'dataCAIDA/AS_relationships/raw/20221001.as-rel.txt',
         'dataCAIDA/AS_relationships/raw/20180701.as-rel.txt',
         'dataCAIDA/AS_relationships/raw/20110401.as-rel.txt'
     ]
+    DEBUG = 0
+    if DEBUG:
+        G = eg.DiGraph()
+        G.add_edges([(5,6),(7,8),(6,5),(1,20),(2,1)])
+
+    else:    
+        fn = ifileNames[0]
+        G = buildAsRelGraph(fn)
+
     ofile = open('playEgOnData/result_SH','w')
 
-    fn = ifileNames[0]
-    G = buildAsRelGraph(fn)
-    shs = eg.common_greedy(G, 5)
+    shs = eg.common_greedy(G, 10)
+    for p in shs:
+        ofile.write(str(p)+'\n')
 
     # Draw the Graph, and the shs is marked by red star
-
     eg.draw_SHS_center(G, shs)
 
     # Draw CDF curves of "Number of Followers" of SH spanners and ordinary users in G.
-
     eg.plot_Followers(G, shs)
     
 
