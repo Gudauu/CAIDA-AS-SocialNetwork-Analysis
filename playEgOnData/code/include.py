@@ -5,7 +5,11 @@ dictInfile = {
     '20221001':'dataCAIDA/AS_relationships/raw/20221001.as-rel.txt',
     '20180701':'dataCAIDA/AS_relationships/raw/20180701.as-rel.txt',
     '19980101':'dataCAIDA/AS_relationships/raw/19980101.as-rel.txt',
-    '20110401':'dataCAIDA/AS_relationships/raw/20110401.as-rel.txt'
+    '20110401':'dataCAIDA/AS_relationships/raw/20110401.as-rel.txt',
+    '20000301':'dataCAIDA/AS_relationships/raw/20000301.as-rel.txt',
+    '19980201':'dataCAIDA/AS_relationships/raw/19980201.as-rel.txt',
+    '19980301':'dataCAIDA/AS_relationships/raw/19980301.as-rel.txt',
+    '19980401':'dataCAIDA/AS_relationships/raw/19980401.as-rel.txt'
 }
 
 def buildAsRelGraph(ifileName) -> eg.DiGraph:
