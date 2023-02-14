@@ -1,16 +1,24 @@
 import easygraph as eg 
 
 dictInfile = {
+    '19980101':'dataCAIDA/AS_relationships/raw/19980101.as-rel.txt',
+    '19980201':'dataCAIDA/AS_relationships/raw/19980201.as-rel.txt',
+    '19980301':'dataCAIDA/AS_relationships/raw/19980301.as-rel.txt',
+    '19980401':'dataCAIDA/AS_relationships/raw/19980401.as-rel.txt',
     '20230101':'dataCAIDA/AS_relationships/raw/20230101.as-rel.txt',
     '20221001':'dataCAIDA/AS_relationships/raw/20221001.as-rel.txt',
     '20180701':'dataCAIDA/AS_relationships/raw/20180701.as-rel.txt',
-    '19980101':'dataCAIDA/AS_relationships/raw/19980101.as-rel.txt',
     '20110401':'dataCAIDA/AS_relationships/raw/20110401.as-rel.txt',
-    '20000301':'dataCAIDA/AS_relationships/raw/20000301.as-rel.txt',
-    '19980201':'dataCAIDA/AS_relationships/raw/19980201.as-rel.txt',
-    '19980301':'dataCAIDA/AS_relationships/raw/19980301.as-rel.txt',
-    '19980401':'dataCAIDA/AS_relationships/raw/19980401.as-rel.txt'
+    '20000301':'dataCAIDA/AS_relationships/raw/20000301.as-rel.txt'
+    
 }
+
+listFileName_1998 = []
+for i in range(1,10):
+    listFileName_1998.append('dataCAIDA/AS_relationships/raw/19980'+str(i)+ '01.as-rel.txt')
+for i in range(10,13):
+    listFileName_1998.append('dataCAIDA/AS_relationships/raw/1998'+str(i)+ '01.as-rel.txt')
+
 
 def buildAsRelGraph(ifileName) -> eg.DiGraph:
     ifile = open(ifileName,'r')
