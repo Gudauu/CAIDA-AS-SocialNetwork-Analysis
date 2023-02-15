@@ -6,9 +6,10 @@ from include import *
 
 if __name__ == '__main__':
     DEBUG = 0
-    versions = ['19980101','19980201','19980301','19980401',]
-    for version in versions:
-        G = getG(version)
+    # versions = ['19980101','19980201','19980301','19980401',]
+    for fn in listFileName_1998[4:]:
+        G = buildAsRelGraph(fn)
+        version = fn[31:39]
         ofile = open('playEgOnData/results/'+version+'/degree_top','w')
 
         try:

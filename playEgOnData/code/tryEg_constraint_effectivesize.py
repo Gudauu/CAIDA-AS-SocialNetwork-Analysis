@@ -8,11 +8,11 @@ if __name__ == '__main__':
         version = fn[31:39]
 
 
-        # constraints = eg.constraint(G)
-        # ofile = open('playEgOnData/results/'+version+'/constraint','w')
-        # for node,con in sorted(constraints.items(), key=lambda x: -x[1]):
-        #     ofile.write(str(node)+':'+str(con)+'\n')
-        # ofile.close()
+        constraints = eg.constraint(G)
+        ofile = open('playEgOnData/results/'+version+'/constraint','w')
+        for node,con in sorted(constraints.items(), key=lambda x: -x[1]):
+            ofile.write(str(node)+':'+str(con)+'\n')
+        ofile.close()
 
         effective_size = eg.effective_size(G)
         # deal with 'nan'
