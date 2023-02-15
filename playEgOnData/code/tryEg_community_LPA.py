@@ -6,6 +6,7 @@ if __name__ == '__main__':
     for version in versions:
 
         G = getG(version,DEBUG)
+        
 
         ofile = open('playEgOnData/results/'+version+'/communityDetection_LPA','w')
 
