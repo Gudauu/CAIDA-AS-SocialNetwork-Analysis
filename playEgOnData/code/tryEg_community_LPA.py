@@ -2,11 +2,10 @@ from include import *
 
 if __name__ == '__main__':
     DEBUG = False
-    versions = ['19980201','19980301','19980401']
-    for version in versions:
+    for fn in listFileName_1998[1:]:
+        G = buildAsRelGraph(fn)
 
-        G = getG(version,DEBUG)
-        
+        version = fn[31:39]        
 
         ofile = open('playEgOnData/results/'+version+'/communityDetection_LPA','w')
 
