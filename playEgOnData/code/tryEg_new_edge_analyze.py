@@ -59,7 +59,7 @@ def analyze_new_edges(fo,fn) -> None:
     dict_constraint = readDict('playEgOnData/results/'+version_new+'/constraint')
     dict_effective_size = readDict('playEgOnData/results/'+version_new+'/effective_size')
     dict_degree = readDict('playEgOnData/results/'+version_new+'/degree_top',': ')
-    dict_community = readCommunity('playEgOnData/results/'+version_new+'/communityDetection_LPA')
+    dict_community = readCommunity('playEgOnData/results/'+version_new+'/communityDetection_louvain')
     edge_new_anotated = analyze_edge(edge_new,dict_degree,dict_effective_size,dict_constraint,dict_community)
     ofile = open('playEgOnData/results/'+version_new+'/edge_added_annotated','w')
     # new list format: [node1|node2|type|degree1|degree2|es1|es2|constraint1|contraint2|community1:size|community2:size]
@@ -76,7 +76,7 @@ def analyze_new_edges(fo,fn) -> None:
     dict_constraint = readDict('playEgOnData/results/'+version_old+'/constraint')
     dict_effective_size = readDict('playEgOnData/results/'+version_old+'/effective_size')
     dict_degree = readDict('playEgOnData/results/'+version_old+'/degree_top',': ')
-    dict_community = readCommunity('playEgOnData/results/'+version_old+'/communityDetection_LPA')
+    dict_community = readCommunity('playEgOnData/results/'+version_old+'/communityDetection_louvain')
     edge_removed_anotated = analyze_edge(edge_removed,dict_degree,dict_effective_size,dict_constraint,dict_community)
 
     ofile = open('playEgOnData/results/'+version_new+'/edge_reomved_annotated','w')
@@ -116,5 +116,5 @@ def analyze_result(fn) -> None:
 
 if __name__ == '__main__':
     for i in range(1,4):
-        # analyze_new_edges(listFileName_1998[i-1],listFileName_1998[i])
-        analyze_result('playEgOnData/results/'+getVersionFromName(listFileName_1998[i])+'/edge_added_annotated')
+        analyze_new_edges(listFileName_1998[i-1],listFileName_1998[i])
+        # analyze_result('playEgOnData/results/'+getVersionFromName(listFileName_1998[i])+'/edge_added_annotated')

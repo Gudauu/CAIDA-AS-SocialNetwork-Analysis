@@ -2,10 +2,10 @@ import easygraph as eg
 import networkx as nx
 
 dictInfile = {
-    '19980101':'dataCAIDA/AS_relationships/raw/19980101.as-rel.txt',
-    '19980201':'dataCAIDA/AS_relationships/raw/19980201.as-rel.txt',
-    '19980301':'dataCAIDA/AS_relationships/raw/19980301.as-rel.txt',
-    '19980401':'dataCAIDA/AS_relationships/raw/19980401.as-rel.txt',
+    # '19980101':'dataCAIDA/AS_relationships/raw/19980101.as-rel.txt',
+    # '19980201':'dataCAIDA/AS_relationships/raw/19980201.as-rel.txt',
+    # '19980301':'dataCAIDA/AS_relationships/raw/19980301.as-rel.txt',
+    # '19980401':'dataCAIDA/AS_relationships/raw/19980401.as-rel.txt',
     '20230101':'dataCAIDA/AS_relationships/raw/20230101.as-rel.txt',
     '20221001':'dataCAIDA/AS_relationships/raw/20221001.as-rel.txt',
     '20180701':'dataCAIDA/AS_relationships/raw/20180701.as-rel.txt',
@@ -73,9 +73,8 @@ def buildAsRelGraph_nx(ifileName, flag_directed = True) -> nx.DiGraph:
             edge_type = int(edge_type)
             
             # Add the appropriate edges to the graph
-            if edge_type == -1:
-                G.add_edge(int(node1), int(node2))
-            elif edge_type == 0 and flag_directed: # if undirected, no need to add edge
+            G.add_edge(int(node1), int(node2))
+            if edge_type == 0 and flag_directed: # if undirected, no need to add edge
                 G.add_edge(int(node1), int(node2))
                 G.add_edge(int(node2), int(node1))
 
