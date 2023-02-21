@@ -1,4 +1,5 @@
 import easygraph as eg 
+import networkx as nx
 
 dictInfile = {
     '19980101':'dataCAIDA/AS_relationships/raw/19980101.as-rel.txt',
@@ -34,26 +35,70 @@ def readDict(fn,separator=':') -> dict:
 def getVersionFromName(fn:str) -> str:
     return fn[31:39] 
 
-def buildAsRelGraph(ifileName) -> eg.DiGraph:
+def buildAsRelGraph(ifileName,flag_directed = True) -> eg.DiGraph:
+    if flag_directed:
+        G = eg.DiGraph()
+    else:
+        G = eg.Graph()
+
     ifile = open(ifileName,'r')
-    G = eg.DiGraph()
 
     for line in ifile:
         if line[0] == '#': # comment
             continue
         listLine = line.split('|')  # ASN|ASN|type
         type_edge = int(listLine[2])
-        G.add_edge(int(listLine[0]),int(listLine[1]),edge_attr={'type':type_edge})
-        if type_edge == 0: # peer edge
-            G.add_edge(int(listLine[1]),int(listLine[0]),edge_attr={'type':type_edge})
+        G.add_edge(int(listLine[0]),int(listLine[1]))  # ,edge_attr={'type':type_edge}
+        if type_edge == 0 and flag_directed: # if undirected, no need to add edge: # peer edge
+            G.add_edge(int(listLine[1]),int(listLine[0])) # ,edge_attr={'type':type_edge}
     return G
 
-def getG(version,DEBUG = False) -> eg.DiGraph:
-    if DEBUG:
-        G = eg.DiGraph()
-        G.add_edges([(5,6),(7,8),(6,5),(1,20),(2,1)])
-    else:  
-        fn = dictInfile[version]
-        G = buildAsRelGraph(fn)
+
+def buildAsRelGraph_nx(ifileName, flag_directed = True) -> nx.DiGraph:
+    if flag_directed:
+        # Create an empty DiGraph
+        G = nx.DiGraph()
+    else:
+        G = nx.Graph()
+
+    # Open the file and read in the edges
+    with open(ifileName, 'r') as f:
+        for line in f:
+            if line[0] == '#': # comment
+                continue
+            # Split the line into node1, node2, and edge_type
+            node1, node2, edge_type = line.strip().split('|')
+            
+            # Convert edge_type to an integer
+            edge_type = int(edge_type)
+            
+            # Add the appropriate edges to the graph
+            if edge_type == -1:
+                G.add_edge(int(node1), int(node2))
+            elif edge_type == 0 and flag_directed: # if undirected, no need to add edge
+                G.add_edge(int(node1), int(node2))
+                G.add_edge(int(node2), int(node1))
+
+    # Print the graph
+    print(G.edges())
+    return G
+
+
+def getG(version,DEBUG = False,flag_directed = True, flag_nx = False):
+    if flag_nx:
+        if DEBUG:
+            G = nx.DiGraph() if flag_directed else nx.Graph()
+            G.add_edges_from([(5,6),(7,8),(6,5),(1,20),(2,1),(2,7),(20,8)])
+            
+        else:  
+            fn = dictInfile[version]
+            G = buildAsRelGraph_nx(fn,flag_directed)
+    else:  # eg
+        if DEBUG:
+            G = eg.DiGraph() if flag_directed else eg.Graph()
+            G.add_edges([(5,6),(7,8),(6,5),(1,20),(2,1)])
+        else:  
+            fn = dictInfile[version]
+            G = buildAsRelGraph(fn,flag_directed)
     return G
 

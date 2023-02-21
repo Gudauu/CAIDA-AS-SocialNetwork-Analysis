@@ -1,29 +1,24 @@
 from include import *
 from time import *
+import community
+from cdlib import algorithms
+
 
 if __name__ == '__main__':
-    DEBUG = False
-    versions = ['19980101','19980201','19980301','19980401']
-    for version in versions:
+    DEBUG = True
+    # versions = ['19980101','19980201','19980301','19980401']
+    for fn in listFileName_1998:
+        G = buildAsRelGraph_nx(fn, flag_directed = False)
 
-        G = getG(version,DEBUG)
+        partition = algorithms.louvain(G, weight="weight", resolution=1.0)
+        # Print the communities
+        list_communties = partition.communities
+        list_communties =  sorted(list_communties,key = lambda x:(-len(x),x))
 
+        version = getVersionFromName(fn)
         ofile = open('playEgOnData/results/'+version+'/communityDetection_louvain','w')
 
-        for i in range(10):
-            sleep(2)
-            ofile.write(str(i)+'\n')
-
-
-        # communities = eg.LPA(G)
-
-        # for k,v in communities.items():
-        #     ofile.write("community "+str(k)+'\n')
-        #     ofile.write(str(v))
-        #     ofile.write('\n')
         ofile.close()
-        break
-
 
     
 
