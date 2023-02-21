@@ -17,6 +17,9 @@ if __name__ == '__main__':
 
         version = getVersionFromName(fn)
         ofile = open('playEgOnData/results/'+version+'/communityDetection_louvain','w')
+        for i in range(len(list_communties)):
+            ofile.write("community "+ str(i+1)+'\n')
+            ofile.write(str(list_communties[i])+'\n')
 
         ofile.close()
 
