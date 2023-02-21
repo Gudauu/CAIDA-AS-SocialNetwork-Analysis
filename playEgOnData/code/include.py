@@ -20,6 +20,20 @@ for i in range(10,13):
     listFileName_1998.append('dataCAIDA/AS_relationships/raw/1998'+str(i)+ '01.as-rel.txt')
 
 
+
+def readDict(fn,separator=':') -> dict:
+    dictResult = {}
+    ifile = open(fn,'r')
+    for line_ in ifile:
+        line = line_[:-1]
+        line_list = line.split(separator)
+        dictResult[line_list[0]] = line_list[1]
+
+    return dictResult
+
+def getVersionFromName(fn:str) -> str:
+    return fn[31:39] 
+
 def buildAsRelGraph(ifileName) -> eg.DiGraph:
     ifile = open(ifileName,'r')
     G = eg.DiGraph()

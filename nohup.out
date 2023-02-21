@@ -1,0 +1,8 @@
+Warning raise in module:classes. Please install Pytorch before you use functions related to Hypergraph
+ Please install Pytorch before use dataset such as KarateClubDataset、CitationDataset、PPIDataset、LegacyPPIDataset
+Warning raise in module:model.Please install Pytorch before you use functions related to Hypergraph
+Warning raise in module:nn. Please install Pytorch before you use functions related to Hypergraph
+Warning raise in module:classes. Please install Pytorch before you use functions related to Hypergraph
+ Please install Pytorch before use dataset such as KarateClubDataset、CitationDataset、PPIDataset、LegacyPPIDataset
+Warning raise in module:model.Please install Pytorch before you use functions related to Hypergraph
+Warning raise in module:nn. Please install Pytorch before you use functions related to Hypergraph
