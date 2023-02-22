@@ -56,11 +56,17 @@ def analyze_new_edges(fo,fn) -> None:
         setn.add(line)
     edge_new = list(setn - seto)
     version_new = getVersionFromName(fn)
+
+    # get all dicts of measures ready
     dict_constraint = readDict('playEgOnData/results/'+version_new+'/constraint')
     dict_effective_size = readDict('playEgOnData/results/'+version_new+'/effective_size')
     dict_degree = readDict('playEgOnData/results/'+version_new+'/degree_top',': ')
     dict_community = readCommunity('playEgOnData/results/'+version_new+'/communityDetection_louvain')
+
+
     edge_new_anotated = analyze_edge(edge_new,dict_degree,dict_effective_size,dict_constraint,dict_community)
+
+
     ofile = open('playEgOnData/results/'+version_new+'/edge_added_annotated','w')
     # new list format: [node1|node2|type|degree1|degree2|es1|es2|constraint1|contraint2|community1:size|community2:size]
 

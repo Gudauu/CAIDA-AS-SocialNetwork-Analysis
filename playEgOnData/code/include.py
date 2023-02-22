@@ -75,7 +75,6 @@ def buildAsRelGraph_nx(ifileName, flag_directed = True) -> nx.DiGraph:
             # Add the appropriate edges to the graph
             G.add_edge(int(node1), int(node2))
             if edge_type == 0 and flag_directed: # if undirected, no need to add edge
-                G.add_edge(int(node1), int(node2))
                 G.add_edge(int(node2), int(node1))
 
     # Print the graph
