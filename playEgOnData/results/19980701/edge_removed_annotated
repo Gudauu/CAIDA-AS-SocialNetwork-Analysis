@@ -1,0 +1,3444 @@
+2548 | 10252|-1
+degree: 206 | 2
+eff size: 177.50970873786403 | -1
+constraint: 0.02648616815875582 | 0.6124330756904515
+community: 1(583) | 1(583)
+edge betweeness centrality: 2.6161095455595935e-05
+
+701 | 7895|-1
+degree: 847 | 2
+eff size: 809.8122786304559 | -1
+constraint: 0.012185591378935857 | 0.5
+community: 1(583) | 2(527)
+edge betweeness centrality: 2.661285572370566e-05
+
+701 | 6721|-1
+degree: 847 | 3
+eff size: 809.8122786304559 | -1
+constraint: 0.012185591378935857 | 0.3333333333333333
+community: 1(583) | 16(61)
+edge betweeness centrality: 2.6587083585250803e-05
+
+3847 | 5413|0
+degree: 82 | 112
+eff size: 43.0 | 57.59375000000001
+constraint: 0.04513124183629353 | 0.028302220909222058
+community: 4(395) | 4(395)
+edge betweeness centrality: 0.00010478465713177527
+
+4000 | 4352|-1
+degree: 76 | 4
+eff size: 60.00657894736841 | 4.0
+constraint: 0.02213402816169772 | 0.25
+community: 3(445) | 3(445)
+edge betweeness centrality: 3.8602458182133456e-05
+
+174 | 7018|-1
+degree: 101 | 105
+eff size: 65.3861386138614 | 88.63333333333324
+constraint: 0.03758642834858716 | 0.03231716990245016
+community: 4(395) | 2(527)
+edge betweeness centrality: 3.646325994432876e-05
+
+1673 | 3407|-1
+degree: 101 | 11
+eff size: 60.34653465346533 | 3.545454545454546
+constraint: 0.032999749630033326 | 0.15193699884343326
+community: 4(395) | 4(395)
+edge betweeness centrality: 1.4912599904865014e-06
+
+3561 | 1746|-1
+degree: 673 | 18
+eff size: 625.1738484398189 | 4.722222222222221
+constraint: 0.018076133470507474 | 0.11676957198599242
+community: 2(527) | 4(395)
+edge betweeness centrality: 5.918478741841502e-06
+
+1239 | 4534|-1
+degree: 497 | 16
+eff size: 457.88631790744415 | 14.59375
+constraint: 0.02269183768409597 | 0.09999443391816591
+community: 2(527) | 6(193)
+edge betweeness centrality: 2.4265923702726387e-05
+
+174 | 4984|-1
+degree: 101 | 3
+eff size: 65.3861386138614 | -1
+constraint: 0.03758642834858716 | 0.33843871629180106
+community: 4(395) | 20(52)
+edge betweeness centrality: 1.0495596715446283e-05
+
+1741 | 3343|-1
+degree: 9 | 16
+eff size: 8.0 | 14.53125
+constraint: 0.13580246913580246 | 0.09410275972707702
+community: 5(217) | 7(171)
+edge betweeness centrality: 0.00010057053047021708
+
+1853 | 1776|-1
+degree: 16 | 2
+eff size: 15.0 | -1
+constraint: 0.0703125 | 0.5
+community: 10(120) | 10(120)
+edge betweeness centrality: 7.2040003836832746e-06
+
+2516 | 2526|-1
+degree: 44 | 2
+eff size: 39.511363636363626 | -1
+constraint: 0.10422322558047749 | 0.5287381430784353
+community: 9(145) | 9(145)
+edge betweeness centrality: 3.842859475210464e-06
+
+1239 | 6553|-1
+degree: 497 | 14
+eff size: 457.88631790744415 | 9.821428571428571
+constraint: 0.02269183768409597 | 0.11140900633216559
+community: 2(527) | 1(583)
+edge betweeness centrality: 2.004937772947624e-05
+
+3306 | 5627|-1
+degree: 3 | 1
+eff size: 3.0 | -1
+constraint: 0.3333333333333333 | 1.0
+community: 3(445) | 3(445)
+edge betweeness centrality: 2.7793553791514734e-05
+
+3257 | 3300|0
+degree: 55 | 66
+eff size: 42.872727272727275 | 48.9090909090909
+constraint: 0.03521238068192246 | 0.03222842933474537
+community: 3(445) | 3(445)
+edge betweeness centrality: 0.00012595674096824847
+
+5727 | 4788|-1
+degree: 16 | 3
+eff size: 15.53125 | 3.0
+constraint: 0.06649225215951507 | 0.3333333333333333
+community: 11(95) | 11(95)
+edge betweeness centrality: 1.5280498178227796e-06
+
+7018 | 7199|-1
+degree: 105 | 1
+eff size: 88.63333333333324 | -1
+constraint: 0.03231716990245016 | 1.0
+community: 2(527) | 2(527)
+edge betweeness centrality: 2.772173582306121e-05
+
+174 | 2516|-1
+degree: 101 | 44
+eff size: 65.3861386138614 | 39.511363636363626
+constraint: 0.03758642834858716 | 0.10422322558047749
+community: 4(395) | 9(145)
+edge betweeness centrality: 6.033165051592622e-05
+
+3316 | 8291|-1
+degree: 6 | 2
+eff size: 6.0 | -1
+constraint: 0.16666666666666669 | 0.5
+community: 7(171) | 7(171)
+edge betweeness centrality: 7.387206106528799e-06
+
+4969 | 7055|-1
+degree: 26 | 4
+eff size: 16.365384615384617 | 4.0
+constraint: 0.07951286335834717 | 0.25
+community: 4(395) | 4(395)
+edge betweeness centrality: 9.80235020860376e-06
+
+600 | 3847|0
+degree: 14 | 82
+eff size: 8.571428571428571 | 43.0
+constraint: 0.11910672419925822 | 0.04513124183629353
+community: 6(193) | 4(395)
+edge betweeness centrality: 6.966354103837626e-05
+
+1 | 6453|0
+degree: 215 | 89
+eff size: 198.6883720930232 | 78.38202247191013
+constraint: 0.026683147675068436 | 0.020219296288142025
+community: 1(583) | 5(217)
+edge betweeness centrality: 6.568763402477517e-05
+
+1887 | 8501|0
+degree: 10 | 4
+eff size: 7.9 | 3.0
+constraint: 0.14124598780340544 | 0.375
+community: 16(61) | 16(61)
+edge betweeness centrality: 2.3896739293914245e-06
+
+1913 | 5209|-1
+degree: 52 | 1
+eff size: 51.96153846153847 | -1
+constraint: 0.020545693622616688 | 1.0
+community: 19(52) | 19(52)
+edge betweeness centrality: 2.786537175996826e-05
+
+1755 | 1883|-1
+degree: 91 | 2
+eff size: 84.46153846153847 | -1
+constraint: 0.01844780275328917 | 0.6461496950851346
+community: 3(445) | 3(445)
+edge betweeness centrality: 2.4723074847298004e-05
+
+1887 | 8459|-1
+degree: 10 | 2
+eff size: 7.9 | -1
+constraint: 0.14124598780340544 | 0.5
+community: 16(61) | 16(61)
+edge betweeness centrality: 9.51607154546635e-06
+
+1 | 3847|-1
+degree: 215 | 82
+eff size: 198.6883720930232 | 43.0
+constraint: 0.026683147675068436 | 0.04513124183629353
+community: 1(583) | 4(395)
+edge betweeness centrality: 4.348747115236569e-06
+
+286 | 1800|0
+degree: 116 | 28
+eff size: 60.32758620689655 | 15.625
+constraint: 0.034224171569549086 | 0.06732904480522527
+community: 4(395) | 18(53)
+edge betweeness centrality: 5.319780940799562e-05
+
+5388 | 7176|-1
+degree: 15 | 4
+eff size: 8.633333333333335 | 3.75
+constraint: 0.11664762819459666 | 0.25919385854215493
+community: 3(445) | 17(60)
+edge betweeness centrality: 3.262483196638977e-05
+
+1239 | 10297|-1
+degree: 497 | 5
+eff size: 457.88631790744415 | -1
+constraint: 0.02269183768409597 | 0.2091690451755498
+community: 2(527) | 2(527)
+edge betweeness centrality: 4.230205806912994e-06
+
+4200 | 4544|0
+degree: 104 | 26
+eff size: 72.89903846153848 | 5.653846153846153
+constraint: 0.031163070120937827 | 0.09741048147876682
+community: 8(146) | 4(395)
+edge betweeness centrality: 6.582292262902674e-06
+
+701 | 11162|-1
+degree: 847 | 1
+eff size: 809.8122786304559 | -1
+constraint: 0.012185591378935857 | 1.0
+community: 1(583) | 1(583)
+edge betweeness centrality: 2.772173582306121e-05
+
+6362 | 6633|0
+degree: 3 | 5
+eff size: 1.5 | 3.3
+constraint: 0.664291809386455 | 0.35291886957047025
+community: 1(583) | 1(583)
+edge betweeness centrality: 2.1545390536057935e-07
+
+3847 | 6395|0
+degree: 82 | 10
+eff size: 43.0 | 2.25
+constraint: 0.04513124183629353 | 0.17646012040892728
+community: 4(395) | 4(395)
+edge betweeness centrality: 2.144326768514114e-06
+
+1239 | 10721|-1
+degree: 497 | 3
+eff size: 457.88631790744415 | -1
+constraint: 0.02269183768409597 | 0.3375052122642057
+community: 2(527) | 2(527)
+edge betweeness centrality: 6.0747750622628015e-06
+
+1 | 5388|-1
+degree: 215 | 15
+eff size: 198.6883720930232 | 8.633333333333335
+constraint: 0.026683147675068436 | 0.11664762819459666
+community: 1(583) | 3(445)
+edge betweeness centrality: 4.084034361613514e-06
+
+3561 | 6340|-1
+degree: 673 | 1
+eff size: 625.1738484398189 | -1
+constraint: 0.018076133470507474 | 1.0
+community: 2(527) | 2(527)
+edge betweeness centrality: 2.772173582306121e-05
+
+3316 | 8370|-1
+degree: 6 | 2
+eff size: 6.0 | -1
+constraint: 0.16666666666666669 | 0.5
+community: 7(171) | 7(171)
+edge betweeness centrality: 1.7501796885106514e-05
+
+701 | 3791|-1
+degree: 847 | 2
+eff size: 809.8122786304559 | -1
+constraint: 0.012185591378935857 | 0.5
+community: 1(583) | 4(395)
+edge betweeness centrality: 1.0387783362495103e-05
+
+5673 | 8137|-1
+degree: 12 | 5
+eff size: 11.0 | -1
+constraint: 0.09722222222222224 | 0.21045951526874226
+community: 11(95) | 4(395)
+edge betweeness centrality: 1.8403354416216153e-07
+
+1849 | 5622|-1
+degree: 26 | 3
+eff size: 15.53846153846154 | -1
+constraint: 0.09403326138279412 | 0.3333333333333333
+community: 3(445) | 2(527)
+edge betweeness centrality: 1.1393272806835718e-05
+
+174 | 6113|0
+degree: 101 | 59
+eff size: 65.3861386138614 | 41.6694915254237
+constraint: 0.03758642834858716 | 0.059210065767974156
+community: 4(395) | 1(583)
+edge betweeness centrality: 1.706773655112482e-05
+
+2914 | 7058|-1
+degree: 221 | 2
+eff size: 123.5135746606334 | -1
+constraint: 0.02370992008192883 | 0.5
+community: 4(395) | 4(395)
+edge betweeness centrality: 1.7333952460566104e-05
+
+701 | 2497|0
+degree: 847 | 183
+eff size: 809.8122786304559 | 103.48087431693992
+constraint: 0.012185591378935857 | 0.025773134525637936
+community: 1(583) | 9(145)
+edge betweeness centrality: 5.323767570936205e-05
+
+1 | 3681|-1
+degree: 215 | 2
+eff size: 198.6883720930232 | -1
+constraint: 0.026683147675068436 | 0.5
+community: 1(583) | 1(583)
+edge betweeness centrality: 2.6576415675034223e-05
+
+3300 | 5377|0
+degree: 66 | 19
+eff size: 48.9090909090909 | 15.26315789473684
+constraint: 0.03222842933474537 | 0.07819840475020086
+community: 3(445) | 10(120)
+edge betweeness centrality: 0.00010905918678487432
+
+1785 | 6502|-1
+degree: 14 | 6
+eff size: 14.0 | 3.666666666666667
+constraint: 0.07142857142857142 | 0.2267049850580939
+community: 6(193) | 6(193)
+edge betweeness centrality: 0.0001514892285545467
+
+4200 | 6434|0
+degree: 104 | 3
+eff size: 72.89903846153848 | 2.0
+constraint: 0.031163070120937827 | 0.5555555555555556
+community: 8(146) | 8(146)
+edge betweeness centrality: 1.262979510889834e-05
+
+174 | 2056|0
+degree: 101 | 10
+eff size: 65.3861386138614 | 2.85
+constraint: 0.03758642834858716 | 0.18384344054960705
+community: 4(395) | 4(395)
+edge betweeness centrality: 4.102245206630079e-06
+
+1327 | 4546|-1
+degree: 10 | 2
+eff size: 10.0 | -1
+constraint: 0.10000000000000003 | 0.5
+community: 1(583) | 22(13)
+edge betweeness centrality: 1.393268587998413e-05
+
+286 | 1890|0
+degree: 116 | 15
+eff size: 60.32758620689655 | 11.500000000000002
+constraint: 0.034224171569549086 | 0.13199509246391194
+community: 4(395) | 3(445)
+edge betweeness centrality: 0.00010854796776699103
+
+6683 | 6681|-1
+degree: 8 | 5
+eff size: 4.0 | 2.4
+constraint: 0.2764557001474771 | 0.4309023668639054
+community: 10(120) | 10(120)
+edge betweeness centrality: 0.00011112724700114256
+
+3561 | 5738|-1
+degree: 673 | 5
+eff size: 625.1738484398189 | -1
+constraint: 0.018076133470507474 | 0.2208046397944466
+community: 2(527) | 1(583)
+edge betweeness centrality: 5.1636491421408605e-06
+
+174 | 568|-1
+degree: 101 | 23
+eff size: 65.3861386138614 | 8.91304347826087
+constraint: 0.03758642834858716 | 0.08746837523379242
+community: 4(395) | 4(395)
+edge betweeness centrality: 6.93851731874707e-05
+
+5623 | 6764|-1
+degree: 6 | 1
+eff size: 5.0 | -1
+constraint: 0.22222222222222227 | 1.0
+community: 3(445) | 3(445)
+edge betweeness centrality: 2.772173582306121e-05
+
+3300 | 2603|-1
+degree: 66 | 13
+eff size: 48.9090909090909 | 10.423076923076923
+constraint: 0.03222842933474537 | 0.11537749043948631
+community: 3(445) | 5(217)
+edge betweeness centrality: 9.804442583078301e-05
+
+3300 | 3216|-1
+degree: 66 | 8
+eff size: 48.9090909090909 | 7.875
+constraint: 0.03222842933474537 | 0.12551398855793713
+community: 3(445) | 7(171)
+edge betweeness centrality: 5.781380956139422e-05
+
+2497 | 4685|-1
+degree: 183 | 2
+eff size: 103.48087431693992 | -1
+constraint: 0.025773134525637936 | 0.5287381430784353
+community: 9(145) | 9(145)
+edge betweeness centrality: 2.3878876347850726e-05
+
+701 | 3718|-1
+degree: 847 | 1
+eff size: 809.8122786304559 | -1
+constraint: 0.012185591378935857 | 1.0
+community: 1(583) | 1(583)
+edge betweeness centrality: 2.772173582306121e-05
+
+4660 | 7627|-1
+degree: 2 | 2
+eff size: 2.0 | -1
+constraint: 0.5 | 0.5
+community: 21(45) | 21(45)
+edge betweeness centrality: 3.7124832910439625e-07
+
+2828 | 3847|0
+degree: 28 | 82
+eff size: 13.785714285714286 | 43.0
+constraint: 0.0808968180369304 | 0.04513124183629353
+community: 4(395) | 4(395)
+edge betweeness centrality: 7.771573899461628e-06
+
+174 | 4200|0
+degree: 101 | 104
+eff size: 65.3861386138614 | 72.89903846153848
+constraint: 0.03758642834858716 | 0.031163070120937827
+community: 4(395) | 8(146)
+edge betweeness centrality: 2.7182739673962422e-05
+
+2764 | 9314|-1
+degree: 16 | 2
+eff size: 15.40625 | -1
+constraint: 0.09694782021604936 | 0.6225043402777779
+community: 11(95) | 11(95)
+edge betweeness centrality: 4.667441780798136e-06
+
+174 | 6467|0
+degree: 101 | 28
+eff size: 65.3861386138614 | 21.946428571428573
+constraint: 0.03758642834858716 | 0.06882928932629712
+community: 4(395) | 1(583)
+edge betweeness centrality: 1.5324569811160693e-05
+
+3561 | 8002|-1
+degree: 673 | 2
+eff size: 625.1738484398189 | -1
+constraint: 0.018076133470507474 | 0.5084322061024236
+community: 2(527) | 4(395)
+edge betweeness centrality: 1.3364324773592232e-05
+
+5459 | 8252|0
+degree: 89 | 5
+eff size: 44.62359550561799 | 2.6
+constraint: 0.03071745454049707 | 0.3761600837859663
+community: 3(445) | 3(445)
+edge betweeness centrality: 2.2778379497336613e-05
+
+3491 | 5557|-1
+degree: 46 | 6
+eff size: 33.57608695652175 | 4.000000000000001
+constraint: 0.04603434643503335 | 0.2766655813130631
+community: 4(395) | 3(445)
+edge betweeness centrality: 7.739206881792222e-06
+
+2915 | 4714|-1
+degree: 15 | 1
+eff size: 13.633333333333333 | -1
+constraint: 0.0954496488067392 | 1.0
+community: 9(145) | 9(145)
+edge betweeness centrality: 2.772173582306121e-05
+
+2497 | 4673|0
+degree: 183 | 4
+eff size: 103.48087431693992 | 2.25
+constraint: 0.025773134525637936 | 0.3892548695834256
+community: 9(145) | 9(145)
+edge betweeness centrality: 4.76141167587944e-05
+
+174 | 2529|-1
+degree: 101 | 14
+eff size: 65.3861386138614 | 9.892857142857144
+constraint: 0.03758642834858716 | 0.11228512259084217
+community: 4(395) | 3(445)
+edge betweeness centrality: 1.9889319245287634e-05
+
+6809 | 8206|-1
+degree: 3 | 2
+eff size: 3.0 | -1
+constraint: 0.3333333333333333 | 0.5
+community: 7(171) | 7(171)
+edge betweeness centrality: 1.0711551543082964e-06
+
+701 | 1673|0
+degree: 847 | 101
+eff size: 809.8122786304559 | 60.34653465346533
+constraint: 0.012185591378935857 | 0.032999749630033326
+community: 1(583) | 4(395)
+edge betweeness centrality: 4.878115032781657e-05
+
+6727 | 8653|-1
+degree: 6 | 2
+eff size: 5.416666666666667 | -1
+constraint: 0.21595688519161768 | 0.5
+community: 3(445) | 3(445)
+edge betweeness centrality: 9.679218021299023e-06
+
+6402 | 6478|0
+degree: 17 | 4
+eff size: 10.235294117647062 | 1.0
+constraint: 0.12343845776128595 | 0.5718982494958768
+community: 4(395) | 4(395)
+edge betweeness centrality: 6.514829868374456e-06
+
+1755 | 6707|-1
+degree: 91 | 1
+eff size: 84.46153846153847 | -1
+constraint: 0.01844780275328917 | 1.0
+community: 3(445) | 3(445)
+edge betweeness centrality: 2.772173582306121e-05
+
+1755 | 1887|-1
+degree: 91 | 10
+eff size: 84.46153846153847 | 7.9
+constraint: 0.01844780275328917 | 0.14124598780340544
+community: 3(445) | 16(61)
+edge betweeness centrality: 4.750419990652841e-05
+
+1849 | 8252|0
+degree: 26 | 5
+eff size: 15.53846153846154 | 2.6
+constraint: 0.09403326138279412 | 0.3761600837859663
+community: 3(445) | 3(445)
+edge betweeness centrality: 3.3387988577559092e-06
+
+816 | 7992|-1
+degree: 24 | 4
+eff size: 23.333333333333332 | -1
+constraint: 0.06422389403292181 | 0.25
+community: 13(92) | 13(92)
+edge betweeness centrality: 6.153690187169893e-06
+
+1913 | 5207|-1
+degree: 52 | 1
+eff size: 51.96153846153847 | -1
+constraint: 0.020545693622616688 | 1.0
+community: 19(52) | 19(52)
+edge betweeness centrality: 2.786537175996826e-05
+
+6427 | 6889|0
+degree: 5 | 9
+eff size: 4.0 | 7.722222222222222
+constraint: 0.28 | 0.14920319979843788
+community: 14(89) | 3(445)
+edge betweeness centrality: 0.0005358289913404428
+
+6850 | 6731|-1
+degree: 4 | 6
+eff size: 3.375 | 5.75
+constraint: 0.28475293800257584 | 0.18291939324439954
+community: 7(171) | 7(171)
+edge betweeness centrality: 1.4432880525224517e-06
+
+3300 | 71|-1
+degree: 66 | 7
+eff size: 48.9090909090909 | -1
+constraint: 0.03222842933474537 | 0.1559823656705189
+community: 3(445) | 3(445)
+edge betweeness centrality: 5.764261757032509e-06
+
+5422 | 5428|-1
+degree: 2 | 2
+eff size: 2.0 | -1
+constraint: 0.5 | 0.5
+community: 3(445) | 3(445)
+edge betweeness centrality: 1.0737958021532933e-06
+
+1239 | 5655|-1
+degree: 497 | 2
+eff size: 457.88631790744415 | -1
+constraint: 0.02269183768409597 | 0.5
+community: 2(527) | 4(395)
+edge betweeness centrality: 2.120244566066179e-05
+
+3384 | 7095|-1
+degree: 16 | 2
+eff size: 15.1875 | -1
+constraint: 0.07263669263910864 | 0.5
+community: 20(52) | 20(52)
+edge betweeness centrality: 1.9392203635841333e-06
+
+174 | 8218|-1
+degree: 101 | 14
+eff size: 65.3861386138614 | 6.214285714285715
+constraint: 0.03758642834858716 | 0.1298936344090121
+community: 4(395) | 4(395)
+edge betweeness centrality: 2.229770416378526e-06
+
+6598 | 10868|-1
+degree: 3 | 2
+eff size: 3.0 | -1
+constraint: 0.3333333333333333 | 0.5
+community: 14(89) | 14(89)
+edge betweeness centrality: 2.1545390536057935e-07
+
+2685 | 10303|0
+degree: 38 | 23
+eff size: 22.06578947368421 | 13.739130434782611
+constraint: 0.053393813585032014 | 0.09046915421067282
+community: 4(395) | 4(395)
+edge betweeness centrality: 3.7630288438247144e-06
+
+2118 | 8504|-1
+degree: 28 | 2
+eff size: 26.875 | -1
+constraint: 0.0393884739032549 | 0.5
+community: 7(171) | 7(171)
+edge betweeness centrality: 2.3147616833498522e-05
+
+6765 | 8297|0
+degree: 28 | 17
+eff size: 23.392857142857142 | 12.794117647058824
+constraint: 0.05869443315467104 | 0.11865429056346935
+community: 3(445) | 3(445)
+edge betweeness centrality: 4.500643469672422e-05
+
+3561 | 5761|-1
+degree: 673 | 4
+eff size: 625.1738484398189 | -1
+constraint: 0.018076133470507474 | 0.32192092895799357
+community: 2(527) | 2(527)
+edge betweeness centrality: 1.2945755147378382e-05
+
+2493 | 6539|-1
+degree: 18 | 2
+eff size: 17.88888888888889 | -1
+constraint: 0.05569737174884632 | 0.5
+community: 13(92) | 13(92)
+edge betweeness centrality: 2.1078895476992193e-05
+
+6730 | 8281|-1
+degree: 9 | 3
+eff size: 8.777777777777779 | -1
+constraint: 0.13348765432098764 | 0.3333333333333333
+community: 3(445) | 3(445)
+edge betweeness centrality: 1.360547516901119e-05
+
+4200 | 6245|0
+degree: 104 | 7
+eff size: 72.89903846153848 | 3.1428571428571423
+constraint: 0.031163070120937827 | 0.20848445843869778
+community: 8(146) | 8(146)
+edge betweeness centrality: 4.418192127741289e-06
+
+1 | 1673|0
+degree: 215 | 101
+eff size: 198.6883720930232 | 60.34653465346533
+constraint: 0.026683147675068436 | 0.032999749630033326
+community: 1(583) | 4(395)
+edge betweeness centrality: 2.0295065730602962e-05
+
+701 | 6078|-1
+degree: 847 | 4
+eff size: 809.8122786304559 | 3.0
+constraint: 0.012185591378935857 | 0.2631880941270093
+community: 1(583) | 8(146)
+edge betweeness centrality: 2.598617415449148e-05
+
+8390 | 8262|-1
+degree: 4 | 3
+eff size: 4.0 | 3.0
+constraint: 0.25 | 0.3333333333333333
+community: 1(583) | 1(583)
+edge betweeness centrality: 9.048410045338806e-06
+
+4565 | 6113|-1
+degree: 37 | 59
+eff size: 18.472972972972972 | 41.6694915254237
+constraint: 0.06550994540258379 | 0.059210065767974156
+community: 4(395) | 1(583)
+edge betweeness centrality: 9.73898663990652e-06
+
+1 | 7725|-1
+degree: 215 | 3
+eff size: 198.6883720930232 | -1
+constraint: 0.026683147675068436 | 0.33607150580382444
+community: 1(583) | 1(583)
+edge betweeness centrality: 6.302083452904518e-06
+
+1321 | 6201|-1
+degree: 4 | 7
+eff size: 4.0 | -1
+constraint: 0.25 | 0.1471421395941262
+community: 4(395) | 4(395)
+edge betweeness centrality: 1.8594614834140682e-07
+
+8322 | 5556|-1
+degree: 4 | 17
+eff size: 2.75 | 11.264705882352942
+constraint: 0.34106338440949946 | 0.11759187237628116
+community: 16(61) | 16(61)
+edge betweeness centrality: 0.00016622270895842685
+
+6660 | 5378|-1
+degree: 20 | 18
+eff size: 10.75 | 13.166666666666666
+constraint: 0.09720457462655371 | 0.09028291113944464
+community: 4(395) | 3(445)
+edge betweeness centrality: 1.019730542034965e-05
+
+3847 | 8218|0
+degree: 82 | 14
+eff size: 43.0 | 6.214285714285715
+constraint: 0.04513124183629353 | 0.1298936344090121
+community: 4(395) | 4(395)
+edge betweeness centrality: 2.0956929587206605e-06
+
+701 | 4908|-1
+degree: 847 | 4
+eff size: 809.8122786304559 | -1
+constraint: 0.012185591378935857 | 0.27645038076254375
+community: 1(583) | 4(395)
+edge betweeness centrality: 6.473446658058992e-06
+
+3561 | 6502|-1
+degree: 673 | 6
+eff size: 625.1738484398189 | 3.666666666666667
+constraint: 0.018076133470507474 | 0.2267049850580939
+community: 2(527) | 6(193)
+edge betweeness centrality: 1.0443379108963479e-05
+
+5400 | 1804|-1
+degree: 28 | 3
+eff size: 22.714285714285715 | 2.0
+constraint: 0.05793201876456169 | 0.5555555555555556
+community: 3(445) | 3(445)
+edge betweeness centrality: 0.00021381279180234496
+
+2118 | 5573|-1
+degree: 28 | 2
+eff size: 26.875 | -1
+constraint: 0.0393884739032549 | 0.5
+community: 7(171) | 7(171)
+edge betweeness centrality: 2.708992632746971e-05
+
+2915 | 4728|-1
+degree: 15 | 2
+eff size: 13.633333333333333 | -1
+constraint: 0.0954496488067392 | 0.5
+community: 9(145) | 9(145)
+edge betweeness centrality: 1.1162818856065414e-05
+
+5443 | 5449|-1
+degree: 7 | 3
+eff size: 3.7857142857142856 | 1.0
+constraint: 0.38430070911131514 | 0.7871104364610857
+community: 17(60) | 17(60)
+edge betweeness centrality: 1.4004503848437658e-05
+
+8517 | 2592|-1
+degree: 4 | 2
+eff size: 4.0 | -1
+constraint: 0.25 | 0.5
+community: 3(445) | 3(445)
+edge betweeness centrality: 7.129813717920138e-06
+
+3257 | 2686|-1
+degree: 55 | 28
+eff size: 42.872727272727275 | 19.892857142857142
+constraint: 0.03521238068192246 | 0.0612242036751302
+community: 3(445) | 3(445)
+edge betweeness centrality: 7.560348035264227e-05
+
+1916 | 10417|-1
+degree: 5 | 3
+eff size: 5.0 | -1
+constraint: 0.20000000000000004 | 0.3333333333333333
+community: 5(217) | 5(217)
+edge betweeness centrality: 6.549955532670145e-06
+
+6743 | 3238|-1
+degree: 2 | 2
+eff size: 2.0 | -1
+constraint: 0.5 | 0.5
+community: 16(61) | 16(61)
+edge betweeness centrality: 1.056066126592808e-06
+
+1 | 2914|0
+degree: 215 | 221
+eff size: 198.6883720930232 | 123.5135746606334
+constraint: 0.026683147675068436 | 0.02370992008192883
+community: 1(583) | 4(395)
+edge betweeness centrality: 1.1131087818016768e-05
+
+4000 | 5683|0
+degree: 76 | 47
+eff size: 60.00657894736841 | 34.22340425531915
+constraint: 0.02213402816169772 | 0.04217695775216527
+community: 3(445) | 12(94)
+edge betweeness centrality: 0.00017909410175327475
+
+816 | 3964|-1
+degree: 24 | 1
+eff size: 23.333333333333332 | -1
+constraint: 0.06422389403292181 | 1.0
+community: 13(92) | 13(92)
+edge betweeness centrality: 2.772173582306121e-05
+
+3847 | 6123|0
+degree: 82 | 10
+eff size: 43.0 | 4.1499999999999995
+constraint: 0.04513124183629353 | 0.20083218305723682
+community: 4(395) | 4(395)
+edge betweeness centrality: 1.0295452148639361e-05
+
+2548 | 7802|-1
+degree: 206 | 1
+eff size: 177.50970873786403 | -1
+constraint: 0.02648616815875582 | 1.0
+community: 1(583) | 1(583)
+edge betweeness centrality: 2.772173582306121e-05
+
+1939 | 2477|0
+degree: 3 | 3
+eff size: 1.5 | 1.5
+constraint: 0.7710419753086419 | 0.7710419753086419
+community: 10(120) | 10(120)
+edge betweeness centrality: 7.181796845352645e-08
+
+5650 | 7284|-1
+degree: 26 | 3
+eff size: 24.211538461538456 | -1
+constraint: 0.055664904947558276 | 0.34554464350880393
+community: 14(89) | 14(89)
+edge betweeness centrality: 1.1064160396059347e-06
+
+3847 | 7170|0
+degree: 82 | 30
+eff size: 43.0 | 21.7
+constraint: 0.04513124183629353 | 0.06808593732991629
+community: 4(395) | 18(53)
+edge betweeness centrality: 4.944990519070162e-05
+
+6441 | 6297|-1
+degree: 2 | 2
+eff size: 2.0 | -1
+constraint: 0.5 | 0.5
+community: 1(583) | 1(583)
+edge betweeness centrality: 6.394758880817184e-07
+
+3257 | 5417|0
+degree: 55 | 21
+eff size: 42.872727272727275 | 16.261904761904766
+constraint: 0.03521238068192246 | 0.13873233055934175
+community: 3(445) | 3(445)
+edge betweeness centrality: 6.113139628593757e-05
+
+2521 | 4725|-1
+degree: 19 | 9
+eff size: 16.157894736842106 | 8.11111111111111
+constraint: 0.12874567528005848 | 0.15218670949037294
+community: 9(145) | 9(145)
+edge betweeness centrality: 1.5689809129640998e-06
+
+4278 | 3361|-1
+degree: 3 | 3
+eff size: 2.3333333333333335 | -1
+constraint: 0.3419369119366436 | 0.33478871574017893
+community: 8(146) | 8(146)
+edge betweeness centrality: 2.8082667151699445e-07
+
+174 | 4544|0
+degree: 101 | 26
+eff size: 65.3861386138614 | 5.653846153846153
+constraint: 0.03758642834858716 | 0.09741048147876682
+community: 4(395) | 4(395)
+edge betweeness centrality: 1.1202535536426764e-06
+
+2563 | 7624|-1
+degree: 6 | 2
+eff size: 6.0 | -1
+constraint: 0.16666666666666669 | 0.5
+community: 21(45) | 21(45)
+edge betweeness centrality: 2.714540781561096e-05
+
+4200 | 10621|0
+degree: 104 | 3
+eff size: 72.89903846153848 | 2.0
+constraint: 0.031163070120937827 | 0.5555555555555556
+community: 8(146) | 8(146)
+edge betweeness centrality: 2.3112414280571536e-05
+
+701 | 6299|-1
+degree: 847 | 3
+eff size: 809.8122786304559 | -1
+constraint: 0.012185591378935857 | 0.34052796468402696
+community: 1(583) | 1(583)
+edge betweeness centrality: 1.0230078432547837e-05
+
+2041 | 6453|0
+degree: 56 | 89
+eff size: 40.25 | 78.38202247191013
+constraint: 0.044700754870746415 | 0.020219296288142025
+community: 8(146) | 5(217)
+edge betweeness centrality: 0.0001197306988722
+
+6347 | 6938|-1
+degree: 65 | 5
+eff size: 62.06153846153844 | 2.7
+constraint: 0.03874437623722406 | 0.3442902019891073
+community: 8(146) | 8(146)
+edge betweeness centrality: 4.564689920967563e-06
+
+7594 | 4854|-1
+degree: 14 | 2
+eff size: 7.92857142857143 | -1
+constraint: 0.13743497657910908 | 0.5482243638196018
+community: 11(95) | 11(95)
+edge betweeness centrality: 2.310356411912697e-05
+
+1887 | 8374|-1
+degree: 10 | 2
+eff size: 7.9 | -1
+constraint: 0.14124598780340544 | 0.5
+community: 16(61) | 16(61)
+edge betweeness centrality: 9.51607154546635e-06
+
+4651 | 4803|-1
+degree: 10 | 2
+eff size: 10.0 | -1
+constraint: 0.10000000000000003 | 0.5
+community: 9(145) | 9(145)
+edge betweeness centrality: 2.4784003811885405e-06
+
+4515 | 7499|-1
+degree: 6 | 2
+eff size: 5.500000000000001 | -1
+constraint: 0.17232405913112478 | 0.5
+community: 12(94) | 12(94)
+edge betweeness centrality: 2.6858492651091555e-05
+
+5443 | 5445|-1
+degree: 7 | 9
+eff size: 3.7857142857142856 | 5.388888888888888
+constraint: 0.38430070911131514 | 0.23188081859618653
+community: 17(60) | 17(60)
+edge betweeness centrality: 8.618156214423174e-07
+
+174 | 5683|-1
+degree: 101 | 47
+eff size: 65.3861386138614 | 34.22340425531915
+constraint: 0.03758642834858716 | 0.04217695775216527
+community: 4(395) | 12(94)
+edge betweeness centrality: 1.795377670719194e-05
+
+4200 | 10539|0
+degree: 104 | 4
+eff size: 72.89903846153848 | 2.25
+constraint: 0.031163070120937827 | 0.3804908151773838
+community: 8(146) | 8(146)
+edge betweeness centrality: 1.134546720623141e-05
+
+2854 | 5547|-1
+degree: 15 | 1
+eff size: 15.0 | -1
+constraint: 0.06666666666666667 | 1.0
+community: 7(171) | 7(171)
+edge betweeness centrality: 2.7793553791514734e-05
+
+1324 | 4546|-1
+degree: 8 | 2
+eff size: 8.0 | -1
+constraint: 0.125 | 0.5
+community: 22(13) | 22(13)
+edge betweeness centrality: 1.393268587998413e-05
+
+7594 | 10303|0
+degree: 14 | 23
+eff size: 7.92857142857143 | 13.739130434782611
+constraint: 0.13743497657910908 | 0.09046915421067282
+community: 11(95) | 4(395)
+edge betweeness centrality: 2.9753390641988566e-05
+
+6679 | 6682|0
+degree: 15 | 7
+eff size: 7.433333333333334 | 3.7857142857142856
+constraint: 0.14296409499132703 | 0.2775113043244911
+community: 10(120) | 10(120)
+edge betweeness centrality: 4.974463949711622e-05
+
+8297 | 2871|-1
+degree: 17 | 6
+eff size: 12.794117647058824 | 5.5
+constraint: 0.11865429056346935 | 0.17520746319374253
+community: 3(445) | 3(445)
+edge betweeness centrality: 3.443315606354376e-06
+
+5683 | 6618|-1
+degree: 47 | 3
+eff size: 34.22340425531915 | -1
+constraint: 0.04217695775216527 | 0.3527479095731487
+community: 12(94) | 12(94)
+edge betweeness centrality: 6.065776202461286e-06
+
+3764 | 1591|-1
+degree: 4 | 2
+eff size: 3.5 | -1
+constraint: 0.2508760532056729 | 0.5
+community: 2(527) | 2(527)
+edge betweeness centrality: 1.3980871628136715e-06
+
+4200 | 7949|0
+degree: 104 | 3
+eff size: 72.89903846153848 | 2.0
+constraint: 0.031163070120937827 | 0.5555555555555556
+community: 8(146) | 8(146)
+edge betweeness centrality: 2.3112414280571536e-05
+
+4923 | 6598|-1
+degree: 7 | 3
+eff size: 6.714285714285715 | 3.0
+constraint: 0.14333508796369698 | 0.3333333333333333
+community: 14(89) | 14(89)
+edge betweeness centrality: 1.395364833158132e-05
+
+1273 | 8495|-1
+degree: 25 | 2
+eff size: 19.66 | -1
+constraint: 0.07442917605439729 | 0.5
+community: 3(445) | 3(445)
+edge betweeness centrality: 1.7752371068276297e-05
+
+6906 | 8206|-1
+degree: 2 | 2
+eff size: 2.0 | -1
+constraint: 0.5 | 0.5
+community: 7(171) | 7(171)
+edge betweeness centrality: 2.6866034574113497e-05
+
+1887 | 8664|-1
+degree: 10 | 1
+eff size: 7.9 | -1
+constraint: 0.14124598780340544 | 1.0
+community: 16(61) | 16(61)
+edge betweeness centrality: 2.8009007696875315e-05
+
+6478 | 7018|0
+degree: 4 | 105
+eff size: 1.0 | 88.63333333333324
+constraint: 0.5718982494958768 | 0.03231716990245016
+community: 4(395) | 2(527)
+edge betweeness centrality: 0.00022967115411942735
+
+3790 | 2146|-1
+degree: 7 | 2
+eff size: 5.857142857142857 | -1
+constraint: 0.14671210856330594 | 0.5
+community: 5(217) | 5(217)
+edge betweeness centrality: 4.446878958409263e-06
+
+724 | 227|-1
+degree: 2 | 1
+eff size: 2.0 | -1
+constraint: 0.5 | 1.0
+community: 4(395) | 4(395)
+edge betweeness centrality: 2.7793553791514734e-05
+
+4969 | 7960|-1
+degree: 26 | 4
+eff size: 16.365384615384617 | 1.25
+constraint: 0.07951286335834717 | 0.41058514992991924
+community: 4(395) | 4(395)
+edge betweeness centrality: 2.2182270617770663e-06
+
+1239 | 7966|-1
+degree: 497 | 1
+eff size: 457.88631790744415 | -1
+constraint: 0.02269183768409597 | 1.0
+community: 2(527) | 2(527)
+edge betweeness centrality: 2.772173582306121e-05
+
+4189 | 4201|-1
+degree: 2 | 2
+eff size: 2.0 | -1
+constraint: 0.5 | 0.5
+community: 14(89) | 14(89)
+edge betweeness centrality: 2.5382717865817717e-06
+
+4926 | 4967|-1
+degree: 28 | 2
+eff size: 27.696428571428573 | -1
+constraint: 0.03648724951078798 | 0.5
+community: 5(217) | 5(217)
+edge betweeness centrality: 1.1443429858435055e-05
+
+6849 | 8464|-1
+degree: 9 | 2
+eff size: 8.555555555555555 | -1
+constraint: 0.13972717573540616 | 0.5
+community: 7(171) | 10(120)
+edge betweeness centrality: 2.507854959203311e-05
+
+7275 | 3761|-1
+degree: 2 | 2
+eff size: 2.0 | -1
+constraint: 0.5 | 0.5
+community: 2(527) | 2(527)
+edge betweeness centrality: 4.3885908579994196e-07
+
+1913 | 5205|-1
+degree: 52 | 1
+eff size: 51.96153846153847 | -1
+constraint: 0.020545693622616688 | 1.0
+community: 19(52) | 19(52)
+edge betweeness centrality: 2.786537175996826e-05
+
+6113 | 6386|-1
+degree: 59 | 3
+eff size: 41.6694915254237 | 2.3333333333333335
+constraint: 0.059210065767974156 | 0.34151931456158324
+community: 1(583) | 1(583)
+edge betweeness centrality: 2.097676736387787e-05
+
+5683 | 8412|-1
+degree: 47 | 3
+eff size: 34.22340425531915 | 2.0
+constraint: 0.04217695775216527 | 0.5555555555555556
+community: 12(94) | 3(445)
+edge betweeness centrality: 3.507619915723899e-05
+
+6113 | 10304|-1
+degree: 59 | 1
+eff size: 41.6694915254237 | -1
+constraint: 0.059210065767974156 | 1.0
+community: 1(583) | 1(583)
+edge betweeness centrality: 2.772173582306121e-05
+
+1 | 3739|-1
+degree: 215 | 6
+eff size: 198.6883720930232 | 4.75
+constraint: 0.026683147675068436 | 0.19040177981813655
+community: 1(583) | 1(583)
+edge betweeness centrality: 2.68178619682193e-05
+
+2548 | 4637|0
+degree: 206 | 42
+eff size: 177.50970873786403 | 37.89285714285714
+constraint: 0.02648616815875582 | 0.036005547925136695
+community: 1(583) | 12(94)
+edge betweeness centrality: 0.00013142840827702417
+
+6332 | 278|-1
+degree: 15 | 9
+eff size: 14.866666666666667 | 7.5
+constraint: 0.06687343348163102 | 0.156114435606333
+community: 15(76) | 15(76)
+edge betweeness centrality: 3.3959505402467605e-06
+
+6905 | 8737|-1
+degree: 4 | 2
+eff size: 3.625 | -1
+constraint: 0.33003328741965104 | 0.6482581496786042
+community: 3(445) | 3(445)
+edge betweeness centrality: 7.181796845352645e-08
+
+278 | 3548|-1
+degree: 9 | 1
+eff size: 7.5 | -1
+constraint: 0.156114435606333 | 1.0
+community: 15(76) | 15(76)
+edge betweeness centrality: 2.8368097539142944e-05
+
+174 | 7144|-1
+degree: 101 | 3
+eff size: 65.3861386138614 | -1
+constraint: 0.03758642834858716 | 0.34509436314797615
+community: 4(395) | 4(395)
+edge betweeness centrality: 1.0216126668094923e-05
+
+174 | 3763|-1
+degree: 101 | 9
+eff size: 65.3861386138614 | 2.2222222222222223
+constraint: 0.03758642834858716 | 0.20517253587211615
+community: 4(395) | 4(395)
+edge betweeness centrality: 3.2183322451846787e-06
+
+1 | 2056|0
+degree: 215 | 10
+eff size: 198.6883720930232 | 2.85
+constraint: 0.026683147675068436 | 0.18384344054960705
+community: 1(583) | 4(395)
+edge betweeness centrality: 2.640870236569e-06
+
+1273 | 6779|-1
+degree: 25 | 3
+eff size: 19.66 | -1
+constraint: 0.07442917605439729 | 0.3333333333333333
+community: 3(445) | 3(445)
+edge betweeness centrality: 3.6525159672991417e-06
+
+5683 | 6830|-1
+degree: 47 | 3
+eff size: 34.22340425531915 | -1
+constraint: 0.04217695775216527 | 0.34056718503959804
+community: 12(94) | 12(94)
+edge betweeness centrality: 1.1190783574453903e-05
+
+1890 | 1104|-1
+degree: 15 | 4
+eff size: 11.500000000000002 | 1.875
+constraint: 0.13199509246391194 | 0.43630510811600554
+community: 3(445) | 3(445)
+edge betweeness centrality: 7.021111531828493e-06
+
+4000 | 7980|-1
+degree: 76 | 2
+eff size: 60.00657894736841 | -1
+constraint: 0.02213402816169772 | 0.5730284799168974
+community: 3(445) | 5(217)
+edge betweeness centrality: 2.590422564486225e-05
+
+3967 | 5097|-1
+degree: 126 | 6
+eff size: 62.47222222222224 | 5.666666666666666
+constraint: 0.03518592108157115 | 0.17199336938856677
+community: 4(395) | 14(89)
+edge betweeness centrality: 5.0599509698886905e-05
+
+7570 | 7569|-1
+degree: 2 | 2
+eff size: 1.0 | -1
+constraint: 0.8427768166089966 | 0.8427768166089966
+community: 11(95) | 11(95)
+edge betweeness centrality: 7.181796845352645e-08
+
+6849 | 6876|-1
+degree: 9 | 2
+eff size: 8.555555555555555 | -1
+constraint: 0.13972717573540616 | 0.5
+community: 7(171) | 7(171)
+edge betweeness centrality: 1.9216758632360562e-05
+
+5417 | 5462|-1
+degree: 21 | 18
+eff size: 16.261904761904766 | 10.222222222222221
+constraint: 0.13873233055934175 | 0.09821679771899489
+community: 3(445) | 3(445)
+edge betweeness centrality: 9.507546731312215e-05
+
+286 | 3220|-1
+degree: 116 | 4
+eff size: 60.32758620689655 | 3.625
+constraint: 0.034224171569549086 | 0.32920723097502974
+community: 4(395) | 4(395)
+edge betweeness centrality: 3.990559717281431e-05
+
+3967 | 3976|0
+degree: 126 | 13
+eff size: 62.47222222222224 | 10.346153846153847
+constraint: 0.03518592108157115 | 0.10695892434991534
+community: 4(395) | 21(45)
+edge betweeness centrality: 4.9911456380556864e-05
+
+4200 | 6601|0
+degree: 104 | 3
+eff size: 72.89903846153848 | 1.0
+constraint: 0.031163070120937827 | 0.5653170047597933
+community: 8(146) | 8(146)
+edge betweeness centrality: 1.1536942730229453e-05
+
+5417 | 8215|-1
+degree: 21 | 5
+eff size: 16.261904761904766 | 2.1999999999999997
+constraint: 0.13873233055934175 | 0.34924104207758055
+community: 3(445) | 3(445)
+edge betweeness centrality: 9.75368919056644e-07
+
+8342 | 6795|-1
+degree: 14 | 4
+eff size: 13.892857142857142 | 3.125
+constraint: 0.07431364273496757 | 0.2623790416162196
+community: 7(171) | 7(171)
+edge betweeness centrality: 1.436359369070529e-07
+
+1913 | 5213|-1
+degree: 52 | 1
+eff size: 51.96153846153847 | -1
+constraint: 0.020545693622616688 | 1.0
+community: 19(52) | 19(52)
+edge betweeness centrality: 2.786537175996826e-05
+
+3110 | 4200|0
+degree: 3 | 104
+eff size: 2.0 | 72.89903846153848
+constraint: 0.5555555555555556 | 0.031163070120937827
+community: 8(146) | 8(146)
+edge betweeness centrality: 0.00026826590093143905
+
+174 | 4694|0
+degree: 101 | 27
+eff size: 65.3861386138614 | 18.185185185185183
+constraint: 0.03758642834858716 | 0.09430747112869019
+community: 4(395) | 9(145)
+edge betweeness centrality: 1.9809671647052404e-05
+
+1239 | 4003|-1
+degree: 497 | 2
+eff size: 457.88631790744415 | 2.0
+constraint: 0.02269183768409597 | 0.5
+community: 2(527) | 9(145)
+edge betweeness centrality: 2.8361187648684492e-05
+
+6648 | 10275|-1
+degree: 3 | 3
+eff size: 2.666666666666667 | 3.0
+constraint: 0.338771672270423 | 0.3333333333333333
+community: 9(145) | 9(145)
+edge betweeness centrality: 1.5662236499775426e-06
+
+1755 | 3259|-1
+degree: 91 | 10
+eff size: 84.46153846153847 | 8.55
+constraint: 0.01844780275328917 | 0.1290391907944711
+community: 3(445) | 3(445)
+edge betweeness centrality: 9.432651400016198e-06
+
+1290 | 71|-1
+degree: 10 | 7
+eff size: 7.35 | -1
+constraint: 0.17141027578109472 | 0.1559823656705189
+community: 3(445) | 3(445)
+edge betweeness centrality: 1.574187215332886e-06
+
+1673 | 4540|-1
+degree: 101 | 10
+eff size: 60.34653465346533 | 2.2
+constraint: 0.032999749630033326 | 0.17970611279491483
+community: 4(395) | 4(395)
+edge betweeness centrality: 2.1442116198086522e-06
+
+4200 | 7078|0
+degree: 104 | 5
+eff size: 72.89903846153848 | 2.4
+constraint: 0.031163070120937827 | 0.28782683930299985
+community: 8(146) | 2(527)
+edge betweeness centrality: 1.0307306169033395e-05
+
+513 | 6679|0
+degree: 7 | 15
+eff size: 4.571428571428571 | 7.433333333333334
+constraint: 0.22555291691919765 | 0.14296409499132703
+community: 10(120) | 10(120)
+edge betweeness centrality: 3.752357114322418e-05
+
+815 | 11079|-1
+degree: 5 | 2
+eff size: 4.2 | -1
+constraint: 0.27940277777777783 | 0.72
+community: 13(92) | 13(92)
+edge betweeness centrality: 1.436359369070529e-07
+
+3320 | 8196|-1
+degree: 26 | 5
+eff size: 17.53846153846154 | 5.0
+constraint: 0.06247598928273704 | 0.20000000000000004
+community: 3(445) | 3(445)
+edge betweeness centrality: 1.6697213413460172e-05
+
+5646 | 3847|-1
+degree: 61 | 82
+eff size: 52.762295081967196 | 43.0
+constraint: 0.031022177495046106 | 0.04513124183629353
+community: 6(193) | 4(395)
+edge betweeness centrality: 2.052799371205135e-05
+
+1673 | 3914|-1
+degree: 101 | 10
+eff size: 60.34653465346533 | 3.5
+constraint: 0.032999749630033326 | 0.17047373763353219
+community: 4(395) | 4(395)
+edge betweeness centrality: 2.273392028810306e-06
+
+3300 | 6799|-1
+degree: 66 | 5
+eff size: 48.9090909090909 | 5.0
+constraint: 0.03222842933474537 | 0.20000000000000004
+community: 3(445) | 10(120)
+edge betweeness centrality: 3.611235757265633e-05
+
+701 | 5413|0
+degree: 847 | 112
+eff size: 809.8122786304559 | 57.59375000000001
+constraint: 0.012185591378935857 | 0.028302220909222058
+community: 1(583) | 4(395)
+edge betweeness centrality: 3.227811791073016e-05
+
+1798 | 4386|0
+degree: 4 | 2
+eff size: 3.0 | 1.0
+constraint: 0.375 | 1.0
+community: 14(89) | 14(89)
+edge betweeness centrality: 2.7793553791514734e-05
+
+3561 | 6072|-1
+degree: 673 | 2
+eff size: 625.1738484398189 | 2.0
+constraint: 0.018076133470507474 | 0.5
+community: 2(527) | 1(583)
+edge betweeness centrality: 2.8289393742689393e-05
+
+174 | 668|-1
+degree: 101 | 33
+eff size: 65.3861386138614 | 16.242424242424242
+constraint: 0.03758642834858716 | 0.07756753362714333
+community: 4(395) | 18(53)
+edge betweeness centrality: 1.518180102924122e-05
+
+1 | 7977|-1
+degree: 215 | 3
+eff size: 198.6883720930232 | -1
+constraint: 0.026683147675068436 | 0.34421720828838404
+community: 1(583) | 2(527)
+edge betweeness centrality: 5.9065991219771906e-06
+
+1901 | 8387|-1
+degree: 3 | 1
+eff size: 3.0 | -1
+constraint: 0.3333333333333333 | 1.0
+community: 4(395) | 4(395)
+edge betweeness centrality: 2.7793553791514734e-05
+
+3838 | 7322|-1
+degree: 4 | 2
+eff size: 3.625 | -1
+constraint: 0.29875877792320854 | 0.5
+community: 1(583) | 1(583)
+edge betweeness centrality: 3.963348383199889e-06
+
+174 | 6172|0
+degree: 101 | 24
+eff size: 65.3861386138614 | 9.583333333333334
+constraint: 0.03758642834858716 | 0.08569622061260844
+community: 4(395) | 4(395)
+edge betweeness centrality: 3.452581595663362e-06
+
+685 | 701|0
+degree: 21 | 847
+eff size: 18.523809523809526 | 809.8122786304559
+constraint: 0.10261947095866285 | 0.012185591378935857
+community: 15(76) | 1(583)
+edge betweeness centrality: 0.0005184090897382273
+
+10637 | 6460|-1
+degree: 5 | 2
+eff size: 5.0 | -1
+constraint: 0.20000000000000004 | 0.5
+community: 2(527) | 2(527)
+edge betweeness centrality: 3.802255751610871e-07
+
+7037 | 11110|-1
+degree: 10 | 2
+eff size: 9.15 | -1
+constraint: 0.11069938862652956 | 0.5
+community: 8(146) | 8(146)
+edge betweeness centrality: 2.904046537974039e-06
+
+3561 | 10721|-1
+degree: 673 | 3
+eff size: 625.1738484398189 | -1
+constraint: 0.018076133470507474 | 0.3375052122642057
+community: 2(527) | 2(527)
+edge betweeness centrality: 1.2945755147378382e-05
+
+1225 | 7194|0
+degree: 37 | 14
+eff size: 31.01351351351352 | 4.464285714285715
+constraint: 0.04658988681450551 | 0.1353841045347064
+community: 6(193) | 4(395)
+edge betweeness centrality: 5.799614634216584e-05
+
+5413 | 8297|0
+degree: 112 | 17
+eff size: 57.59375000000001 | 12.794117647058824
+constraint: 0.028302220909222058 | 0.11865429056346935
+community: 4(395) | 3(445)
+edge betweeness centrality: 5.9161715379224654e-05
+
+1 | 7019|-1
+degree: 215 | 10
+eff size: 198.6883720930232 | 4.2
+constraint: 0.026683147675068436 | 0.1692592222204827
+community: 1(583) | 4(395)
+edge betweeness centrality: 3.8190703663132835e-06
+
+3561 | 4534|-1
+degree: 673 | 16
+eff size: 625.1738484398189 | 14.59375
+constraint: 0.018076133470507474 | 0.09999443391816591
+community: 2(527) | 6(193)
+edge betweeness centrality: 4.4259527005057504e-05
+
+174 | 2685|0
+degree: 101 | 38
+eff size: 65.3861386138614 | 22.06578947368421
+constraint: 0.03758642834858716 | 0.053393813585032014
+community: 4(395) | 4(395)
+edge betweeness centrality: 1.934851040388746e-05
+
+8359 | 3058|-1
+degree: 4 | 5
+eff size: 4.0 | 5.0
+constraint: 0.25 | 0.20000000000000004
+community: 7(171) | 7(171)
+edge betweeness centrality: 5.316695823797359e-06
+
+8472 | 6787|-1
+degree: 7 | 1
+eff size: 5.142857142857143 | -1
+constraint: 0.19421726354589408 | 1.0
+community: 3(445) | 3(445)
+edge betweeness centrality: 2.7937189728421786e-05
+
+1 | 7133|-1
+degree: 215 | 2
+eff size: 198.6883720930232 | -1
+constraint: 0.026683147675068436 | 0.506160888058605
+community: 1(583) | 1(583)
+edge betweeness centrality: 9.021581834013695e-06
+
+2854 | 3253|-1
+degree: 15 | 2
+eff size: 15.0 | -1
+constraint: 0.06666666666666667 | 0.5
+community: 7(171) | 7(171)
+edge betweeness centrality: 1.0579028780222332e-05
+
+701 | 6143|0
+degree: 847 | 3
+eff size: 809.8122786304559 | 2.0
+constraint: 0.012185591378935857 | 0.5555555555555556
+community: 1(583) | 4(395)
+edge betweeness centrality: 1.0315965394041577e-05
+
+3356 | 5632|-1
+degree: 27 | 17
+eff size: 8.75925925925926 | 13.411764705882351
+constraint: 0.08845813467232956 | 0.08634119091781411
+community: 4(395) | 4(395)
+edge betweeness centrality: 9.420381169458621e-06
+
+2497 | 7514|0
+degree: 183 | 5
+eff size: 103.48087431693992 | 2.9
+constraint: 0.025773134525637936 | 0.41424683926065275
+community: 9(145) | 9(145)
+edge betweeness centrality: 3.074611482223128e-05
+
+3254 | 3255|0
+degree: 14 | 5
+eff size: 12.678571428571429 | 3.5
+constraint: 0.10357142857142855 | 0.32584489795918375
+community: 7(171) | 7(171)
+edge betweeness centrality: 8.52457908305558e-06
+
+4534 | 5687|-1
+degree: 16 | 3
+eff size: 14.59375 | 3.0
+constraint: 0.09999443391816591 | 0.3333333333333333
+community: 6(193) | 6(193)
+edge betweeness centrality: 1.578795117398757e-05
+
+4205 | 93|-1
+degree: 4 | 10
+eff size: 2.75 | 9.35
+constraint: 0.2776515114172654 | 0.12656521077520497
+community: 2(527) | 2(527)
+edge betweeness centrality: 5.745437476282116e-07
+
+3561 | 6304|-1
+degree: 673 | 1
+eff size: 625.1738484398189 | -1
+constraint: 0.018076133470507474 | 1.0
+community: 2(527) | 2(527)
+edge betweeness centrality: 2.772173582306121e-05
+
+701 | 10334|-1
+degree: 847 | 4
+eff size: 809.8122786304559 | 2.5
+constraint: 0.012185591378935857 | 0.25481719082335746
+community: 1(583) | 1(583)
+edge betweeness centrality: 1.7290269997033322e-05
+
+278 | 11087|-1
+degree: 9 | 2
+eff size: 7.5 | -1
+constraint: 0.156114435606333 | 0.5889187919176386
+community: 15(76) | 15(76)
+edge betweeness centrality: 1.592714392706919e-05
+
+3343 | 2848|-1
+degree: 16 | 5
+eff size: 14.53125 | 4.0
+constraint: 0.09410275972707702 | 0.28
+community: 7(171) | 7(171)
+edge betweeness centrality: 5.4069618955640146e-05
+
+3847 | 6201|-1
+degree: 82 | 7
+eff size: 43.0 | -1
+constraint: 0.04513124183629353 | 0.1471421395941262
+community: 4(395) | 4(395)
+edge betweeness centrality: 8.27828259032697e-06
+
+5510 | 8754|-1
+degree: 5 | 2
+eff size: 5.0 | -1
+constraint: 0.20000000000000004 | 0.5
+community: 17(60) | 17(60)
+edge betweeness centrality: 1.027141657029768e-05
+
+286 | 2118|-1
+degree: 116 | 28
+eff size: 60.32758620689655 | 26.875
+constraint: 0.034224171569549086 | 0.0393884739032549
+community: 4(395) | 7(171)
+edge betweeness centrality: 0.0005678687320599152
+
+701 | 3838|-1
+degree: 847 | 4
+eff size: 809.8122786304559 | 3.625
+constraint: 0.012185591378935857 | 0.29875877792320854
+community: 1(583) | 1(583)
+edge betweeness centrality: 1.1387514234656013e-05
+
+7037 | 3776|-1
+degree: 10 | 2
+eff size: 9.15 | -1
+constraint: 0.11069938862652956 | 0.5
+community: 8(146) | 18(53)
+edge betweeness centrality: 1.9955938234809233e-05
+
+2914 | 7594|0
+degree: 221 | 14
+eff size: 123.5135746606334 | 7.92857142857143
+constraint: 0.02370992008192883 | 0.13743497657910908
+community: 4(395) | 11(95)
+edge betweeness centrality: 4.9577446402159585e-05
+
+1887 | 8535|-1
+degree: 10 | 2
+eff size: 7.9 | -1
+constraint: 0.14124598780340544 | 0.5
+community: 16(61) | 16(61)
+edge betweeness centrality: 9.51607154546635e-06
+
+174 | 6469|-1
+degree: 101 | 4
+eff size: 65.3861386138614 | -1
+constraint: 0.03758642834858716 | 0.2630930634468424
+community: 4(395) | 4(395)
+edge betweeness centrality: 5.854581797856727e-06
+
+3967 | 4436|0
+degree: 126 | 20
+eff size: 62.47222222222224 | 8.475
+constraint: 0.03518592108157115 | 0.10415748764412582
+community: 4(395) | 4(395)
+edge betweeness centrality: 9.731833459877571e-06
+
+4200 | 8100|0
+degree: 104 | 4
+eff size: 72.89903846153848 | 2.625
+constraint: 0.031163070120937827 | 0.42574770978965176
+community: 8(146) | 1(583)
+edge betweeness centrality: 1.3949375132201049e-05
+
+174 | 4000|-1
+degree: 101 | 76
+eff size: 65.3861386138614 | 60.00657894736841
+constraint: 0.03758642834858716 | 0.02213402816169772
+community: 4(395) | 3(445)
+edge betweeness centrality: 9.657188993213572e-05
+
+4436 | 6565|-1
+degree: 20 | 1
+eff size: 8.475 | -1
+constraint: 0.10415748764412582 | 1.0
+community: 4(395) | 4(395)
+edge betweeness centrality: 2.772173582306121e-05
+
+290 | 2497|0
+degree: 4 | 183
+eff size: 1.5 | 103.48087431693992
+constraint: 0.504289697844537 | 0.025773134525637936
+community: 9(145) | 9(145)
+edge betweeness centrality: 0.0002679528403001073
+
+1913 | 5210|-1
+degree: 52 | 1
+eff size: 51.96153846153847 | -1
+constraint: 0.020545693622616688 | 1.0
+community: 19(52) | 19(52)
+edge betweeness centrality: 2.786537175996826e-05
+
+1239 | 2900|-1
+degree: 497 | 4
+eff size: 457.88631790744415 | -1
+constraint: 0.02269183768409597 | 0.2615064740522308
+community: 2(527) | 4(395)
+edge betweeness centrality: 7.855120721767716e-06
+
+52 | 1852|-1
+degree: 3 | 11
+eff size: 3.0 | 9.090909090909092
+constraint: 0.3333333333333333 | 0.12802341269362735
+community: 4(395) | 4(395)
+edge betweeness centrality: 0.00026861688447054314
+
+1221 | 7594|-1
+degree: 45 | 14
+eff size: 44.46666666666665 | 7.92857142857143
+constraint: 0.03295446162407297 | 0.13743497657910908
+community: 11(95) | 11(95)
+edge betweeness centrality: 0.00037577298038608353
+
+4000 | 286|-1
+degree: 76 | 116
+eff size: 60.00657894736841 | 60.32758620689655
+constraint: 0.02213402816169772 | 0.034224171569549086
+community: 3(445) | 4(395)
+edge betweeness centrality: 0.00023562025051013832
+
+559 | 6679|0
+degree: 3 | 15
+eff size: 2.0 | 7.433333333333334
+constraint: 0.5555555555555556 | 0.14296409499132703
+community: 10(120) | 10(120)
+edge betweeness centrality: 0.0005358458322931699
+
+237 | 238|-1
+degree: 18 | 2
+eff size: 10.194444444444443 | -1
+constraint: 0.10830849469089691 | 0.5
+community: 6(193) | 6(193)
+edge betweeness centrality: 7.180551136178856e-06
+
+4000 | 4002|-1
+degree: 76 | 2
+eff size: 60.00657894736841 | 2.0
+constraint: 0.02213402816169772 | 0.5
+community: 3(445) | 20(52)
+edge betweeness centrality: 3.3832484136963575e-05
+
+6664 | 2598|-1
+degree: 22 | 3
+eff size: 19.636363636363637 | 2.0
+constraint: 0.06736031724813953 | 0.5555555555555556
+community: 17(60) | 17(60)
+edge betweeness centrality: 3.9004591953803705e-05
+
+174 | 7960|-1
+degree: 101 | 4
+eff size: 65.3861386138614 | 1.25
+constraint: 0.03758642834858716 | 0.41058514992991924
+community: 4(395) | 4(395)
+edge betweeness centrality: 7.42521050091753e-06
+
+1239 | 5705|-1
+degree: 497 | 3
+eff size: 457.88631790744415 | -1
+constraint: 0.02269183768409597 | 0.3704244937910124
+community: 2(527) | 4(395)
+edge betweeness centrality: 8.221533464641778e-06
+
+4200 | 6967|-1
+degree: 104 | 2
+eff size: 72.89903846153848 | -1
+constraint: 0.031163070120937827 | 0.5
+community: 8(146) | 8(146)
+edge betweeness centrality: 2.6656928647298782e-05
+
+4999 | 8106|-1
+degree: 2 | 1
+eff size: 2.0 | -1
+constraint: 0.5 | 1.0
+community: 2(527) | 2(527)
+edge betweeness centrality: 2.7793553791514734e-05
+
+1 | 2933|-1
+degree: 215 | 6
+eff size: 198.6883720930232 | 3.5000000000000004
+constraint: 0.026683147675068436 | 0.2137712126465824
+community: 1(583) | 1(583)
+edge betweeness centrality: 5.278270212189229e-06
+
+2118 | 2820|-1
+degree: 28 | 2
+eff size: 26.875 | -1
+constraint: 0.0393884739032549 | 0.5
+community: 7(171) | 7(171)
+edge betweeness centrality: 2.7094924553947377e-05
+
+6322 | 10385|-1
+degree: 5 | 2
+eff size: 4.6 | -1
+constraint: 0.2725000000000001 | 0.750625
+community: 14(89) | 14(89)
+edge betweeness centrality: 1.3974085384021582e-05
+
+7018 | 11112|-1
+degree: 105 | 1
+eff size: 88.63333333333324 | -1
+constraint: 0.03231716990245016 | 1.0
+community: 2(527) | 2(527)
+edge betweeness centrality: 2.772173582306121e-05
+
+4200 | 6938|0
+degree: 104 | 5
+eff size: 72.89903846153848 | 2.7
+constraint: 0.031163070120937827 | 0.3442902019891073
+community: 8(146) | 8(146)
+edge betweeness centrality: 1.0832128809209668e-05
+
+5400 | 6679|0
+degree: 28 | 15
+eff size: 22.714285714285715 | 7.433333333333334
+constraint: 0.05793201876456169 | 0.14296409499132703
+community: 3(445) | 10(120)
+edge betweeness centrality: 1.2890574130433649e-05
+
+174 | 7226|-1
+degree: 101 | 3
+eff size: 65.3861386138614 | -1
+constraint: 0.03758642834858716 | 0.3333333333333333
+community: 4(395) | 4(395)
+edge betweeness centrality: 1.1680758323388506e-05
+
+174 | 4355|-1
+degree: 101 | 5
+eff size: 65.3861386138614 | -1
+constraint: 0.03758642834858716 | 0.23184954501190733
+community: 4(395) | 1(583)
+edge betweeness centrality: 7.264548972410401e-06
+
+1136 | 1890|0
+degree: 19 | 15
+eff size: 15.657894736842106 | 11.500000000000002
+constraint: 0.08691744948859026 | 0.13199509246391194
+community: 3(445) | 3(445)
+edge betweeness centrality: 0.0002887873725944586
+
+1 | 4129|-1
+degree: 215 | 3
+eff size: 198.6883720930232 | -1
+constraint: 0.026683147675068436 | 0.3406189050670379
+community: 1(583) | 1(583)
+edge betweeness centrality: 7.340823564361185e-06
+
+2118 | 8470|-1
+degree: 28 | 5
+eff size: 26.875 | 5.0
+constraint: 0.0393884739032549 | 0.20000000000000004
+community: 7(171) | 7(171)
+edge betweeness centrality: 4.10156870071167e-05
+
+2041 | 3967|0
+degree: 56 | 126
+eff size: 40.25 | 62.47222222222224
+constraint: 0.044700754870746415 | 0.03518592108157115
+community: 8(146) | 4(395)
+edge betweeness centrality: 1.5652151898862902e-05
+
+2914 | 3561|0
+degree: 221 | 673
+eff size: 123.5135746606334 | 625.1738484398189
+constraint: 0.02370992008192883 | 0.018076133470507474
+community: 4(395) | 2(527)
+edge betweeness centrality: 0.0018042661503931438
+
+3976 | 6619|-1
+degree: 13 | 3
+eff size: 10.346153846153847 | -1
+constraint: 0.10695892434991534 | 0.3333333333333333
+community: 21(45) | 21(45)
+edge betweeness centrality: 5.755611971138062e-06
+
+7784 | 10543|0
+degree: 5 | 3
+eff size: 2.7 | 2.0
+constraint: 0.4313000688743954 | 0.5555555555555556
+community: 1(583) | 1(583)
+edge betweeness centrality: 1.071155154308296e-06
+
+2033 | 4459|-1
+degree: 4 | 3
+eff size: 2.375 | -1
+constraint: 0.4656498007659283 | 0.4808471878857208
+community: 2(527) | 2(527)
+edge betweeness centrality: 1.8908849732432344e-07
+
+702 | 5582|-1
+degree: 107 | 1
+eff size: 91.65887850467287 | -1
+constraint: 0.016799663485283084 | 1.0
+community: 3(445) | 3(445)
+edge betweeness centrality: 2.772173582306121e-05
+
+4534 | 7168|-1
+degree: 16 | 2
+eff size: 14.59375 | -1
+constraint: 0.09999443391816591 | 0.5328172297483897
+community: 6(193) | 6(193)
+edge betweeness centrality: 1.1958114058642953e-06
+
+3561 | 3761|-1
+degree: 673 | 2
+eff size: 625.1738484398189 | -1
+constraint: 0.018076133470507474 | 0.5
+community: 2(527) | 2(527)
+edge betweeness centrality: 2.7354694705714795e-05
+
+4923 | 10367|-1
+degree: 7 | 2
+eff size: 6.714285714285715 | -1
+constraint: 0.14333508796369698 | 0.5
+community: 14(89) | 14(89)
+edge betweeness centrality: 1.1710174128407248e-06
+
+8363 | 8386|-1
+degree: 2 | 3
+eff size: 2.0 | -1
+constraint: 0.5 | 0.3333333333333333
+community: 2(527) | 2(527)
+edge betweeness centrality: 4.6688006042784665e-06
+
+2118 | 6690|-1
+degree: 28 | 2
+eff size: 26.875 | -1
+constraint: 0.0393884739032549 | 0.5
+community: 7(171) | 7(171)
+edge betweeness centrality: 7.445563781088802e-06
+
+1 | 174|0
+degree: 215 | 101
+eff size: 198.6883720930232 | 65.3861386138614
+constraint: 0.026683147675068436 | 0.03758642834858716
+community: 1(583) | 4(395)
+edge betweeness centrality: 6.031554361688866e-06
+
+7993 | 10502|-1
+degree: 2 | 1
+eff size: 2.0 | -1
+constraint: 0.5 | 1.0
+community: 3(445) | 3(445)
+edge betweeness centrality: 2.7793553791514734e-05
+
+6753 | 5605|-1
+degree: 4 | 1
+eff size: 3.5 | -1
+constraint: 0.34725765306122447 | 1.0
+community: 3(445) | 3(445)
+edge betweeness centrality: 2.7937189728421786e-05
+
+668 | 5856|-1
+degree: 33 | 2
+eff size: 16.242424242424242 | -1
+constraint: 0.07756753362714333 | 0.5
+community: 18(53) | 4(395)
+edge betweeness centrality: 1.3018410323525953e-05
+
+668 | 7170|0
+degree: 33 | 30
+eff size: 16.242424242424242 | 21.7
+constraint: 0.07756753362714333 | 0.06808593732991629
+community: 18(53) | 18(53)
+edge betweeness centrality: 2.9065650658813336e-06
+
+701 | 286|-1
+degree: 847 | 116
+eff size: 809.8122786304559 | 60.32758620689655
+constraint: 0.012185591378935857 | 0.034224171569549086
+community: 1(583) | 4(395)
+edge betweeness centrality: 3.2848613831817184e-05
+
+174 | 6453|0
+degree: 101 | 89
+eff size: 65.3861386138614 | 78.38202247191013
+constraint: 0.03758642834858716 | 0.020219296288142025
+community: 4(395) | 5(217)
+edge betweeness centrality: 0.00017561765590860627
+
+3790 | 6371|-1
+degree: 7 | 7
+eff size: 5.857142857142857 | 5.5
+constraint: 0.14671210856330594 | 0.19215928159892567
+community: 5(217) | 5(217)
+edge betweeness centrality: 3.1295095047655234e-06
+
+145 | 5050|-1
+degree: 47 | 8
+eff size: 36.41489361702128 | 7.75
+constraint: 0.03797470429679599 | 0.12603491416384233
+community: 6(193) | 6(193)
+edge betweeness centrality: 1.346738173455492e-05
+
+2493 | 11085|-1
+degree: 18 | 2
+eff size: 17.88888888888889 | -1
+constraint: 0.05569737174884632 | 0.5
+community: 13(92) | 13(92)
+edge betweeness centrality: 2.5958943041925787e-05
+
+3220 | 3238|-1
+degree: 4 | 2
+eff size: 3.625 | -1
+constraint: 0.32920723097502974 | 0.5
+community: 4(395) | 16(61)
+edge betweeness centrality: 2.702475953873604e-05
+
+6727 | 8497|-1
+degree: 6 | 2
+eff size: 5.416666666666667 | -1
+constraint: 0.21595688519161768 | 0.5949725109422463
+community: 3(445) | 3(445)
+edge betweeness centrality: 1.5038203488839977e-06
+
+2685 | 4543|-1
+degree: 38 | 2
+eff size: 22.06578947368421 | -1
+constraint: 0.053393813585032014 | 0.5139216921791376
+community: 4(395) | 4(395)
+edge betweeness centrality: 1.0939968263667825e-05
+
+4534 | 7752|-1
+degree: 16 | 2
+eff size: 14.59375 | -1
+constraint: 0.09999443391816591 | 0.5
+community: 6(193) | 6(193)
+edge betweeness centrality: 4.6506471910942415e-06
+
+4200 | 5557|-1
+degree: 104 | 6
+eff size: 72.89903846153848 | 4.000000000000001
+constraint: 0.031163070120937827 | 0.2766655813130631
+community: 8(146) | 3(445)
+edge betweeness centrality: 2.0730271595039464e-05
+
+8562 | 8245|-1
+degree: 2 | 2
+eff size: 2.0 | -1
+constraint: 0.5 | 0.5
+community: 3(445) | 3(445)
+edge betweeness centrality: 4.958859726553016e-07
+
+237 | 4912|-1
+degree: 18 | 3
+eff size: 10.194444444444443 | -1
+constraint: 0.10830849469089691 | 0.37173309445581715
+community: 6(193) | 6(193)
+edge betweeness centrality: 3.4395491401880814e-06
+
+5491 | 5492|-1
+degree: 3 | 2
+eff size: 2.0 | -1
+constraint: 0.5555555555555556 | 0.5
+community: 18(53) | 18(53)
+edge betweeness centrality: 6.314810974146431e-06
+
+1755 | 2592|-1
+degree: 91 | 2
+eff size: 84.46153846153847 | -1
+constraint: 0.01844780275328917 | 0.5
+community: 3(445) | 3(445)
+edge betweeness centrality: 2.0663740073594572e-05
+
+4534 | 6108|-1
+degree: 16 | 3
+eff size: 14.59375 | 2.5
+constraint: 0.09999443391816591 | 0.34791876877706207
+community: 6(193) | 6(193)
+edge betweeness centrality: 1.2676293743178226e-06
+
+1755 | 71|-1
+degree: 91 | 7
+eff size: 84.46153846153847 | -1
+constraint: 0.01844780275328917 | 0.1559823656705189
+community: 3(445) | 3(445)
+edge betweeness centrality: 1.767699332279579e-06
+
+1267 | 8583|-1
+degree: 7 | 2
+eff size: 6.5 | -1
+constraint: 0.17388447469229323 | 0.6068074288538945
+community: 17(60) | 17(60)
+edge betweeness centrality: 7.287096465048617e-06
+
+10554 | 7820|-1
+degree: 3 | 4
+eff size: 3.0 | -1
+constraint: 0.3333333333333333 | 0.25
+community: 6(193) | 6(193)
+edge betweeness centrality: 6.622311633981977e-07
+
+2033 | 3561|0
+degree: 4 | 673
+eff size: 2.375 | 625.1738484398189
+constraint: 0.4656498007659283 | 0.018076133470507474
+community: 2(527) | 2(527)
+edge betweeness centrality: 0.0002729516276170757
+
+3300 | 1299|-1
+degree: 66 | 20
+eff size: 48.9090909090909 | 14.825
+constraint: 0.03222842933474537 | 0.07613516750954206
+community: 3(445) | 16(61)
+edge betweeness centrality: 7.338751782212087e-05
+
+1 | 7018|-1
+degree: 215 | 105
+eff size: 198.6883720930232 | 88.63333333333324
+constraint: 0.026683147675068436 | 0.03231716990245016
+community: 1(583) | 2(527)
+edge betweeness centrality: 1.144283447402726e-05
+
+701 | 7360|-1
+degree: 847 | 1
+eff size: 809.8122786304559 | -1
+constraint: 0.012185591378935857 | 1.0
+community: 1(583) | 1(583)
+edge betweeness centrality: 2.772173582306121e-05
+
+1239 | 6925|-1
+degree: 497 | 2
+eff size: 457.88631790744415 | -1
+constraint: 0.02269183768409597 | 0.5035042128226916
+community: 2(527) | 2(527)
+edge betweeness centrality: 9.64655449935708e-06
+
+7594 | 3409|-1
+degree: 14 | 2
+eff size: 7.92857142857143 | -1
+constraint: 0.13743497657910908 | 0.5
+community: 11(95) | 11(95)
+edge betweeness centrality: 2.7532431024163193e-05
+
+4005 | 6505|-1
+degree: 29 | 8
+eff size: 27.810344827586206 | 6.9375
+constraint: 0.03793955599875249 | 0.1564462691385447
+community: 5(217) | 5(217)
+edge betweeness centrality: 2.5136288958734254e-07
+
+1901 | 8446|-1
+degree: 3 | 1
+eff size: 3.0 | -1
+constraint: 0.3333333333333333 | 1.0
+community: 4(395) | 4(395)
+edge betweeness centrality: 2.7793553791514734e-05
+
+3300 | 6679|0
+degree: 66 | 15
+eff size: 48.9090909090909 | 7.433333333333334
+constraint: 0.03222842933474537 | 0.14296409499132703
+community: 3(445) | 10(120)
+edge betweeness centrality: 9.416774591702694e-05
+
+3758 | 4775|-1
+degree: 6 | 2
+eff size: 5.75 | -1
+constraint: 0.2014714993348234 | 0.5910212717911884
+community: 3(445) | 3(445)
+edge betweeness centrality: 4.4776256990720536e-07
+
+2497 | 7594|0
+degree: 183 | 14
+eff size: 103.48087431693992 | 7.92857142857143
+constraint: 0.025773134525637936 | 0.13743497657910908
+community: 9(145) | 11(95)
+edge betweeness centrality: 3.562133562865799e-05
+
+1198 | 2611|0
+degree: 6 | 7
+eff size: 3.0 | 4.2857142857142865
+constraint: 0.3333333333333333 | 0.23592788740722398
+community: 3(445) | 3(445)
+edge betweeness centrality: 2.6064015442999744e-06
+
+3847 | 7018|0
+degree: 82 | 105
+eff size: 43.0 | 88.63333333333324
+constraint: 0.04513124183629353 | 0.03231716990245016
+community: 4(395) | 2(527)
+edge betweeness centrality: 9.463441843606278e-05
+
+93 | 10729|-1
+degree: 10 | 2
+eff size: 9.35 | -1
+constraint: 0.12656521077520497 | 0.5532434940134106
+community: 2(527) | 2(527)
+edge betweeness centrality: 5.106770542534684e-07
+
+3304 | 6686|0
+degree: 8 | 7
+eff size: 7.0 | 6.0
+constraint: 0.15625 | 0.18367346938775508
+community: 3(445) | 3(445)
+edge betweeness centrality: 4.301573209632802e-06
+
+3940 | 685|-1
+degree: 3 | 21
+eff size: 2.5 | 18.523809523809526
+constraint: 0.4830561854371378 | 0.10261947095866285
+community: 15(76) | 15(76)
+edge betweeness centrality: 0.000268153930611777
+
+3561 | 1967|-1
+degree: 673 | 2
+eff size: 625.1738484398189 | -1
+constraint: 0.018076133470507474 | 0.5
+community: 2(527) | 3(445)
+edge betweeness centrality: 2.7413328216353666e-05
+
+2548 | 6806|-1
+degree: 206 | 2
+eff size: 177.50970873786403 | -1
+constraint: 0.02648616815875582 | 0.5
+community: 1(583) | 5(217)
+edge betweeness centrality: 2.738506655478408e-05
+
+6755 | 8488|-1
+degree: 8 | 2
+eff size: 7.5625 | -1
+constraint: 0.13773367753860075 | 0.5
+community: 1(583) | 1(583)
+edge betweeness centrality: 1.941372059078835e-05
+
+7736 | 3142|-1
+degree: 3 | 1
+eff size: 2.3333333333333335 | -1
+constraint: 0.33452005484528297 | 1.0
+community: 1(583) | 1(583)
+edge betweeness centrality: 2.7793553791514734e-05
+
+7594 | 7637|-1
+degree: 14 | 6
+eff size: 7.92857142857143 | 4.666666666666667
+constraint: 0.13743497657910908 | 0.2605251736111111
+community: 11(95) | 11(95)
+edge betweeness centrality: 5.619035258611919e-05
+
+701 | 2052|-1
+degree: 847 | 2
+eff size: 809.8122786304559 | -1
+constraint: 0.012185591378935857 | 0.5
+community: 1(583) | 20(52)
+edge betweeness centrality: 2.7627272025121167e-05
+
+701 | 7019|-1
+degree: 847 | 10
+eff size: 809.8122786304559 | 4.2
+constraint: 0.012185591378935857 | 0.1692592222204827
+community: 1(583) | 4(395)
+edge betweeness centrality: 7.013024728361447e-06
+
+7915 | 7353|-1
+degree: 4 | 1
+eff size: 4.0 | -1
+constraint: 0.25 | 1.0
+community: 2(527) | 2(527)
+edge betweeness centrality: 2.786537175996826e-05
+
+4200 | 5413|0
+degree: 104 | 112
+eff size: 72.89903846153848 | 57.59375000000001
+constraint: 0.031163070120937827 | 0.028302220909222058
+community: 8(146) | 4(395)
+edge betweeness centrality: 0.00023908367767929974
+
+2116 | 3220|-1
+degree: 2 | 4
+eff size: 1.25 | 3.625
+constraint: 0.644953923900119 | 0.32920723097502974
+community: 4(395) | 4(395)
+edge betweeness centrality: 1.436359369070529e-07
+
+2516 | 290|-1
+degree: 44 | 4
+eff size: 39.511363636363626 | 1.5
+constraint: 0.10422322558047749 | 0.504289697844537
+community: 9(145) | 9(145)
+edge betweeness centrality: 3.842859475210464e-06
+
+3561 | 7023|-1
+degree: 673 | 3
+eff size: 625.1738484398189 | -1
+constraint: 0.018076133470507474 | 0.3375052122642057
+community: 2(527) | 2(527)
+edge betweeness centrality: 1.2945755147378382e-05
+
+4200 | 4258|0
+degree: 104 | 4
+eff size: 72.89903846153848 | 1.875
+constraint: 0.031163070120937827 | 0.4009784245847497
+community: 8(146) | 2(527)
+edge betweeness centrality: 1.2940226749259775e-05
+
+701 | 7018|-1
+degree: 847 | 105
+eff size: 809.8122786304559 | 88.63333333333324
+constraint: 0.012185591378935857 | 0.03231716990245016
+community: 1(583) | 2(527)
+edge betweeness centrality: 5.16522550951996e-05
+
+1241 | 8522|-1
+degree: 8 | 2
+eff size: 8.0 | -1
+constraint: 0.125 | 0.5
+community: 10(120) | 10(120)
+edge betweeness centrality: 2.1942766178824427e-05
+
+8672 | 8975|-1
+degree: 3 | 1
+eff size: 3.0 | -1
+constraint: 0.3333333333333333 | 1.0
+community: 1(583) | 1(583)
+edge betweeness centrality: 2.7793553791514734e-05
+
+4534 | 7042|-1
+degree: 16 | 2
+eff size: 14.59375 | -1
+constraint: 0.09999443391816591 | 0.5
+community: 6(193) | 2(527)
+edge betweeness centrality: 1.7498178279640444e-05
+
+3561 | 6441|-1
+degree: 673 | 2
+eff size: 625.1738484398189 | 2.0
+constraint: 0.018076133470507474 | 0.5
+community: 2(527) | 1(583)
+edge betweeness centrality: 2.8289393742689393e-05
+
+174 | 3932|0
+degree: 101 | 15
+eff size: 65.3861386138614 | 4.2
+constraint: 0.03758642834858716 | 0.13361557940683355
+community: 4(395) | 4(395)
+edge betweeness centrality: 2.4551971047273746e-06
+
+174 | 2548|0
+degree: 101 | 206
+eff size: 65.3861386138614 | 177.50970873786403
+constraint: 0.03758642834858716 | 0.02648616815875582
+community: 4(395) | 1(583)
+edge betweeness centrality: 0.00011317163714007715
+
+5641 | 7819|0
+degree: 5 | 3
+eff size: 4.0 | 2.0
+constraint: 0.28 | 0.5555555555555556
+community: 4(395) | 4(395)
+edge betweeness centrality: 3.027359064552685e-07
+
+174 | 7194|-1
+degree: 101 | 14
+eff size: 65.3861386138614 | 4.464285714285715
+constraint: 0.03758642834858716 | 0.1353841045347064
+community: 4(395) | 4(395)
+edge betweeness centrality: 3.667132887321251e-06
+
+3300 | 6805|-1
+degree: 66 | 10
+eff size: 48.9090909090909 | 6.050000000000001
+constraint: 0.03222842933474537 | 0.1769456280313551
+community: 3(445) | 3(445)
+edge betweeness centrality: 1.0308840872347396e-05
+
+8322 | 8210|-1
+degree: 4 | 8
+eff size: 2.75 | 5.9375
+constraint: 0.34106338440949946 | 0.1884575631511035
+community: 16(61) | 16(61)
+edge betweeness centrality: 0.00010108376962559857
+
+174 | 3356|0
+degree: 101 | 27
+eff size: 65.3861386138614 | 8.75925925925926
+constraint: 0.03758642834858716 | 0.08845813467232956
+community: 4(395) | 4(395)
+edge betweeness centrality: 3.9221715066233045e-06
+
+3343 | 6850|-1
+degree: 16 | 4
+eff size: 14.53125 | 3.375
+constraint: 0.09410275972707702 | 0.28475293800257584
+community: 7(171) | 7(171)
+edge betweeness centrality: 2.2880245033474677e-06
+
+1331 | 2544|-1
+degree: 4 | 1
+eff size: 4.0 | -1
+constraint: 0.25 | 1.0
+community: 2(527) | 2(527)
+edge betweeness centrality: 2.772173582306121e-05
+
+2685 | 6461|0
+degree: 38 | 41
+eff size: 22.06578947368421 | 23.902439024390244
+constraint: 0.053393813585032014 | 0.06267171717934086
+community: 4(395) | 4(395)
+edge betweeness centrality: 6.047739199482442e-06
+
+5377 | 5556|0
+degree: 19 | 17
+eff size: 15.26315789473684 | 11.264705882352942
+constraint: 0.07819840475020086 | 0.11759187237628116
+community: 10(120) | 16(61)
+edge betweeness centrality: 6.272643311230442e-06
+
+6461 | 7594|-1
+degree: 41 | 14
+eff size: 23.902439024390244 | 7.92857142857143
+constraint: 0.06267171717934086 | 0.13743497657910908
+community: 4(395) | 11(95)
+edge betweeness centrality: 8.632715580125063e-06
+
+2521 | 7516|-1
+degree: 19 | 2
+eff size: 16.157894736842106 | -1
+constraint: 0.12874567528005848 | 0.5608960034754041
+community: 9(145) | 9(145)
+edge betweeness centrality: 7.944391587404648e-07
+
+5417 | 702|-1
+degree: 21 | 107
+eff size: 16.261904761904766 | 91.65887850467287
+constraint: 0.13873233055934175 | 0.016799663485283084
+community: 3(445) | 3(445)
+edge betweeness centrality: 7.789304511201258e-05
+
+636 | 1733|0
+degree: 3 | 3
+eff size: 1.1666666666666667 | 1.1666666666666667
+constraint: 0.7616745196873402 | 0.7616745196873402
+community: 19(52) | 19(52)
+edge betweeness centrality: 7.181796845352645e-08
+
+3967 | 4565|0
+degree: 126 | 37
+eff size: 62.47222222222224 | 18.472972972972972
+constraint: 0.03518592108157115 | 0.06550994540258379
+community: 4(395) | 4(395)
+edge betweeness centrality: 4.0712470028711664e-05
+
+6664 | 6734|-1
+degree: 22 | 2
+eff size: 19.636363636363637 | -1
+constraint: 0.06736031724813953 | 0.5
+community: 17(60) | 17(60)
+edge betweeness centrality: 2.150493575592976e-05
+
+3549 | 7740|-1
+degree: 19 | 1
+eff size: 14.842105263157896 | -1
+constraint: 0.07771593173083188 | 1.0
+community: 8(146) | 8(146)
+edge betweeness centrality: 2.772173582306121e-05
+
+1913 | 636|-1
+degree: 52 | 3
+eff size: 51.96153846153847 | 1.1666666666666667
+constraint: 0.020545693622616688 | 0.7616745196873402
+community: 19(52) | 19(52)
+edge betweeness centrality: 2.786537175996826e-05
+
+3245 | 5421|0
+degree: 3 | 2
+eff size: 2.0 | 1.0
+constraint: 0.5555555555555556 | 1.0
+community: 4(395) | 4(395)
+edge betweeness centrality: 2.7793553791514734e-05
+
+4003 | 4713|-1
+degree: 2 | 8
+eff size: 2.0 | 6.0
+constraint: 0.5 | 0.2427824962517635
+community: 9(145) | 9(145)
+edge betweeness centrality: 0.000268664110094184
+
+2685 | 4926|-1
+degree: 38 | 28
+eff size: 22.06578947368421 | 27.696428571428573
+constraint: 0.053393813585032014 | 0.03648724951078798
+community: 4(395) | 5(217)
+edge betweeness centrality: 7.568196110617096e-05
+
+3243 | 6752|-1
+degree: 5 | 3
+eff size: 4.4 | -1
+constraint: 0.20127510569312712 | 0.3912082694133976
+community: 5(217) | 5(217)
+edge betweeness centrality: 1.528790517788651e-05
+
+5556 | 8210|-1
+degree: 17 | 8
+eff size: 11.264705882352942 | 5.9375
+constraint: 0.11759187237628116 | 0.1884575631511035
+community: 16(61) | 16(61)
+edge betweeness centrality: 1.1382961902780112e-05
+
+3561 | 1908|-1
+degree: 673 | 1
+eff size: 625.1738484398189 | -1
+constraint: 0.018076133470507474 | 1.0
+community: 2(527) | 2(527)
+edge betweeness centrality: 2.772173582306121e-05
+
+174 | 10584|-1
+degree: 101 | 2
+eff size: 65.3861386138614 | -1
+constraint: 0.03758642834858716 | 0.5111810511532355
+community: 4(395) | 4(395)
+edge betweeness centrality: 1.3394318056784366e-05
+
+4200 | 7019|0
+degree: 104 | 10
+eff size: 72.89903846153848 | 4.2
+constraint: 0.031163070120937827 | 0.1692592222204827
+community: 8(146) | 4(395)
+edge betweeness centrality: 1.0430281366875884e-05
+
+1800 | 1759|-1
+degree: 28 | 11
+eff size: 15.625 | 9.59090909090909
+constraint: 0.06732904480522527 | 0.10958977387153407
+community: 18(53) | 3(445)
+edge betweeness centrality: 3.686874241212397e-05
+
+668 | 1800|0
+degree: 33 | 28
+eff size: 16.242424242424242 | 15.625
+constraint: 0.07756753362714333 | 0.06732904480522527
+community: 18(53) | 18(53)
+edge betweeness centrality: 1.3753945824237641e-05
+
+2529 | 2686|0
+degree: 14 | 28
+eff size: 9.892857142857144 | 19.892857142857142
+constraint: 0.11228512259084217 | 0.0612242036751302
+community: 3(445) | 3(445)
+edge betweeness centrality: 5.2328482366890915e-05
+
+6769 | 8764|0
+degree: 4 | 3
+eff size: 2.0 | 2.0
+constraint: 0.5 | 0.5555555555555556
+community: 16(61) | 16(61)
+edge betweeness centrality: 2.1545390536057935e-07
+
+2516 | 4693|-1
+degree: 44 | 4
+eff size: 39.511363636363626 | -1
+constraint: 0.10422322558047749 | 0.2951061561589074
+community: 9(145) | 9(145)
+edge betweeness centrality: 2.923507699843453e-06
+
+701 | 10799|-1
+degree: 847 | 1
+eff size: 809.8122786304559 | -1
+constraint: 0.012185591378935857 | 1.0
+community: 1(583) | 1(583)
+edge betweeness centrality: 2.772173582306121e-05
+
+8472 | 8442|-1
+degree: 7 | 2
+eff size: 5.142857142857143 | -1
+constraint: 0.19421726354589408 | 0.5
+community: 3(445) | 3(445)
+edge betweeness centrality: 7.240367858623233e-06
+
+1239 | 5761|-1
+degree: 497 | 4
+eff size: 457.88631790744415 | -1
+constraint: 0.02269183768409597 | 0.32192092895799357
+community: 2(527) | 2(527)
+edge betweeness centrality: 5.9311391253557515e-06
+
+7922 | 7757|-1
+degree: 15 | 2
+eff size: 7.766666666666667 | -1
+constraint: 0.12077801028874996 | 0.5
+community: 1(583) | 1(583)
+edge betweeness centrality: 7.275011131636036e-06
+
+7618 | 7532|-1
+degree: 2 | 2
+eff size: 2.0 | -1
+constraint: 0.5 | 0.5
+community: 12(94) | 12(94)
+edge betweeness centrality: 1.0490335883201807e-05
+
+5413 | 5491|0
+degree: 112 | 3
+eff size: 57.59375000000001 | 2.0
+constraint: 0.028302220909222058 | 0.5555555555555556
+community: 4(395) | 18(53)
+edge betweeness centrality: 3.389291086030056e-05
+
+3561 | 6925|-1
+degree: 673 | 2
+eff size: 625.1738484398189 | -1
+constraint: 0.018076133470507474 | 0.5035042128226916
+community: 2(527) | 2(527)
+edge betweeness centrality: 1.807518132370412e-05
+
+174 | 6716|0
+degree: 101 | 13
+eff size: 65.3861386138614 | 4.9230769230769225
+constraint: 0.03758642834858716 | 0.14986462853854252
+community: 4(395) | 4(395)
+edge betweeness centrality: 3.5017688265255232e-06
+
+293 | 5409|0
+degree: 201 | 14
+eff size: 110.76865671641792 | 10.892857142857142
+constraint: 0.0230968142797399 | 0.1023676553481705
+community: 4(395) | 3(445)
+edge betweeness centrality: 5.2350980328456344e-05
+
+1239 | 1798|-1
+degree: 497 | 4
+eff size: 457.88631790744415 | 3.0
+constraint: 0.02269183768409597 | 0.375
+community: 2(527) | 14(89)
+edge betweeness centrality: 4.675556701974573e-05
+
+2598 | 5444|0
+degree: 3 | 3
+eff size: 2.0 | 2.0
+constraint: 0.5555555555555556 | 0.5555555555555556
+community: 17(60) | 17(60)
+edge betweeness centrality: 1.2072853783731279e-05
+
+1335 | 3776|-1
+degree: 9 | 2
+eff size: 8.0 | -1
+constraint: 0.13580246913580246 | 0.5
+community: 18(53) | 18(53)
+edge betweeness centrality: 7.837615556705502e-06
+
+6072 | 6071|-1
+degree: 2 | 2
+eff size: 2.0 | -1
+constraint: 0.5 | 0.5
+community: 1(583) | 1(583)
+edge betweeness centrality: 6.394758880817184e-07
+
+1239 | 3751|-1
+degree: 497 | 3
+eff size: 457.88631790744415 | -1
+constraint: 0.02269183768409597 | 0.3448347264166501
+community: 2(527) | 8(146)
+edge betweeness centrality: 8.714344816714456e-06
+
+1239 | 1804|0
+degree: 497 | 3
+eff size: 457.88631790744415 | 2.0
+constraint: 0.02269183768409597 | 0.5555555555555556
+community: 2(527) | 3(445)
+edge betweeness centrality: 1.9275644015763313e-05
+
+3561 | 5773|-1
+degree: 673 | 3
+eff size: 625.1738484398189 | -1
+constraint: 0.018076133470507474 | 0.3484327953369467
+community: 2(527) | 6(193)
+edge betweeness centrality: 1.5724545629921904e-05
+
+4276 | 6083|-1
+degree: 2 | 6
+eff size: 2.0 | 3.916666666666667
+constraint: 0.5 | 0.33562932624287933
+community: 5(217) | 5(217)
+edge betweeness centrality: 0.0002756577151703428
+
+8309 | 8375|-1
+degree: 3 | 2
+eff size: 3.0 | -1
+constraint: 0.3333333333333333 | 0.5
+community: 3(445) | 3(445)
+edge betweeness centrality: 4.760804944400399e-06
+
+701 | 4621|-1
+degree: 847 | 2
+eff size: 809.8122786304559 | 2.0
+constraint: 0.012185591378935857 | 0.5
+community: 1(583) | 1(583)
+edge betweeness centrality: 5.544347164612242e-05
+
+297 | 1262|-1
+degree: 41 | 1
+eff size: 22.39024390243903 | -1
+constraint: 0.049385906232970504 | 1.0
+community: 4(395) | 4(395)
+edge betweeness centrality: 2.772173582306121e-05
+
+3803 | 8513|-1
+degree: 8 | 4
+eff size: 7.125 | 4.0
+constraint: 0.16635779596293915 | 0.25
+community: 2(527) | 20(52)
+edge betweeness centrality: 7.403406722356602e-06
+
+4167 | 7351|-1
+degree: 3 | 2
+eff size: 2.666666666666667 | -1
+constraint: 0.3423751492130608 | 0.5
+community: 14(89) | 14(89)
+edge betweeness centrality: 7.112938565352446e-07
+
+568 | 3847|0
+degree: 23 | 82
+eff size: 8.91304347826087 | 43.0
+constraint: 0.08746837523379242 | 0.04513124183629353
+community: 4(395) | 4(395)
+edge betweeness centrality: 1.6661007225934703e-05
+
+174 | 5696|0
+degree: 101 | 73
+eff size: 65.3861386138614 | 58.88356164383562
+constraint: 0.03758642834858716 | 0.026369424597875564
+community: 4(395) | 14(89)
+edge betweeness centrality: 2.781372130787766e-05
+
+6347 | 10415|-1
+degree: 65 | 1
+eff size: 62.06153846153844 | -1
+constraint: 0.03874437623722406 | 1.0
+community: 8(146) | 8(146)
+edge betweeness centrality: 2.772173582306121e-05
+
+6261 | 7594|-1
+degree: 10 | 14
+eff size: 5.0 | 7.92857142857143
+constraint: 0.177159359134725 | 0.13743497657910908
+community: 4(395) | 11(95)
+edge betweeness centrality: 9.803912282157234e-06
+
+6197 | 10891|-1
+degree: 3 | 2
+eff size: 2.3333333333333335 | -1
+constraint: 0.34151931456158324 | 0.5
+community: 1(583) | 1(583)
+edge betweeness centrality: 4.161345593878504e-07
+
+568 | 400|-1
+degree: 23 | 1
+eff size: 8.91304347826087 | -1
+constraint: 0.08746837523379242 | 1.0
+community: 4(395) | 4(395)
+edge betweeness centrality: 2.772173582306121e-05
+
+7208 | 100|-1
+degree: 4 | 1
+eff size: 3.0 | -1
+constraint: 0.375 | 1.0
+community: 8(146) | 8(146)
+edge betweeness centrality: 2.772173582306121e-05
+
+3561 | 10891|-1
+degree: 673 | 2
+eff size: 625.1738484398189 | -1
+constraint: 0.018076133470507474 | 0.5
+community: 2(527) | 1(583)
+edge betweeness centrality: 2.73774192321269e-05
+
+174 | 6395|-1
+degree: 101 | 10
+eff size: 65.3861386138614 | 2.25
+constraint: 0.03758642834858716 | 0.17646012040892728
+community: 4(395) | 4(395)
+edge betweeness centrality: 2.471422985985949e-06
+
+2854 | 8402|-1
+degree: 15 | 2
+eff size: 15.0 | -1
+constraint: 0.06666666666666667 | 0.5
+community: 7(171) | 7(171)
+edge betweeness centrality: 1.9922055407924627e-05
+
+7514 | 290|-1
+degree: 5 | 4
+eff size: 2.9 | 1.5
+constraint: 0.41424683926065275 | 0.504289697844537
+community: 9(145) | 9(145)
+edge betweeness centrality: 1.436359369070529e-07
+
+5594 | 8527|-1
+degree: 8 | 1
+eff size: 7.0625 | -1
+constraint: 0.18458751100776585 | 1.0
+community: 3(445) | 3(445)
+edge betweeness centrality: 2.829627957068942e-05
+
+1225 | 7996|0
+degree: 37 | 3
+eff size: 31.01351351351352 | 2.0
+constraint: 0.04658988681450551 | 0.5555555555555556
+community: 6(193) | 4(395)
+edge betweeness centrality: 7.226570109887461e-06
+
+2551 | 3967|0
+degree: 34 | 126
+eff size: 18.058823529411764 | 62.47222222222224
+constraint: 0.06388689486072409 | 0.03518592108157115
+community: 4(395) | 4(395)
+edge betweeness centrality: 9.052434541667286e-06
+
+4534 | 6576|-1
+degree: 16 | 2
+eff size: 14.59375 | -1
+constraint: 0.09999443391816591 | 0.5
+community: 6(193) | 6(193)
+edge betweeness centrality: 4.6506471910942415e-06
+
+2914 | 3791|-1
+degree: 221 | 2
+eff size: 123.5135746606334 | -1
+constraint: 0.02370992008192883 | 0.5
+community: 4(395) | 4(395)
+edge betweeness centrality: 1.7333952460566104e-05
+
+1299 | 1849|0
+degree: 20 | 26
+eff size: 14.825 | 15.53846153846154
+constraint: 0.07613516750954206 | 0.09403326138279412
+community: 16(61) | 3(445)
+edge betweeness centrality: 1.984596861151388e-05
+
+174 | 6082|0
+degree: 101 | 10
+eff size: 65.3861386138614 | 7.050000000000001
+constraint: 0.03758642834858716 | 0.16038307267221613
+community: 4(395) | 8(146)
+edge betweeness centrality: 1.765575666446339e-05
+
+1257 | 6762|0
+degree: 12 | 21
+eff size: 8.041666666666668 | 18.738095238095237
+constraint: 0.1352285132139676 | 0.062130866470120914
+community: 18(53) | 5(217)
+edge betweeness centrality: 2.6263777557088878e-05
+
+1 | 4923|-1
+degree: 215 | 7
+eff size: 198.6883720930232 | 6.714285714285715
+constraint: 0.026683147675068436 | 0.14333508796369698
+community: 1(583) | 14(89)
+edge betweeness centrality: 4.1926688952854996e-05
+
+2914 | 6123|0
+degree: 221 | 10
+eff size: 123.5135746606334 | 4.1499999999999995
+constraint: 0.02370992008192883 | 0.20083218305723682
+community: 4(395) | 4(395)
+edge betweeness centrality: 1.1719997331883253e-05
+
+701 | 11090|-1
+degree: 847 | 2
+eff size: 809.8122786304559 | -1
+constraint: 0.012185591378935857 | 0.505375247747256
+community: 1(583) | 2(527)
+edge betweeness centrality: 1.68455167494741e-05
+
+1270 | 8735|-1
+degree: 9 | 3
+eff size: 8.444444444444443 | 2.0
+constraint: 0.12582898230959363 | 0.5555555555555556
+community: 3(445) | 3(445)
+edge betweeness centrality: 2.177555650252469e-05
+
+5430 | 5539|-1
+degree: 8 | 7
+eff size: 7.4375 | 6.071428571428572
+constraint: 0.17211580379396935 | 0.15940881214744848
+community: 3(445) | 3(445)
+edge betweeness centrality: 1.265355138160632e-06
+
+668 | 1839|-1
+degree: 33 | 1
+eff size: 16.242424242424242 | -1
+constraint: 0.07756753362714333 | 1.0
+community: 18(53) | 18(53)
+edge betweeness centrality: 2.772173582306121e-05
+
+4000 | 5000|0
+degree: 76 | 17
+eff size: 60.00657894736841 | 7.588235294117647
+constraint: 0.02213402816169772 | 0.10779424387408076
+community: 3(445) | 20(52)
+edge betweeness centrality: 6.756334249892036e-05
+
+7514 | 4705|-1
+degree: 5 | 2
+eff size: 2.9 | -1
+constraint: 0.41424683926065275 | 0.5
+community: 9(145) | 9(145)
+edge betweeness centrality: 3.371499180028845e-06
+
+1321 | 3768|-1
+degree: 4 | 4
+eff size: 4.0 | 3.5
+constraint: 0.25 | 0.2508760532056729
+community: 4(395) | 2(527)
+edge betweeness centrality: 2.651811123415591e-07
+
+4004 | 6545|-1
+degree: 28 | 3
+eff size: 26.80357142857143 | -1
+constraint: 0.0394224063711108 | 0.3333333333333333
+community: 5(217) | 5(217)
+edge betweeness centrality: 3.1266523863399367e-06
+
+1930 | 6679|0
+degree: 6 | 15
+eff size: 4.75 | 7.433333333333334
+constraint: 0.23233569686568756 | 0.14296409499132703
+community: 5(217) | 10(120)
+edge betweeness centrality: 0.0005376792714574365
+
+4000 | 4861|-1
+degree: 76 | 1
+eff size: 60.00657894736841 | -1
+constraint: 0.02213402816169772 | 1.0
+community: 3(445) | 3(445)
+edge betweeness centrality: 2.772173582306121e-05
+
+7288 | 5678|-1
+degree: 2 | 3
+eff size: 2.0 | 3.0
+constraint: 0.5 | 0.3333333333333333
+community: 4(395) | 4(395)
+edge betweeness centrality: 2.52799779050695e-06
+
+3847 | 7019|0
+degree: 82 | 10
+eff size: 43.0 | 4.2
+constraint: 0.04513124183629353 | 0.1692592222204827
+community: 4(395) | 4(395)
+edge betweeness centrality: 8.719851488587307e-06
+
+2599 | 3216|-1
+degree: 2 | 8
+eff size: 2.0 | 7.875
+constraint: 0.5 | 0.12551398855793713
+community: 7(171) | 7(171)
+edge betweeness centrality: 1.2177860974033822e-06
+
+6660 | 8218|0
+degree: 20 | 14
+eff size: 10.75 | 6.214285714285715
+constraint: 0.09720457462655371 | 0.1298936344090121
+community: 4(395) | 4(395)
+edge betweeness centrality: 2.793128122702085e-06
+
+4200 | 10601|0
+degree: 104 | 3
+eff size: 72.89903846153848 | 2.0
+constraint: 0.031163070120937827 | 0.5555555555555556
+community: 8(146) | 4(395)
+edge betweeness centrality: 1.4598335646627857e-05
+
+1270 | 71|-1
+degree: 9 | 7
+eff size: 8.444444444444443 | -1
+constraint: 0.12582898230959363 | 0.1559823656705189
+community: 3(445) | 3(445)
+edge betweeness centrality: 3.482601486119418e-07
+
+3257 | 5430|-1
+degree: 55 | 8
+eff size: 42.872727272727275 | 7.4375
+constraint: 0.03521238068192246 | 0.17211580379396935
+community: 3(445) | 3(445)
+edge betweeness centrality: 3.241532427003267e-05
+
+2519 | 4683|-1
+degree: 7 | 2
+eff size: 4.142857142857143 | -1
+constraint: 0.2768923688694592 | 0.5
+community: 9(145) | 9(145)
+edge betweeness centrality: 1.7993504360791553e-05
+
+4534 | 10557|-1
+degree: 16 | 2
+eff size: 14.59375 | -1
+constraint: 0.09999443391816591 | 0.5328172297483897
+community: 6(193) | 6(193)
+edge betweeness centrality: 1.1958114058642953e-06
+
+3847 | 4544|0
+degree: 82 | 26
+eff size: 43.0 | 5.653846153846153
+constraint: 0.04513124183629353 | 0.09741048147876682
+community: 4(395) | 4(395)
+edge betweeness centrality: 5.809560467484393e-06
+
+2548 | 7859|-1
+degree: 206 | 3
+eff size: 177.50970873786403 | -1
+constraint: 0.02648616815875582 | 0.33976746418503867
+community: 1(583) | 8(146)
+edge betweeness centrality: 1.2714251898778345e-05
+
+8681 | 8680|-1
+degree: 2 | 2
+eff size: 2.0 | -1
+constraint: 0.5 | 0.5
+community: 3(445) | 3(445)
+edge betweeness centrality: 7.855796107398149e-07
+
+3254 | 3261|-1
+degree: 14 | 5
+eff size: 12.678571428571429 | 4.3
+constraint: 0.10357142857142855 | 0.3150893424036282
+community: 7(171) | 7(171)
+edge betweeness centrality: 1.5183177891381782e-05
+
+701 | 10447|-1
+degree: 847 | 1
+eff size: 809.8122786304559 | -1
+constraint: 0.012185591378935857 | 1.0
+community: 1(583) | 1(583)
+edge betweeness centrality: 2.772173582306121e-05
+
+145 | 4189|-1
+degree: 47 | 2
+eff size: 36.41489361702128 | 2.0
+constraint: 0.03797470429679599 | 0.5
+community: 6(193) | 14(89)
+edge betweeness centrality: 3.0188189641189504e-05
+
+2685 | 7894|-1
+degree: 38 | 3
+eff size: 22.06578947368421 | -1
+constraint: 0.053393813585032014 | 0.3479049690101166
+community: 4(395) | 4(395)
+edge betweeness centrality: 7.314606889367317e-06
+
+2860 | 6806|-1
+degree: 4 | 2
+eff size: 4.0 | -1
+constraint: 0.25 | 0.5
+community: 5(217) | 5(217)
+edge betweeness centrality: 4.803052051841828e-07
+
+6332 | 8151|-1
+degree: 15 | 3
+eff size: 14.866666666666667 | 3.0
+constraint: 0.06687343348163102 | 0.3333333333333333
+community: 15(76) | 15(76)
+edge betweeness centrality: 1.2606014167596434e-05
+
+2652 | 2655|-1
+degree: 6 | 1
+eff size: 6.0 | -1
+constraint: 0.16666666666666669 | 1.0
+community: 13(92) | 13(92)
+edge betweeness centrality: 2.786537175996826e-05
+
+1800 | 3970|-1
+degree: 28 | 1
+eff size: 15.625 | -1
+constraint: 0.06732904480522527 | 1.0
+community: 18(53) | 18(53)
+edge betweeness centrality: 2.772173582306121e-05
+
+7321 | 4200|-1
+degree: 2 | 104
+eff size: 2.0 | 72.89903846153848
+constraint: 0.5 | 0.031163070120937827
+community: 6(193) | 8(146)
+edge betweeness centrality: 0.0003835055608124487
+
+4002 | 8203|-1
+degree: 2 | 2
+eff size: 2.0 | -1
+constraint: 0.5 | 0.5
+community: 20(52) | 20(52)
+edge betweeness centrality: 6.182566282355915e-06
+
+6083 | 7154|-1
+degree: 6 | 2
+eff size: 3.916666666666667 | -1
+constraint: 0.33562932624287933 | 0.7847222222222223
+community: 5(217) | 5(217)
+edge betweeness centrality: 2.4531289496931245e-05
+
+1673 | 4136|-1
+degree: 101 | 4
+eff size: 60.34653465346533 | -1
+constraint: 0.032999749630033326 | 0.2633424449389098
+community: 4(395) | 4(395)
+edge betweeness centrality: 3.290886711687148e-06
+
+2848 | 3267|0
+degree: 5 | 2
+eff size: 4.0 | 1.0
+constraint: 0.28 | 1.0
+community: 7(171) | 7(171)
+edge betweeness centrality: 2.808082566532884e-05
+
+6679 | 6770|0
+degree: 15 | 9
+eff size: 7.433333333333334 | 4.833333333333333
+constraint: 0.14296409499132703 | 0.2172599248382724
+community: 10(120) | 10(120)
+edge betweeness centrality: 6.49425007697631e-05
+
+5683 | 2599|-1
+degree: 47 | 2
+eff size: 34.22340425531915 | 2.0
+constraint: 0.04217695775216527 | 0.5
+community: 12(94) | 7(171)
+edge betweeness centrality: 2.8436796141289904e-05
+
+1239 | 6249|-1
+degree: 497 | 1
+eff size: 457.88631790744415 | -1
+constraint: 0.02269183768409597 | 1.0
+community: 2(527) | 2(527)
+edge betweeness centrality: 2.772173582306121e-05
+
+8355 | 8651|0
+degree: 6 | 3
+eff size: 4.833333333333333 | 2.0
+constraint: 0.22860833360563776 | 0.5555555555555556
+community: 3(445) | 3(445)
+edge betweeness centrality: 1.1678576252703475e-05
+
+2548 | 10476|0
+degree: 206 | 3
+eff size: 177.50970873786403 | 1.0
+constraint: 0.02648616815875582 | 0.5612342104482813
+community: 1(583) | 1(583)
+edge betweeness centrality: 9.676786577479415e-06
+
+4200 | 10985|0
+degree: 104 | 3
+eff size: 72.89903846153848 | 2.0
+constraint: 0.031163070120937827 | 0.5555555555555556
+community: 8(146) | 8(146)
+edge betweeness centrality: 2.3112414280571536e-05
+
+1800 | 2874|-1
+degree: 28 | 9
+eff size: 15.625 | 7.611111111111111
+constraint: 0.06732904480522527 | 0.1538040016263662
+community: 18(53) | 16(61)
+edge betweeness centrality: 3.928522778564016e-05
+
+1755 | 5683|-1
+degree: 91 | 47
+eff size: 84.46153846153847 | 34.22340425531915
+constraint: 0.01844780275328917 | 0.04217695775216527
+community: 3(445) | 12(94)
+edge betweeness centrality: 9.845925378264804e-05
+
+174 | 3703|-1
+degree: 101 | 4
+eff size: 65.3861386138614 | -1
+constraint: 0.03758642834858716 | 0.2630930634468424
+community: 4(395) | 4(395)
+edge betweeness centrality: 5.854581797856727e-06
+
+4200 | 7782|0
+degree: 104 | 5
+eff size: 72.89903846153848 | 3.4
+constraint: 0.031163070120937827 | 0.28361193084313896
+community: 8(146) | 8(146)
+edge betweeness centrality: 1.848574299474508e-05
+
+3316 | 8409|-1
+degree: 6 | 1
+eff size: 6.0 | -1
+constraint: 0.16666666666666669 | 1.0
+community: 7(171) | 7(171)
+edge betweeness centrality: 2.8009007696875315e-05
+
+174 | 4058|0
+degree: 101 | 20
+eff size: 65.3861386138614 | 13.55
+constraint: 0.03758642834858716 | 0.07981108985571593
+community: 4(395) | 4(395)
+edge betweeness centrality: 1.833655352764876e-05
+
+3789 | 7458|-1
+degree: 5 | 1
+eff size: 5.0 | -1
+constraint: 0.20000000000000004 | 1.0
+community: 6(193) | 6(193)
+edge betweeness centrality: 2.7793553791514734e-05
+
+1955 | 3338|-1
+degree: 10 | 1
+eff size: 9.0 | -1
+constraint: 0.12000000000000002 | 1.0
+community: 10(120) | 10(120)
+edge betweeness centrality: 2.772173582306121e-05
+
+8297 | 5401|-1
+degree: 17 | 3
+eff size: 12.794117647058824 | -1
+constraint: 0.11865429056346935 | 0.3333333333333333
+community: 3(445) | 3(445)
+edge betweeness centrality: 3.573759946733033e-06
+
+1916 | 10875|-1
+degree: 5 | 1
+eff size: 5.0 | -1
+constraint: 0.20000000000000004 | 1.0
+community: 5(217) | 5(217)
+edge betweeness centrality: 2.7793553791514734e-05
+
+4694 | 4693|-1
+degree: 27 | 4
+eff size: 18.185185185185183 | -1
+constraint: 0.09430747112869019 | 0.2951061561589074
+community: 9(145) | 9(145)
+edge betweeness centrality: 4.5306669751204225e-06
+
+2764 | 7556|-1
+degree: 16 | 2
+eff size: 15.40625 | -1
+constraint: 0.09694782021604936 | 0.5434611304012344
+community: 11(95) | 11(95)
+edge betweeness centrality: 7.181796845352645e-08
+
+2118 | 3343|0
+degree: 28 | 16
+eff size: 26.875 | 14.53125
+constraint: 0.0393884739032549 | 0.09410275972707702
+community: 7(171) | 7(171)
+edge betweeness centrality: 0.0001794685816952128
+
+2548 | 7293|-1
+degree: 206 | 2
+eff size: 177.50970873786403 | -1
+constraint: 0.02648616815875582 | 0.506894054699857
+community: 1(583) | 1(583)
+edge betweeness centrality: 1.4352870141483617e-05
+
+3967 | 7018|0
+degree: 126 | 105
+eff size: 62.47222222222224 | 88.63333333333324
+constraint: 0.03518592108157115 | 0.03231716990245016
+community: 4(395) | 2(527)
+edge betweeness centrality: 0.00019027281958572647
+
+174 | 297|0
+degree: 101 | 41
+eff size: 65.3861386138614 | 22.39024390243903
+constraint: 0.03758642834858716 | 0.049385906232970504
+community: 4(395) | 4(395)
+edge betweeness centrality: 1.0718452057279142e-05
+
+1 | 8008|-1
+degree: 215 | 2
+eff size: 198.6883720930232 | -1
+constraint: 0.026683147675068436 | 0.5066889169760931
+community: 1(583) | 1(583)
+edge betweeness centrality: 1.342488845578967e-05
+
+3720 | 6123|-1
+degree: 11 | 10
+eff size: 5.681818181818182 | 4.1499999999999995
+constraint: 0.14810824419742136 | 0.20083218305723682
+community: 4(395) | 4(395)
+edge betweeness centrality: 1.1618667170410738e-05
+
+4200 | 3720|-1
+degree: 104 | 11
+eff size: 72.89903846153848 | 5.681818181818182
+constraint: 0.031163070120937827 | 0.14810824419742136
+community: 8(146) | 4(395)
+edge betweeness centrality: 9.423094103233238e-06
+
+3306 | 6754|-1
+degree: 3 | 7
+eff size: 3.0 | 6.714285714285714
+constraint: 0.3333333333333333 | 0.17984693877551017
+community: 3(445) | 3(445)
+edge betweeness centrality: 2.571940438696848e-06
+
+2381 | 10485|-1
+degree: 6 | 2
+eff size: 5.666666666666667 | -1
+constraint: 0.2170138888888889 | 0.5
+community: 6(193) | 6(193)
+edge betweeness centrality: 2.3530717453164976e-07
+
+701 | 3763|-1
+degree: 847 | 9
+eff size: 809.8122786304559 | 2.2222222222222223
+constraint: 0.012185591378935857 | 0.20517253587211615
+community: 1(583) | 4(395)
+edge betweeness centrality: 2.960744429937767e-06
+
+3316 | 6868|-1
+degree: 6 | 2
+eff size: 6.0 | 2.0
+constraint: 0.16666666666666669 | 0.5
+community: 7(171) | 7(171)
+edge betweeness centrality: 5.601801539375063e-05
+
+3561 | 7977|-1
+degree: 673 | 3
+eff size: 625.1738484398189 | -1
+constraint: 0.018076133470507474 | 0.34421720828838404
+community: 2(527) | 2(527)
+edge betweeness centrality: 1.6287694241847378e-05
+
+701 | 7058|-1
+degree: 847 | 2
+eff size: 809.8122786304559 | -1
+constraint: 0.012185591378935857 | 0.5
+community: 1(583) | 4(395)
+edge betweeness centrality: 1.0387783362495103e-05
+
+293 | 2698|-1
+degree: 201 | 3
+eff size: 110.76865671641792 | -1
+constraint: 0.0230968142797399 | 0.3333333333333333
+community: 4(395) | 2(527)
+edge betweeness centrality: 2.6863941788393298e-05
+
+4694 | 4713|-1
+degree: 27 | 8
+eff size: 18.185185185185183 | 6.0
+constraint: 0.09430747112869019 | 0.2427824962517635
+community: 9(145) | 9(145)
+edge betweeness centrality: 7.567471879550917e-06
+
+174 | 6402|0
+degree: 101 | 17
+eff size: 65.3861386138614 | 10.235294117647062
+constraint: 0.03758642834858716 | 0.12343845776128595
+community: 4(395) | 4(395)
+edge betweeness centrality: 9.876266412912408e-06
+
+5650 | 3701|-1
+degree: 26 | 8
+eff size: 24.211538461538456 | 6.5
+constraint: 0.055664904947558276 | 0.192442520756127
+community: 14(89) | 14(89)
+edge betweeness centrality: 9.39890676654998e-06
+
+1890 | 1888|-1
+degree: 15 | 4
+eff size: 11.500000000000002 | 1.875
+constraint: 0.13199509246391194 | 0.43630510811600554
+community: 3(445) | 3(445)
+edge betweeness centrality: 7.021111531828493e-06
+
+3967 | 7594|0
+degree: 126 | 14
+eff size: 62.47222222222224 | 7.92857142857143
+constraint: 0.03518592108157115 | 0.13743497657910908
+community: 4(395) | 11(95)
+edge betweeness centrality: 2.9208307784748367e-05
+
+4926 | 2688|-1
+degree: 28 | 1
+eff size: 27.696428571428573 | -1
+constraint: 0.03648724951078798 | 1.0
+community: 5(217) | 5(217)
+edge betweeness centrality: 2.786537175996826e-05
+
+5673 | 6201|-1
+degree: 12 | 7
+eff size: 11.0 | -1
+constraint: 0.09722222222222224 | 0.1471421395941262
+community: 11(95) | 4(395)
+edge betweeness centrality: 1.8433278569738451e-07
+
+174 | 4969|-1
+degree: 101 | 26
+eff size: 65.3861386138614 | 16.365384615384617
+constraint: 0.03758642834858716 | 0.07951286335834717
+community: 4(395) | 4(395)
+edge betweeness centrality: 1.1889562694449575e-05
+
+1239 | 6505|-1
+degree: 497 | 8
+eff size: 457.88631790744415 | 6.9375
+constraint: 0.02269183768409597 | 0.1564462691385447
+community: 2(527) | 5(217)
+edge betweeness centrality: 4.2403292078951825e-05
+
+1273 | 8481|0
+degree: 25 | 3
+eff size: 19.66 | 2.0
+constraint: 0.07442917605439729 | 0.5555555555555556
+community: 3(445) | 3(445)
+edge betweeness centrality: 1.934512463797038e-05
+
+3561 | 4680|-1
+degree: 673 | 5
+eff size: 625.1738484398189 | 2.8000000000000003
+constraint: 0.018076133470507474 | 0.3060874687389813
+community: 2(527) | 9(145)
+edge betweeness centrality: 2.1274577458451855e-05
+
+1221 | 7477|-1
+degree: 45 | 1
+eff size: 44.46666666666665 | -1
+constraint: 0.03295446162407297 | 1.0
+community: 11(95) | 11(95)
+edge betweeness centrality: 2.772173582306121e-05
+
+4761 | 7713|-1
+degree: 4 | 2
+eff size: 3.125 | -1
+constraint: 0.3294385507998465 | 0.6416320483261744
+community: 2(527) | 2(527)
+edge betweeness centrality: 7.199639443573338e-07
+
+2109 | 3292|0
+degree: 6 | 9
+eff size: 4.0 | 7.555555555555555
+constraint: 0.2777777777777778 | 0.15312953088431974
+community: 16(61) | 16(61)
+edge betweeness centrality: 1.0875241744874036e-05
+

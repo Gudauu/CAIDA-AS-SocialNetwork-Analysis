@@ -1,7 +1,7 @@
 from include import *
 
 # new list format: [node1|node2|type|degree1|degree2|es1|es2|constraint1|contraint2|community1:size|community2:size]
-def analyze_edge(edges:list,dictDegree,dictEffcsize,dictConstraint,dictCommunity) -> list:
+def analyze_edge(edges:list,dictDegree,dictEffcsize,dictConstraint,dictCommunity,dictEdgeBetweeness) -> list:
     list_edges_annotated = []
     for edge_line in edges:
         list_edge = (edge_line[:-1]).split("|")
@@ -20,7 +20,8 @@ def analyze_edge(edges:list,dictDegree,dictEffcsize,dictConstraint,dictCommunity
             dictDegree[node1],dictDegree[node2],
             dictEffcsize[node1],dictEffcsize[node2],
             dictConstraint[node1],dictConstraint[node2],
-            community1, len(dictCommunity[community1]), community2, len(dictCommunity[community2])
+            community1, len(dictCommunity[community1]), community2, len(dictCommunity[community2]),
+            dictEdgeBetweeness['(' + node1 + ', ' + node2 + ')']
             ]:
             list_edge.append(toadd)
         list_edges_annotated.append(list_edge)
@@ -62,20 +63,21 @@ def analyze_new_edges(fo,fn) -> None:
     dict_effective_size = readDict('playEgOnData/results/'+version_new+'/effective_size')
     dict_degree = readDict('playEgOnData/results/'+version_new+'/degree_top',': ')
     dict_community = readCommunity('playEgOnData/results/'+version_new+'/communityDetection_louvain')
+    dict_edge_betweeness_centrality = readDict('playEgOnData/results/'+version_new+'/edge_betweenness_centrality')
 
-
-    edge_new_anotated = analyze_edge(edge_new,dict_degree,dict_effective_size,dict_constraint,dict_community)
+    edge_new_anotated = analyze_edge(edge_new,dict_degree,dict_effective_size,dict_constraint,dict_community,dict_edge_betweeness_centrality)
 
 
     ofile = open('playEgOnData/results/'+version_new+'/edge_added_annotated','w')
-    # new list format: [node1|node2|type|degree1|degree2|es1|es2|constraint1|contraint2|community1:size|community2:size]
 
     for list_edge in edge_new_anotated:
         ofile.write(str(list_edge[0])+' | '+str(list_edge[1])+ '|'+str(list_edge[2])+'\n')
         ofile.write("degree: " + str(list_edge[3])+' | '+str(list_edge[4])+'\n')
         ofile.write("eff size: " + str(list_edge[5])+' | '+str(list_edge[6])+'\n')
         ofile.write("constraint: " + str(list_edge[7])+' | '+str(list_edge[8])+'\n')
-        ofile.write("community: " + str(list_edge[9])+'('+str(list_edge[10])+ ') | '+str(list_edge[11])+'('+str(list_edge[12])+  ')\n\n')
+        ofile.write("community: " + str(list_edge[9])+'('+str(list_edge[10])+ ') | '+str(list_edge[11])+'('+str(list_edge[12])+  ')\n')
+        ofile.write("edge betweeness centrality: " + str(list_edge[13])+'\n\n')
+
 
     edge_removed = list(seto - setn) 
     version_old = getVersionFromName(fo)
@@ -83,17 +85,19 @@ def analyze_new_edges(fo,fn) -> None:
     dict_effective_size = readDict('playEgOnData/results/'+version_old+'/effective_size')
     dict_degree = readDict('playEgOnData/results/'+version_old+'/degree_top',': ')
     dict_community = readCommunity('playEgOnData/results/'+version_old+'/communityDetection_louvain')
-    edge_removed_anotated = analyze_edge(edge_removed,dict_degree,dict_effective_size,dict_constraint,dict_community)
+    dict_edge_betweeness_centrality = readDict('playEgOnData/results/'+version_old+'/edge_betweenness_centrality')
 
-    ofile = open('playEgOnData/results/'+version_new+'/edge_reomved_annotated','w')
-    # new list format: [node1|node2|type|degree1|degree2|es1|es2|constraint1|contraint2|community1:size|community2:size]
+    edge_removed_anotated = analyze_edge(edge_removed,dict_degree,dict_effective_size,dict_constraint,dict_community,dict_edge_betweeness_centrality)
+
+    ofile = open('playEgOnData/results/'+version_new+'/edge_removed_annotated','w')
 
     for list_edge in edge_removed_anotated:
         ofile.write(str(list_edge[0])+' | '+str(list_edge[1])+ '|'+str(list_edge[2])+'\n')
         ofile.write("degree: " + str(list_edge[3])+' | '+str(list_edge[4])+'\n')
         ofile.write("eff size: " + str(list_edge[5])+' | '+str(list_edge[6])+'\n')
         ofile.write("constraint: " + str(list_edge[7])+' | '+str(list_edge[8])+'\n')
-        ofile.write("community: " + str(list_edge[9])+'('+str(list_edge[10])+ ') | '+str(list_edge[11])+'('+str(list_edge[12])+  ')\n\n')
+        ofile.write("community: " + str(list_edge[9])+'('+str(list_edge[10])+ ') | '+str(list_edge[11])+'('+str(list_edge[12])+  ')\n')
+        ofile.write("edge betweeness centrality: " + str(list_edge[13])+'\n\n')
 
 
 
@@ -121,6 +125,6 @@ def analyze_result(fn) -> None:
 
 
 if __name__ == '__main__':
-    for i in range(1,4):
+    for i in range(1,12):
         analyze_new_edges(listFileName_1998[i-1],listFileName_1998[i])
         # analyze_result('playEgOnData/results/'+getVersionFromName(listFileName_1998[i])+'/edge_added_annotated')
