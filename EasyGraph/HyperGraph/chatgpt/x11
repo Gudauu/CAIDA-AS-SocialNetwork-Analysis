@@ -1,0 +1,120 @@
+                    start_1[i],
+                    end_1[i]) + 1,
+                np.random.randint(
+                    start_2[i],
+                    end_2[i]) + 1]
+            while tuple(temp) in dict2:
+                temp = [
+                    np.random.randint(
+                        start_1[i],
+                        end_1[i]) + 1,
+                    np.random.randint(
+                        start_2[i],
+                        end_2[i]) + 1]
+            negative.append(temp)
+
+    return list(pos), negative
+
+
+def generate_outlier(k=20):
+    inputs = []
+    negs = []
+    split_num = 4
+    pool = ProcessPoolExecutor(max_workers=split_num)
+    data = np.array_split(potential_outliers, split_num)
+    dict_pair = build_hash2(np.concatenate([train_data, test]))
+
+    process_list = []
+
+    for datum in data:
+        process_list.append(
+            pool.submit(
+                generate_outlier_part,
+                datum,
+                dict_pair,
+                k))
+
+    for p in as_completed(process_list):
+        in_, ne = p.result()
+        inputs.append(in_)
+        negs.append(ne)
+    inputs = np.concatenate(inputs, axis=0)
+    negs = np.concatenate(negs, axis=0)
+
+    index = np.arange(len(inputs))
+    np.random.shuffle(index)
+    inputs, negs = inputs[index], negs[index]
+
+    pool.shutdown(wait=True)
+
+    x = np2tensor_hyper(inputs, dtype=torch.long)
+    x = pad_sequence(x, batch_first=True, padding_value=0).to(device)
+
+    return (torch.tensor(x).to(device), torch.tensor(negs).to(device))
+
+def pass_(x):
+    return x
+
+
+def generate_outlier_part(data, dict_pair, k=20):
+    inputs = []
+    negs = []
+	
+    for e in tqdm(data):
+        point = int(np.where(e == 0)[0])
+        start = 0 if point == 0 else int(num_list[point - 1])
+        end = int(num_list[point])
+		
+        count = 0
+        trial = 0
+        while count < k:
+            trial += 1
+            if trial >= 100:
+                break
+            j = np.random.randint(start, end) + 1
+            condition = [(j, n) in dict_pair for n in e]
+            if np.sum(condition) > 0:
+                continue
+            else:
+                temp = np.copy(e)
+                temp[point] = j
+                inputs.append(temp)
+                negs.append(point)
+                count += 1
+    inputs, index = np.unique(inputs, axis=0, return_index=True)
+    negs = np.array(negs)[index]
+    return np.array(inputs), np.array(negs)
+
+
+def check_outlier(model, data_):
+    data, negs = data_
+    bs = 1024
+    num_of_batches = int(np.floor(data.shape[0] / bs)) + 1
+    k = 3
+    outlier_prec = torch.zeros(k).to(device)
+	
+    model.eval()
+    with torch.no_grad():
+        for i in tqdm(range(num_of_batches)):
+            inputs = data[i * bs:(i + 1) * bs]
+            neg = negs[i * bs:(i + 1) * bs]
+            outlier = model(inputs, get_outlier=k)
+            outlier_prec += (outlier.transpose(1, 0) == neg).sum(dim=1).float()
+        # for kk in range(k):
+        # 	outlier_prec[kk] += (outlier[:,kk].view(-1)==neg).sum().float()
+        outlier_prec = outlier_prec.cumsum(dim=0)
+        outlier_prec /= data.shape[0]
+        for kk in range(k):
+            print("outlier top %d hitting: %.5f" % (kk + 1, outlier_prec[kk]))
+
+
+class Word2Vec_Skipgram_Data_Empty(object):
+    """Word2Vec model (Skipgram)."""
+	
+    def __init__(self):
+        return
+	
+    def next_batch(self):
+        """Train the model."""
+		
+        return 0, 0, 0, 0, 0

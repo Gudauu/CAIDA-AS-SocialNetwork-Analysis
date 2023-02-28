@@ -1,0 +1,300 @@
+        
+        
+        output = torch.bmm(attn, v)
+        
+        return output, attn
+
+
+class MultiHeadAttention(nn.Module):
+    ''' Multi-Head Attention module '''
+    
+    def __init__(
+            self,
+            n_head,
+            d_model,
+            d_k,
+            d_v,
+            dropout,
+            diag_mask,
+            input_dim):
+        super().__init__()
+        
+        self.n_head = n_head
+        self.d_k = d_k
+        self.d_v = d_v
+        
+        self.w_qs = nn.Linear(input_dim, n_head * d_k, bias=False)
+        self.w_ks = nn.Linear(input_dim, n_head * d_k, bias=False)
+        self.w_vs = nn.Linear(input_dim, n_head * d_v, bias=False)
+        
+        nn.init.normal_(self.w_qs.weight, mean=0,
+                        std=np.sqrt(2.0 / (d_model + d_k)))
+        nn.init.normal_(self.w_ks.weight, mean=0,
+                        std=np.sqrt(2.0 / (d_model + d_k)))
+        nn.init.normal_(self.w_vs.weight, mean=0,
+                        std=np.sqrt(2.0 / (d_model + d_v)))
+        
+        self.attention = ScaledDotProductAttention(
+            temperature=np.power(d_k, 0.5))
+        
+        self.fc1 = FeedForward([n_head * d_v, d_model], use_bias=False)
+        self.fc2 = FeedForward([n_head * d_v, d_model], use_bias=False)
+        
+        self.layer_norm1 = nn.LayerNorm(input_dim)
+        self.layer_norm2 = nn.LayerNorm(input_dim)
+        self.layer_norm3 = nn.LayerNorm(input_dim)
+        
+        if dropout is not None:
+            self.dropout = nn.Dropout(dropout)
+        else:
+            self.dropout = dropout
+        
+        self.diag_mask_flag = diag_mask
+        self.diag_mask = None
+    
+    def pass_(self, inputs):
+        return inputs
+    
+    def forward(self, q, k, v, diag_mask, mask=None):
+        d_k, d_v, n_head = self.d_k, self.d_v, self.n_head
+        
+        residual_dynamic = q
+        residual_static = v
+        
+        q = self.layer_norm1(q)
+        k = self.layer_norm2(k)
+        v = self.layer_norm3(v)
+        
+        sz_b, len_q, _ = q.shape
+        sz_b, len_k, _ = k.shape
+        sz_b, len_v, _ = v.shape
+        
+        q = self.w_qs(q).view(sz_b, len_q, n_head, d_k)
+        k = self.w_ks(k).view(sz_b, len_k, n_head, d_k)
+        v = self.w_vs(v).view(sz_b, len_v, n_head, d_v)
+        
+        q = q.permute(2, 0, 1, 3).contiguous(
+        ).view(-1, len_q, d_k)  # (n*b) x lq x dk
+        k = k.permute(2, 0, 1, 3).contiguous(
+        ).view(-1, len_k, d_k)  # (n*b) x lk x dk
+        v = v.permute(2, 0, 1, 3).contiguous(
+        ).view(-1, len_v, d_v)  # (n*b) x lv x dv
+        
+        n = sz_b * n_head
+        
+        if self.diag_mask is not None:
+            if (len(self.diag_mask) <= n) or (
+                    self.diag_mask.shape[1] != len_v):
+                self.diag_mask = torch.ones((len_v, len_v), device=device)
+                if self.diag_mask_flag == 'True':
+                    self.diag_mask -= torch.eye(len_v, len_v, device=device)
+                self.diag_mask = self.diag_mask.repeat(n, 1, 1)
+                diag_mask = self.diag_mask
+            else:
+                diag_mask = self.diag_mask[:n]
+        
+        else:
+            self.diag_mask = (torch.ones((len_v, len_v), device=device))
+            if self.diag_mask_flag == 'True':
+                self.diag_mask -= torch.eye(len_v, len_v, device=device)
+            self.diag_mask = self.diag_mask.repeat(n, 1, 1)
+            diag_mask = self.diag_mask
+        
+        if mask is not None:
+            mask = mask.repeat(n_head, 1, 1)  # (n*b) x .. x ..
+        
+        dynamic, attn = self.attention(q, k, v, diag_mask, mask=mask)
+        
+        dynamic = dynamic.view(n_head, sz_b, len_q, d_v)
+        dynamic = dynamic.permute(
+            1, 2, 0, 3).contiguous().view(
+            sz_b, len_q, -1)  # b x lq x (n*dv)
+        static = v.view(n_head, sz_b, len_q, d_v)
+        static = static.permute(
+            1, 2, 0, 3).contiguous().view(
+            sz_b, len_q, -1)  # b x lq x (n*dv)
+        
+        dynamic = self.dropout(self.fc1(dynamic)) if self.dropout is not None else self.fc1(dynamic)
+        static = self.dropout(self.fc2(static)) if self.dropout is not None else self.fc2(static)
+        
+        
+        return dynamic, static, attn
+
+
+class EncoderLayer(nn.Module):
+    '''A self-attention layer + 2 layered pff'''
+    
+    def __init__(
+            self,
+            n_head,
+            d_model,
+            d_k,
+            d_v,
+            dropout_mul,
+            dropout_pff,
+            diag_mask,
+            bottle_neck):
+        super().__init__()
+        self.n_head = n_head
+        self.d_k = d_k
+        self.d_v = d_v
+        
+        self.mul_head_attn = MultiHeadAttention(
+            n_head,
+            d_model,
+            d_k,
+            d_v,
+            dropout=dropout_mul,
+            diag_mask=diag_mask,
+            input_dim=bottle_neck)
+        self.pff_n1 = PositionwiseFeedForward(
+            [d_model, d_model, d_model], dropout=dropout_pff, residual=True, layer_norm=True)
+        self.pff_n2 = PositionwiseFeedForward(
+            [bottle_neck, d_model, d_model], dropout=dropout_pff, residual=False, layer_norm=True)
+    
+    # self.dropout = nn.Dropout(0.2)
+    
+    def forward(self, dynamic, static, slf_attn_mask, non_pad_mask):
+        dynamic, static1, attn = self.mul_head_attn(
+            dynamic, dynamic, static, slf_attn_mask)
+        dynamic = self.pff_n1(dynamic * non_pad_mask) * non_pad_mask
+        static1 = self.pff_n2(static * non_pad_mask) * non_pad_mask
+        
+        return dynamic, static1, attn
+5. "random_walk_hyper.py"
+from concurrent.futures import as_completed, ProcessPoolExecutor
+from scipy.sparse import csr_matrix, lil_matrix, csc_matrix
+from tqdm import tqdm, trange
+import time
+import numpy as np
+import os
+
+# os.environ["OMP_DISPLAY_ENV"] = "FALSE"
+# os.environ["OMP_NUM_THREADS"] = "20"
+os.environ["KMP_AFFINITY"] = 'none'
+# os.environ["KMP_AFFINITY"]="scatter"
+
+
+# FIXME: may be there is more efficient method
+
+weight_1st = 1.0
+weight_degree = -0.5
+
+print(weight_1st, weight_degree)
+
+
+def make_sparse_matrix(raw_data, m, n):
+    indptr = [len(row) for row in raw_data]
+    indptr = np.cumsum([0] + indptr)
+    indices = [i for row in raw_data for i in row]
+    data = [1] * len(indices)
+    return csr_matrix((data, indices, indptr), shape=(m, n), dtype='float32')
+
+
+def alias_setup(probs):
+    '''
+    Compute utility lists for non-uniform sampling from discrete distributions.
+    Refer to https://hips.seas.harvard.edu/blog/2013/03/03/the-alias-method-efficient-sampling-with-many-discrete-outcomes/
+    for details
+    '''
+    K = len(probs)
+    q = np.zeros(K)
+    J = np.zeros(K, dtype=np.int)
+
+    smaller = []
+    larger = []
+    for kk, prob in enumerate(probs):
+        q[kk] = K * prob
+        if q[kk] < 1.0:
+            smaller.append(kk)
+        else:
+            larger.append(kk)
+
+    while len(smaller) > 0 and len(larger) > 0:
+        small = smaller.pop()
+        large = larger.pop()
+
+        J[small] = large
+        q[large] = q[large] + q[small] - 1.0
+        if q[large] < 1.0:
+            smaller.append(large)
+        else:
+            larger.append(large)
+
+    return (J, q)
+
+
+def alias_draw(P):
+    '''
+    Draw sample from a non-uniform discrete distribution using alias sampling.
+    '''
+    J, q = P
+    K = len(J)
+
+    kk = int(np.floor(np.random.rand() * K))
+    if np.random.rand() < q[kk]:
+        return kk
+    else:
+        return J[kk]
+
+
+class HyperGraphRandomWalk():
+    def __init__(self, p, q, is_weighted=False):
+        self.p = p
+        self.q = q
+        # FIXME: current version is only for unweighted graph
+        self.is_weighted = is_weighted
+
+    def build_graph(self, node_list, edge_list):
+        # is considered to be range(num_node) FIXME: maybe a dict for nodes
+        # will be better
+        self.nodes = node_list
+        self.edges = edge_list  # the neighbors of hyperedges (without weight)
+
+        # the neighbors of nodes (with weight)
+        n_edge = [[] for _ in range(int(np.max(node_list) + 1))]
+
+        self.node_degree = np.zeros((int(np.max(node_list) + 1)))
+        self.edge_degree = np.array([len(e) for e in self.edges])
+        for i, e in enumerate(edge_list):
+            if isinstance(e, tuple):
+                e = list(e)
+            e.sort()
+            ww = 1  # FIXME: unweighted case
+            for v in e:
+                n_edge[v].append((i, ww))
+
+                self.node_degree[v] += 1
+
+        for v in node_list:
+            n_edge_i = sorted(n_edge[v])
+            n_edge[v] = np.array(n_edge_i)
+
+        self.n_edge = n_edge
+        # adjacent matrices of V x E, E x V, E x E
+        print('adj matrix:')
+        self.EV = make_sparse_matrix(
+            self.edges, len(
+                self.edges), int(
+                np.max(node_list) + 1))
+        self.delta = lil_matrix((self.EV.shape[0], self.EV.shape[0]))
+        size = np.array([1 / np.sqrt(len(e)) for e in self.edges])
+        self.delta.setdiag(size)
+
+        self.EV_over_delta = self.delta * self.EV
+
+        self.VE = self.EV.T
+        self.VE_over_delta = self.EV_over_delta.T
+
+        print("EV size", self.EV.shape)
+
+
+def get_first_order_part(nodes):
+    alias_n2n_1st = {}
+    node2ff_1st = {}
+
+    for src in tqdm(nodes):
+        dsts = node_nbr[src]
+        ff_1st = np.array(
+            (VE_over_delta[src, :] * EV_over_delta[:, dsts]).todense()).reshape((-1))
+        node2ff_1st[src] = ff_1st

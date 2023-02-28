@@ -1,0 +1,300 @@
+            recon_loss += sparse_autoencoder_error(recon, adj)
+            
+        return final, recon_loss
+
+def sparse_autoencoder_error(y_pred, y_true):
+    return torch.mean(torch.sum((y_true.ne(0).type(torch.float) * (y_true - y_pred)) ** 2, dim = -1) / torch.sum(y_true.ne(0).type(torch.float), dim = -1))
+
+class Word2vec_Skipgram(nn.Module):
+    def __init__(
+            self,
+            dict_size,
+            embedding_dim,
+            window_size,
+            u_embedding=None,
+            sparse=False):
+        super(Word2vec_Skipgram, self).__init__()
+        '''
+        use context (u) to predict center (v)
+        '''
+        self.dict_size = dict_size
+        self.embedding_dim = embedding_dim
+        self.window_size = window_size
+        
+        self.u_embedding = u_embedding
+        self.sm_w_t = nn.Embedding(
+            dict_size,
+            embedding_dim,
+            sparse=sparse,
+            padding_idx=0,
+        )
+        self.sm_b = nn.Embedding(dict_size, 1, sparse=sparse, padding_idx=0, )
+    
+    def forward_u(self, u):
+        return self.u_embedding(u)
+    
+    def forward_w_b(self, id):
+        return self.sm_w_t(id), self.sm_b(id)
+
+class Classifier(nn.Module):
+    def __init__(
+            self,
+            n_head,
+            d_model,
+            d_k,
+            d_v,
+            node_embedding,
+            diag_mask,
+            bottle_neck,
+            **args):
+        super().__init__()
+        
+        self.pff_classifier = PositionwiseFeedForward(
+            [d_model, 1], reshape=True, use_bias=True)
+        
+        self.node_embedding = node_embedding
+        self.encode1 = EncoderLayer(
+            n_head,
+            d_model,
+            d_k,
+            d_v,
+            dropout_mul=0.3,
+            dropout_pff=0.4,
+            diag_mask=diag_mask,
+            bottle_neck=bottle_neck)
+        # self.encode2 = EncoderLayer(n_head, d_model, d_k, d_v, dropout_mul=0.0, dropout_pff=0.0, diag_mask = diag_mask, bottle_neck=bottle_neck)
+        self.diag_mask_flag = diag_mask
+        self.layer_norm1 = nn.LayerNorm(d_model)
+        self.layer_norm2 = nn.LayerNorm(d_model)
+    
+    def get_node_embeddings(self, x,return_recon = False):
+        
+        # shape of x: (b, tuple)
+        sz_b, len_seq = x.shape
+        # print(torch.max(x), torch.min(x))
+        
+        x, recon_loss = self.node_embedding(x.view(-1))
+        if return_recon:
+            return x.view(sz_b, len_seq, -1), recon_loss
+        else:
+            return x.view(sz_b, len_seq, -1)
+    
+    def get_embedding(self, x, slf_attn_mask, non_pad_mask,return_recon = False):
+        if return_recon:
+            x, recon_loss = self.get_node_embeddings(x,return_recon)
+        else:
+            x = self.get_node_embeddings(x, return_recon)
+        dynamic, static, attn = self.encode1(x, x, slf_attn_mask, non_pad_mask)
+        # dynamic, static1, attn = self.encode2(dynamic, static,slf_attn_mask, non_pad_mask)
+        if return_recon:
+            return dynamic, static, attn, recon_loss
+        else:
+            return dynamic, static, attn
+    
+    def get_embedding_static(self, x):
+        if len(x.shape) == 1:
+            x = x.view(-1, 1)
+            flag = True
+        else:
+            flag = False
+        slf_attn_mask = get_attn_key_pad_mask(seq_k=x, seq_q=x)
+        non_pad_mask = get_non_pad_mask(x)
+        x = self.get_node_embeddings(x)
+        dynamic, static, attn = self.encode1(x, x, slf_attn_mask, non_pad_mask)
+        # dynamic, static, attn = self.encode2(dynamic, static,slf_attn_mask, non_pad_mask)
+        if flag:
+            return static[:, 0, :]
+        return static
+    
+    def forward(self, x, mask=None, get_outlier=None, return_recon = False):
+        x = x.long()
+            
+        slf_attn_mask = get_attn_key_pad_mask(seq_k=x, seq_q=x)
+        non_pad_mask = get_non_pad_mask(x)
+        
+        if return_recon:
+            dynamic, static, attn, recon_loss = self.get_embedding(x, slf_attn_mask, non_pad_mask,return_recon)
+        else:
+            dynamic, static, attn = self.get_embedding(x, slf_attn_mask, non_pad_mask, return_recon)
+        dynamic = self.layer_norm1(dynamic)
+        static = self.layer_norm2(static)
+        sz_b, len_seq, dim = dynamic.shape
+        
+        if self.diag_mask_flag == 'True':
+            output = (dynamic - static) ** 2
+        else:
+            output = dynamic
+        
+        output = self.pff_classifier(output)
+        output = torch.sigmoid(output)
+        
+        
+        if get_outlier is not None:
+            k = get_outlier
+            outlier = (
+                    (1 -
+                     output) *
+                    non_pad_mask).topk(
+                k,
+                dim=1,
+                largest=True,
+                sorted=True)[1]
+            return outlier.view(-1, k)
+        
+        mode = 'sum'
+        
+        if mode == 'min':
+            output, _ = torch.max(
+                (1 - output) * non_pad_mask, dim=-2, keepdim=False)
+            output = 1 - output
+        
+        elif mode == 'sum':
+            output = torch.sum(output * non_pad_mask, dim=-2, keepdim=False)
+            mask_sum = torch.sum(non_pad_mask, dim=-2, keepdim=False)
+            output /= mask_sum
+        elif mode == 'first':
+            output = output[:, 0, :]
+            
+        if return_recon:
+            return output, recon_loss
+        else:
+            return output
+
+
+# A custom position-wise MLP.
+# dims is a list, it would create multiple layer with tanh between them
+# If dropout, it would add the dropout at the end. Before residual and
+# layer-norm
+
+
+class PositionwiseFeedForward(nn.Module):
+    def __init__(
+            self,
+            dims,
+            dropout=None,
+            reshape=False,
+            use_bias=True,
+            residual=False,
+            layer_norm=False):
+        super(PositionwiseFeedForward, self).__init__()
+        self.w_stack = []
+        self.dims = dims
+        for i in range(len(dims) - 1):
+            self.w_stack.append(nn.Conv1d(dims[i], dims[i + 1], 1, use_bias))
+            self.add_module("PWF_Conv%d" % (i), self.w_stack[-1])
+        self.reshape = reshape
+        self.layer_norm = nn.LayerNorm(dims[-1])
+        
+        if dropout is not None:
+            self.dropout = nn.Dropout(dropout)
+        else:
+            self.dropout = None
+        
+        self.residual = residual
+        self.layer_norm_flag = layer_norm
+    
+    def forward(self, x):
+        output = x.transpose(1, 2)
+        
+        
+        for i in range(len(self.w_stack) - 1):
+            output = self.w_stack[i](output)
+            output = torch.tanh(output)
+            if self.dropout is not None:
+                output = self.dropout(output)
+        
+        output = self.w_stack[-1](output)
+        output = output.transpose(1, 2)
+        
+        if self.reshape:
+            output = output.view(output.shape[0], -1, 1)
+        
+        if self.dims[0] == self.dims[-1]:
+            # residual
+            if self.residual:
+                output += x
+
+            if self.layer_norm_flag:
+                output = self.layer_norm(output)
+        
+        return output
+
+
+# A custom position wise MLP.
+# dims is a list, it would create multiple layer with torch.tanh between them
+# We don't do residual and layer-norm, because this is only used as the
+# final classifier
+
+
+class FeedForward(nn.Module):
+    ''' A two-feed-forward-layer module '''
+    
+    def __init__(self, dims, dropout=None, reshape=False, use_bias=True):
+        super(FeedForward, self).__init__()
+        self.w_stack = []
+        for i in range(len(dims) - 1):
+            self.w_stack.append(nn.Linear(dims[i], dims[i + 1], use_bias))
+            self.add_module("FF_Linear%d" % (i), self.w_stack[-1])
+        
+        if dropout is not None:
+            self.dropout = nn.Dropout(dropout)
+        else:
+            self.dropout = None
+        
+        self.reshape = reshape
+    
+    def forward(self, x):
+        output = x
+        for i in range(len(self.w_stack) - 1):
+            output = self.w_stack[i](output)
+            output = torch.tanh(output)
+            if self.dropout is not None:
+                output = self.dropout(output)
+        output = self.w_stack[-1](output)
+        
+        if self.reshape:
+            output = output.view(output.shape[0], -1, 1)
+        
+        return output
+
+
+class ScaledDotProductAttention(nn.Module):
+    ''' Scaled Dot-Product Attention '''
+    
+    def __init__(self, temperature):
+        super().__init__()
+        self.temperature = temperature
+    
+    def masked_softmax(self, vector: torch.Tensor,
+                       mask: torch.Tensor,
+                       dim: int = -1,
+                       memory_efficient: bool = False,
+                       mask_fill_value: float = -1e32) -> torch.Tensor:
+        
+        if mask is None:
+            result = torch.nn.functional.softmax(vector, dim=dim)
+        else:
+            mask = mask.float()
+            while mask.dim() < vector.dim():
+                mask = mask.unsqueeze(1)
+            if not memory_efficient:
+                # To limit numerical errors from large vector elements outside
+                # the mask, we zero these out.
+                result = torch.nn.functional.softmax(vector * mask, dim=dim)
+                result = result * mask
+                result = result / (result.sum(dim=dim, keepdim=True) + 1e-13)
+            else:
+                masked_vector = vector.masked_fill(
+                    (1 - mask).bool(), mask_fill_value)
+                result = torch.nn.functional.softmax(masked_vector, dim=dim)
+        return result
+    
+    def forward(self, q, k, v, diag_mask, mask=None):
+        attn = torch.bmm(q, k.transpose(1, 2))
+        attn = attn / self.temperature
+        
+        if mask is not None:
+            attn = attn.masked_fill(mask, -float('inf'))
+        
+        attn = self.masked_softmax(
+            attn, diag_mask, dim=-1, memory_efficient=True)

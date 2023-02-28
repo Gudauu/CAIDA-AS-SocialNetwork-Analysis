@@ -1,18 +1,6 @@
 import easygraph as eg 
 import networkx as nx
-
-dictInfile = {
-    # '19980101':'dataCAIDA/AS_relationships/raw/19980101.as-rel.txt',
-    # '19980201':'dataCAIDA/AS_relationships/raw/19980201.as-rel.txt',
-    # '19980301':'dataCAIDA/AS_relationships/raw/19980301.as-rel.txt',
-    # '19980401':'dataCAIDA/AS_relationships/raw/19980401.as-rel.txt',
-    '20230101':'dataCAIDA/AS_relationships/raw/20230101.as-rel.txt',
-    '20221001':'dataCAIDA/AS_relationships/raw/20221001.as-rel.txt',
-    '20180701':'dataCAIDA/AS_relationships/raw/20180701.as-rel.txt',
-    '20110401':'dataCAIDA/AS_relationships/raw/20110401.as-rel.txt',
-    '20000301':'dataCAIDA/AS_relationships/raw/20000301.as-rel.txt'
-    
-}
+import whois
 
 listFileName_1998 = []
 for i in range(1,10):
@@ -89,14 +77,23 @@ def getG(version,DEBUG = False,flag_directed = True, flag_nx = False):
             G.add_edges_from([(5,6),(7,8),(6,5),(1,20),(2,1),(2,7),(20,8)])
             
         else:  
-            fn = dictInfile[version]
+            fn = 'dataCAIDA/AS_relationships/raw/'+version+'.as-rel.txt'
             G = buildAsRelGraph_nx(fn,flag_directed)
     else:  # eg
         if DEBUG:
             G = eg.DiGraph() if flag_directed else eg.Graph()
             G.add_edges([(5,6),(7,8),(6,5),(1,20),(2,1)])
         else:  
-            fn = dictInfile[version]
+            fn = 'dataCAIDA/AS_relationships/raw/'+version+'.as-rel.txt'
             G = buildAsRelGraph(fn,flag_directed)
     return G
+
+def ASN_lookup(asn):
+    asn_info = whois.whois('AS{}'.format(asn))
+
+    # Extract the organization name from the ASN information
+    org_name = asn_info.get('org-name', 'Unknown')
+
+    # Print the ASN and its corresponding organization name
+    print('ASN {}: {}'.format(asn, org_name))
 

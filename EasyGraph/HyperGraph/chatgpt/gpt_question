@@ -1,0 +1,3420 @@
+1: "datapipe.py"
+# Copyright 2015 The TensorFlow Authors. All Rights Reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# ==============================================================================
+
+"""Multi-threaded word2vec mini-batched skip-gram model.
+
+Trains the model described in:
+(Mikolov, et. al.) Efficient Estimation of Word Representations in Vector Space
+ICLR 2013.
+http://arxiv.org/abs/1301.3781
+This model does traditional minibatching.
+
+The key ops used are:
+* placeholder for feeding in tensors for each example.
+* embedding_lookup for fetching rows from the embedding matrix.
+* sigmoid_cross_entropy_with_logits to calculate the loss.
+* GradientDescentOptimizer for optimizing the loss.
+* skipgram custom op that does input processing.
+"""
+
+import torch
+import os
+import tensorflow as tf
+import warnings
+
+word2vec = tf.load_op_library(
+    os.path.join(
+        os.path.dirname(
+            os.path.realpath(__file__)),
+        'word2vec_ops.so'))
+warnings.filterwarnings("ignore")
+
+
+class Word2Vec_Skipgram_Data(object):
+    """Word2Vec model (Skipgram)."""
+
+    def __init__(
+            self,
+            train_data,
+            num_samples,
+            batch_size,
+            window_size,
+            min_count,
+            subsample,
+            session):
+        self.train_data = train_data
+        self.num_samples = num_samples
+        self.batch_size = batch_size
+        self.window_size = window_size
+        self.min_count = min_count
+        self.subsample = subsample
+        self._session = session
+        self._word2id = {}
+        self._id2word = []
+        self.build_graph()
+
+    def build_graph(self):
+        """Build the graph for the full model."""
+        # The training data. A text file.
+        (words, counts, words_per_epoch, self._epoch, self._words, examples,
+         labels) = word2vec.skipgram_word2vec(filename=self.train_data,
+                                              batch_size=self.batch_size,
+                                              window_size=self.window_size,
+                                              min_count=self.min_count,
+                                              subsample=self.subsample)
+        (self.vocab_words, self.vocab_counts,
+         self.words_per_epoch) = self._session.run([words, counts, words_per_epoch])
+        self.vocab_size = len(self.vocab_words)
+        print("Data file: ", self.train_data)
+        print("Vocab size: ", self.vocab_size - 1, " + UNK")
+        print("Words per epoch: ", self.words_per_epoch)
+        self._examples = examples
+        self._labels = labels
+        self._id2word = self.vocab_words
+        for i, w in enumerate(self._id2word):
+            self._word2id[w] = i
+
+        id2word = []
+        for i, w in enumerate(self._id2word):
+            try:
+                id2word.append(int(w))
+            except BaseException:
+                id2word.append(w)
+
+        self._id2word = id2word
+
+        # Nodes to compute the nce loss w/ candidate sampling.
+        labels_matrix = tf.reshape(
+            tf.cast(labels,
+                    dtype=tf.int64),
+            [self.batch_size, 1])
+        # Negative sampling.
+        self.sampled_ids, _, _ = (tf.nn.fixed_unigram_candidate_sampler(
+            true_classes=labels_matrix,
+            num_true=1,
+            num_sampled=self.num_samples,
+            unique=True,
+            range_max=self.vocab_size,
+            distortion=0.75,
+            unigrams=self.vocab_counts.tolist()))
+
+    def next_batch(self):
+        """Train the model."""
+
+        initial_epoch, e, l, s, words = self._session.run(
+            [self._epoch, self._examples, self._labels, self.sampled_ids, self._words])
+
+        # All + 1 because of the padding_idx
+        e_new = []
+        for e1 in e:
+            e_new.append(self._id2word[e1] + 1)
+
+        label_new = []
+        for l1 in l:
+            label_new.append(self._id2word[l1] + 1)
+
+        sampled_id_new = []
+        for s1 in s:
+            sampled_id_new.append(self._id2word[s1] + 1)
+
+        return e_new, label_new, sampled_id_new, initial_epoch, words
+2. "main_torch.py"
+from torch.nn.utils.rnn import pad_sequence
+from torchsummary import summary
+from gensim.models import Word2Vec
+
+from scipy.sparse import csr_matrix
+from scipy.sparse import vstack as s_vstack
+import os
+import time
+import argparse
+import warnings
+
+from random_walk import random_walk
+from random_walk_hyper import random_walk_hyper
+from Modules import *
+from utils import *
+
+import matplotlib as mpl
+mpl.use("Agg")
+import multiprocessing
+
+cpu_num = multiprocessing.cpu_count()
+
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+torch.backends.cudnn.benchmark = True
+torch.backends.cudnn.deterministic = False
+
+warnings.filterwarnings("ignore")
+
+
+def parse_args():
+    # Parses the node2vec arguments.
+    parser = argparse.ArgumentParser(description="Run node2vec.")
+    
+    parser.add_argument('--data', type=str, default='ramani')
+    parser.add_argument('--TRY', action='store_true')
+    parser.add_argument('--FILTER', action='store_true')
+    parser.add_argument('--grid', type=str, default='')
+    parser.add_argument('--remark', type=str, default='')
+    
+    parser.add_argument('--random-walk', action='store_true')
+    
+    parser.add_argument('--dimensions', type=int, default=64,
+                        help='Number of dimensions. Default is 64.')
+    
+    parser.add_argument('-l', '--walk-length', type=int, default=40,
+                        help='Length of walk per source. Default is 40.')
+    
+    parser.add_argument('-r', '--num-walks', type=int, default=10,
+                        help='Number of walks per source. Default is 10.')
+    
+    parser.add_argument('-k', '--window-size', type=int, default=10,
+                        help='Context size for optimization. Default is 10.')
+    
+    parser.add_argument('-i', '--iter', default=1, type=int,
+                        help='Number of epochs in SGD')
+    
+    parser.add_argument('--workers', type=int, default=8,
+                        help='Number of parallel workers. Default is 8.')
+    
+    parser.add_argument('--p', type=float, default=2,
+                        help='Return hyperparameter. Default is 1.')
+    
+    parser.add_argument('--q', type=float, default=0.25,
+                        help='Inout hyperparameter. Default is 1.')
+    
+    parser.add_argument('-a', '--alpha', type=float, default=0.0,
+                        help='The weight of random walk -skip-gram loss. Default is ')
+    parser.add_argument('--rw', type=float, default=0.01,
+                        help='The weight of reconstruction of adjacency matrix loss. Default is ')
+    parser.add_argument('-w', '--walk', type=str, default='',
+                        help='The walk type, empty stands for normal rw')
+    parser.add_argument('-d', '--diag', type=str, default='True',
+                        help='Use the diag mask or not')
+    parser.add_argument(
+        '-f',
+        '--feature',
+        type=str,
+        default='walk',
+        help='Features used in the first step')
+    
+    args = parser.parse_args()
+    
+    if not args.random_walk:
+        args.model_name = 'model_no_randomwalk'
+        args.epoch = 25
+    else:
+        args.model_name = 'model_{}_'.format(args.data)
+        args.epoch = 25
+    if args.TRY:
+        args.model_name = 'try' + args.model_name
+        if not args.random_walk:
+            args.epoch = 5
+        else:
+            args.epoch = 1
+    # args.epoch = 1
+    args.model_name += args.remark
+    print(args.model_name)
+    
+    args.save_path = os.path.join(
+        '../checkpoints/', args.data, args.model_name)
+    if not os.path.exists(args.save_path):
+        os.makedirs(args.save_path)
+    return args
+
+
+def train_batch_hyperedge(model, loss_func, batch_data, batch_weight, type, y=""):
+    x = batch_data
+    w = batch_weight
+    
+    # When label is not generated, prepare the data
+    if len(y) == 0:
+        x, y, w = generate_negative(x, "train_dict", type, w)
+        index = torch.randperm(len(x))
+        x, y, w = x[index], y[index], w[index]
+    
+    # forward
+    pred, recon_loss = model(x, return_recon = True)
+    loss = loss_func(pred, y, weight=w)
+    return pred, y, loss, recon_loss
+
+
+def train_batch_skipgram(model, loss_func, alpha, batch_data):
+    if alpha == 0:
+        return torch.zeros(1).to(device)
+    
+    examples, labels, neg_samples = batch_data
+    
+    # Embeddings for examples: [batch_size, emb_dim]
+    example_emb = model.forward_u(examples)
+    true_w, true_b = model.forward_w_b(labels)
+    sampled_w, sampled_b = model.forward_w_b(neg_samples)
+    
+    # True logits: [batch_size, 1]
+    true_logits = torch.sum(torch.mul(example_emb, true_w), dim=1) + true_b
+    
+    # Sampled logits: [batch_size, num_sampled]
+    # We replicate sampled noise labels for all examples in the batch
+    # using the matmul.
+    sampled_b_vec = sampled_b.view(1, -1)
+    
+    sampled_logits = torch.matmul(example_emb,
+                                  sampled_w.transpose(1, 0))
+    sampled_logits += sampled_b_vec
+    
+    true_xent = loss_func(true_logits, torch.ones_like(true_logits).to(device))
+    sampled_xent = loss_func(sampled_logits,
+                             torch.zeros_like(sampled_logits).to(device))
+    
+    # NCE-loss is the sum of the true and noise (sampled words)
+    # contributions, averaged over the batch.
+    loss = (true_xent + sampled_xent) / len(examples) / len(labels)
+    return loss
+
+
+def train_epoch(args, model, loss_func, training_data, optimizer, batch_size, only_rw, type):
+    # Epoch operation in training phase
+    # Simultaneously train on 2 models: hyperedge-prediction (1) & random-walk with skipgram (2)
+    model_1, model_2 = model
+    (loss_1, beta), (loss_2, alpha) = loss_func
+    edges, edge_weight, sentences = training_data
+    y = torch.tensor([])
+
+    
+    # Permutate all the data
+    index = torch.randperm(len(edges))
+    edges, edge_weight = edges[index], edge_weight[index]
+    if len(y) > 0:
+        y = y[index]
+    
+    model_1.train()
+    model_2.train()
+    
+    bce_total_loss = 0
+    skipgram_total_loss = 0
+    recon_total_loss = 0
+    acc_list, y_list, pred_list = [], [], []
+    
+    batch_num = int(math.floor(len(edges) / batch_size))
+    bar = trange(batch_num, mininterval=0.1, desc='  - (Training) ', leave=False, )
+    for i in bar:
+        if only_rw or alpha > 0:
+            examples, labels, neg_samples, epoch_finished, words = sentences.next_batch()
+            examples = torch.tensor(examples, dtype=torch.long, device=device)
+            labels = torch.tensor(labels, dtype=torch.long, device=device)
+            neg_samples = torch.tensor(neg_samples, dtype=torch.long, device=device)
+            loss_skipgram = train_batch_skipgram(
+                model_2, loss_2, alpha, [
+                    examples, labels, neg_samples])
+            loss = loss_skipgram
+            acc_list.append(0)
+            auc1, auc2 = 0.0, 0.0
+            
+        else:
+            batch_edge = edges[i * batch_size:(i + 1) * batch_size]
+            batch_edge_weight = edge_weight[i * batch_size:(i + 1) * batch_size]
+            batch_y = ""
+            if len(y) > 0:
+                batch_y = y[i * batch_size:(i + 1) * batch_size]
+                if len(batch_y) == 0:
+                    continue
+            
+            pred, batch_y, loss_bce, loss_recon = train_batch_hyperedge(model_1, loss_1, batch_edge, batch_edge_weight, type, y=batch_y)
+            loss_skipgram = torch.Tensor([0.0]).to(device)
+            loss = beta * loss_bce + alpha * loss_skipgram + loss_recon * args.rw
+            acc_list.append(accuracy(pred, batch_y))
+            y_list.append(batch_y)
+            pred_list.append(pred)
+        
+        for opt in optimizer:
+            opt.zero_grad()
+        
+        # backward
+        loss.backward()
+        
+        # update parameters
+        for opt in optimizer:
+            opt.step()
+        
+        bar.set_description(" - (Training) BCE:  %.4f  skipgram: %.4f recon: %.4f" %
+                            (bce_total_loss / (i + 1), skipgram_total_loss / (i + 1), recon_total_loss / (i + 1)))
+        bce_total_loss += loss_bce.item()
+        skipgram_total_loss += loss_skipgram.item()
+        recon_total_loss += loss_recon.item()
+    y = torch.cat(y_list)
+    pred = torch.cat(pred_list)
+    auc1, auc2 = roc_auc_cuda(y, pred)
+    return bce_total_loss / batch_num, skipgram_total_loss / batch_num,recon_total_loss / batch_num, np.mean(acc_list), auc1, auc2
+
+
+def eval_epoch(args, model, loss_func, validation_data, batch_size, type):
+    ''' Epoch operation in evaluation phase '''
+    bce_total_loss = 0
+    recon_total_loss = 0
+    (loss_1, beta), (loss_2, alpha) = loss_func
+    
+    loss_func = loss_1
+    
+    model.eval()
+    with torch.no_grad():
+        validation_data, validation_weight = validation_data
+        y = ""
+        
+        index = torch.randperm(len(validation_data))
+        validation_data, validation_weight = validation_data[index], validation_weight[index]
+        if len(y) > 0:
+            y = y[index]
+        
+        pred, label = [], []
+        
+        for i in tqdm(range(int(math.floor(len(validation_data) / batch_size))),
+                      mininterval=0.1, desc='  - (Validation)   ', leave=False):
+            # prepare data
+            batch_x = validation_data[i * batch_size:(i + 1) * batch_size]
+            batch_w = validation_weight[i * batch_size:(i + 1) * batch_size]
+            
+            if len(y) == 0:
+                batch_x, batch_y, batch_w = generate_negative(
+                    batch_x, "test_dict", type, weight=batch_w)
+            else:
+                batch_y = y[i * batch_size:(i + 1) * batch_size]
+            
+            index = torch.randperm(len(batch_x))
+            batch_x, batch_y, batch_w = batch_x[index], batch_y[index], batch_w[index]
+            
+            pred_batch, recon_loss = model(batch_x, return_recon = True)
+            pred.append(pred_batch)
+            label.append(batch_y)
+            
+            loss = loss_func(pred_batch, batch_y, weight=batch_w)
+            recon_total_loss += recon_loss.item()
+            bce_total_loss += loss.item()
+        
+        pred = torch.cat(pred, dim=0)
+        label = torch.cat(label, dim=0)
+        
+        acc = accuracy(pred, label)
+        
+        auc1, auc2 = roc_auc_cuda(label, pred)
+    
+    return bce_total_loss / (i + 1), recon_total_loss / (i + 1), acc, auc1, auc2
+
+
+def train(args, model, loss, training_data, validation_data, optimizer, epochs, batch_size, only_rw):
+    valid_accus = [0]
+    # outlier_data = generate_outlier()
+    
+    for epoch_i in range(epochs):
+        if only_rw:
+            save_embeddings(model[0], True)
+                
+                
+        
+        print('[ Epoch', epoch_i, 'of', epochs, ']')
+        
+        start = time.time()
+        
+        bce_loss, skipgram_loss,recon_loss, train_accu, auc1, auc2 = train_epoch(
+            args, model, loss, training_data, optimizer, batch_size, only_rw, train_type)
+        print('  - (Training)   bce: {bce_loss: 7.4f}, skipgram: {skipgram_loss: 7.4f}, '
+              'recon: {recon_loss: 7.4f}'
+              ' acc: {accu:3.3f} %, auc: {auc1:3.3f}, aupr: {auc2:3.3f}, '
+              'elapse: {elapse:3.3f} s'.format(
+            bce_loss=bce_loss,
+            skipgram_loss=skipgram_loss,
+            recon_loss = recon_loss,
+            accu=100 *
+                 train_accu,
+            auc1=auc1,
+            auc2=auc2,
+            elapse=(time.time() - start)))
+        
+        start = time.time()
+        valid_bce_loss, recon_loss, valid_accu, valid_auc1, valid_auc2 = eval_epoch(args, model[0], loss, validation_data, batch_size,
+                                                                        'hyper')
+        print('  - (Validation-hyper) bce: {bce_loss: 7.4f}, recon: {recon_loss: 7.4f},'
+              '  acc: {accu:3.3f} %,'
+              ' auc: {auc1:3.3f}, aupr: {auc2:3.3f},'
+              'elapse: {elapse:3.3f} s'.format(
+            bce_loss=valid_bce_loss,
+            recon_loss=recon_loss,
+            accu=100 *
+                 valid_accu,
+            auc1=valid_auc1,
+            auc2=valid_auc2,
+            elapse=(time.time() - start)))
+        
+        valid_accus += [valid_auc1]
+        # check_outlier(model[0], outlier_data)
+        
+        checkpoint = {
+            'model_link': model[0].state_dict(),
+            'model_node2vec': model[1].state_dict(),
+            'epoch': epoch_i}
+        
+        model_name = 'model.chkpt'
+        
+        if valid_auc1 >= max(valid_accus):
+            torch.save(checkpoint, os.path.join(args.save_path, model_name))
+        
+        torch.cuda.empty_cache()
+        
+    if not only_rw:
+        checkpoint = torch.load(os.path.join(args.save_path, model_name))
+        model[0].load_state_dict(checkpoint['model_link'])
+        model[1].load_state_dict(checkpoint['model_node2vec'])
+
+def generate_negative(x, dict1, get_type='all', weight="", forward=True):
+    if dict1 == 'train_dict':
+        dict1 = train_dict
+    elif dict1 == 'test_dict':
+        dict1 = test_dict
+    
+    if len(weight) == 0:
+        weight = torch.ones(len(x), dtype=torch.float)
+    
+    neg_list = []
+    
+    zero_num_list = [0] + list(num_list)
+    new_index = []
+    max_id = int(num[-1])
+    
+    if forward:
+        func1 = pass_
+    else:
+        func1 = tqdm
+    
+    if len(x.shape) > 1:
+        change_list_all = np.random.randint(
+            0, x.shape[-1], len(x) * neg_num).reshape((len(x), neg_num))
+    for j, sample in enumerate(func1(x)):
+        if len(x.shape) > 1:
+            change_list = change_list_all[j, :]
+        else:
+            change_list = np.random.randint(0, sample.shape[-1], neg_num)
+        for i in range(neg_num):
+            temp = np.copy(sample)
+            a = set()
+            a.add(tuple(temp))
+            
+            trial = 0
+            simple_or_hard = np.random.rand()
+            if simple_or_hard <= pair_ratio:
+                change = change_list[i]
+                
+            while not a.isdisjoint(dict1):
+                temp = np.copy(sample)
+                trial += 1
+                if trial >= 1000:
+                    temp = ""
+                    break
+                # Only change one node
+                if simple_or_hard <= pair_ratio:
+                    if len(num_list) == 1:
+                        # Only one node type
+                        temp[change] = np.random.randint(0, max_id, 1) + 1
+                    
+                    else:
+                        # Multiple node types
+                        start = zero_num_list[node_type_mapping[change]]
+                        end = zero_num_list[node_type_mapping[change] + 1]
+                        
+                        temp[change] = np.random.randint(
+                            int(start), int(end), 1) + 1
+                else:
+                    
+                    if len(num_list) == 1:
+                        # Only one node type
+                        temp = np.random.randint(
+                            0, max_id, sample.shape[-1]) + 1
+                    
+                    else:
+                        for k in range(temp.shape[-1]):
+                            start = zero_num_list[node_type_mapping[k]]
+                            end = zero_num_list[node_type_mapping[k] + 1]
+                            temp[k] = np.random.randint(
+                                int(start), int(end), 1) + 1
+                
+                temp.sort()
+                a = set([tuple(temp)])
+            
+            if len(temp) > 0:
+                neg_list.append(temp)
+                if i == 0:
+                    new_index.append(j)
+    if get_type == 'all' or get_type == 'edge':
+        x_e, neg_e = generate_negative_edge(x, int(len(x)))
+        if get_type == 'all':
+            x = list(x) + x_e
+            neg_list = neg_list + neg_e
+        else:
+            x = x_e
+            neg_list = neg_e
+    new_index = np.array(new_index)
+    new_x = x[new_index]
+    
+    if not forward:
+        device = 'cpu'
+    else:
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    
+    new_weight = torch.tensor(weight[new_index]).to(device)
+    
+    x = np2tensor_hyper(new_x, dtype=torch.long)
+    neg = np2tensor_hyper(neg_list, dtype=torch.long)
+    x = pad_sequence(x, batch_first=True, padding_value=0).to(device)
+    neg = pad_sequence(neg, batch_first=True, padding_value=0).to(device)
+    # print("x", x, "neg", neg)
+    
+    return torch.cat([x, neg]), torch.cat(
+        [torch.ones((len(x), 1), device=device), torch.zeros((len(neg), 1), device=device)], dim=0), torch.cat(
+        ((torch.ones((len(x), 1), device=device) * new_weight.view(-1, 1), (torch.ones((len(neg), 1), device=device)))))
+
+
+def save_embeddings(model, origin=False):
+    model.eval()
+    with torch.no_grad():
+        ids = np.arange(num_list[-1]) + 1
+        ids = torch.Tensor(ids).long().to(device).view(-1, 1)
+        embeddings = []
+        for j in range(math.ceil(len(ids) / batch_size)):
+            x = ids[j * batch_size:min((j + 1) * batch_size, len(ids))]
+            if origin:
+                embed = model.get_node_embeddings(x)
+            else:
+                embed = model.get_embedding_static(x)
+            embed = embed.detach().cpu().numpy()
+            embeddings.append(embed)
+        
+        embeddings = np.concatenate(embeddings, axis=0)[:, 0, :]
+        for i in range(len(num_list)):
+            start = 0 if i == 0 else num_list[i - 1]
+            static = embeddings[int(start):int(num_list[i])]
+            np.save("../mymodel_%d.npy" % (i), static)
+            
+            if origin:
+                np.save("../mymodel_%d_origin.npy" % (i), static)
+    
+    torch.cuda.empty_cache()
+    return embeddings
+
+
+def generate_H(edge, nums_type, weight):
+    nums_examples = len(edge)
+    H = [0 for i in range(len(nums_type))]
+    for i in range(edge.shape[-1]):
+        # np.sqrt(weight) because the dot product later would recovers it
+        H[node_type_mapping[i]] += csr_matrix((np.sqrt(weight), (edge[:, i], range(
+            nums_examples))), shape=(nums_type[node_type_mapping[i]], nums_examples))
+    return H
+
+
+def generate_embeddings(edge, nums_type, H=None, weight=1):
+    if len(num) == 1:
+        return [get_adjacency(edge, True)]
+    if H is None:
+        H = generate_H(edge, nums_type, weight)
+    
+    embeddings = [H[i].dot(s_vstack([H[j] for j in range(len(num))]).T).astype('float32') for i in
+                  range(len(nums_type))]
+    
+    new_embeddings = []
+    zero_num_list = [0] + list(num_list)
+    for i, e in enumerate(embeddings):
+        # This is to remove diag entrance
+        for j, k in enumerate(range(zero_num_list[i], zero_num_list[i + 1])):
+            e[j, k] = 0
+        
+        # Automatically removes all zero entries
+        col_sum = np.array(e.sum(0)).reshape((-1))
+        new_e = e[:, col_sum > 0]
+        new_e.eliminate_zeros()
+        new_embeddings.append(new_e)
+    
+    
+    # 0-1 scaling
+    for i in range(len(nums_type)):
+        col_max = np.array(new_embeddings[i].max(0).todense()).flatten()
+        _, col_index = new_embeddings[i].nonzero()
+        new_embeddings[i].data /= col_max[col_index]
+    return [new_embeddings[i] for i in range(len(nums_type))]
+
+
+def get_adjacency(data, norm=True):
+    A = np.zeros((num_list[-1], num_list[-1]))
+    
+    for datum in tqdm(data):
+        for i in range(datum.shape[-1]):
+            for j in range(datum.shape[-1]):
+                if i != j:
+                    A[datum[i], datum[j]] += 1.0
+    
+    if norm:
+        temp = np.concatenate((np.zeros((1), dtype='int'), num), axis=0)
+        temp = np.cumsum(temp)
+        
+        for i in range(len(temp) - 1):
+            A[temp[i]:temp[i + 1],
+            :] /= (np.max(A[temp[i]:temp[i + 1],
+                          :],
+                          axis=0,
+                          keepdims=True) + 1e-10)
+    
+    return csr_matrix(A).astype('float32')
+
+args = parse_args()
+neg_num = 5
+batch_size = 96
+neg_num_w2v = 5
+bottle_neck = args.dimensions
+pair_ratio = 0.9
+train_type = 'hyper'
+
+
+
+train_zip = np.load("../data/%s/train_data.npz" % (args.data), allow_pickle=True)
+test_zip = np.load("../data/%s/test_data.npz" % (args.data), allow_pickle=True)
+train_data, test_data = train_zip['train_data'], test_zip['test_data']
+
+
+
+try:
+    train_weight, test_weight = train_zip["train_weight"].astype('float32'), test_zip["test_weight"].astype('float32')
+except BaseException:
+    print("no specific train weight")
+    test_weight = np.ones(len(test_data), dtype='float32')
+    train_weight = np.ones(len(train_data), dtype='float32') * neg_num
+
+num = train_zip['nums_type']
+num_list = np.cumsum(num)
+print("Node type num", num)
+
+
+if len(num) > 1:
+    node_type_mapping = [0, 1, 2]
+    
+
+if args.feature == 'adj':
+    embeddings_initial = generate_embeddings(train_data, num, H=None, weight=train_weight)
+
+print(train_weight)
+print(train_weight, np.min(train_weight), np.max(train_weight))
+train_weight_mean = np.mean(train_weight)
+train_weight = train_weight / train_weight_mean * neg_num
+test_weight = test_weight / train_weight_mean * neg_num
+
+
+
+# Now for multiple node types, the first column id starts at 0, the second
+# starts at num_list[0]...
+if len(num) > 1:
+    for i in range(len(node_type_mapping) - 1):
+        train_data[:, i + 1] += num_list[node_type_mapping[i + 1] - 1]
+        test_data[:, i + 1] += num_list[node_type_mapping[i + 1] - 1]
+
+num = torch.as_tensor(num)
+num_list = torch.as_tensor(num_list)
+
+print("walk type", args.walk)
+# At this stage, the index still starts from zero
+
+node_list = np.arange(num_list[-1]).astype('int')
+if args.walk == 'hyper':
+    walk_path = random_walk_hyper(args, node_list, train_data)
+else:
+    walk_path = random_walk(args, num, train_data)
+del node_list
+
+
+# Add 1 for the padding index
+print("adding pad idx")
+train_data = add_padding_idx(train_data)
+test_data = add_padding_idx(test_data)
+
+
+
+
+# Note that, no matter how many node types are here, make sure the
+# hyperedge (N1,N2,N3,...) has id, N1 < N2 < N3...
+train_dict = parallel_build_hash(train_data, "build_hash", args, num, initial = set())
+test_dict = parallel_build_hash(test_data, "build_hash", args, num, initial = train_dict)
+print ("dict_size", len(train_dict), len(test_dict))
+
+# dict2 = build_hash2(train_data)
+# pos_edges = list(dict2)
+# pos_edges = np.array(pos_edges)
+# np.random.shuffle(pos_edges)
+
+print("train data amount", len(train_data))
+# potential_outliers = build_hash3(np.concatenate((train_data, test), axis=0))
+# potential_outliers = np.array(list(potential_outliers))
+
+
+
+if args.feature == 'walk':
+    # Note that for this part, the word2vec still takes sentences with
+    # words starts at "0"
+    if not args.TRY and os.path.exists(
+            "../%s_wv_%d_%s.npy" %
+            (args.data, args.dimensions, args.walk)):
+        A = np.load(
+            "../%s_wv_%d_%s.npy" %
+            (args.data,
+             args.dimensions,
+             args.walk),
+            allow_pickle=True)
+    else:
+        print("start loading")
+        walks = np.loadtxt(walk_path, delimiter=" ").astype('int')
+        start = time.time()
+        split_num = 20
+        pool = ProcessPoolExecutor(max_workers=split_num)
+        process_list = []
+        walks = np.array_split(walks, split_num)
+        
+        result = []
+        print("Start turning path to strs")
+        for walk in walks:
+            process_list.append(pool.submit(walkpath2str, walk))
+        
+        for p in as_completed(process_list):
+            result += p.result()
+        
+        pool.shutdown(wait=True)
+        
+        walks = result
+        print(
+            "Finishing Loading and processing %.2f s" %
+            (time.time() - start))
+        print("Start Word2vec")
+        import multiprocessing
+        
+        print("num cpu cores", multiprocessing.cpu_count())
+        w2v = Word2Vec(
+            walks,
+            size=args.dimensions,
+            window=args.window_size,
+            min_count=0,
+            sg=1,
+            iter=1,
+            workers=multiprocessing.cpu_count())
+        wv = w2v.wv
+        A = [wv[str(i)] for i in range(num_list[-1])]
+        np.save("../%s_wv_%d_%s.npy" %
+                (args.data, args.dimensions, args.walk), A)
+        
+        from sklearn.preprocessing import StandardScaler
+        
+        A = StandardScaler().fit_transform(A)
+    
+    A = np.concatenate(
+        (np.zeros((1, A.shape[-1]), dtype='float32'), A), axis=0)
+    A = A.astype('float32')
+    A = torch.tensor(A).to(device)
+    print(A.shape)
+    
+    node_embedding = Wrap_Embedding(int(
+        num_list[-1] + 1), args.dimensions, scale_grad_by_freq=False, padding_idx=0, sparse=False)
+    node_embedding.weight = nn.Parameter(A)
+
+elif args.feature == 'adj':
+    flag = False
+    
+    node_embedding = MultipleEmbedding(
+        embeddings_initial,
+        bottle_neck,
+        flag,
+        num_list,
+        node_type_mapping).to(device)
+
+classifier_model = Classifier(
+    n_head=8,
+    d_model=args.dimensions,
+    d_k=16,
+    d_v=16,
+    node_embedding=node_embedding,
+    diag_mask=args.diag,
+    bottle_neck=bottle_neck).to(device)
+
+save_embeddings(classifier_model, True)
+
+Randomwalk_Word2vec = Word2vec_Skipgram(dict_size=int(num_list[-1] + 1), embedding_dim=args.dimensions,
+                                        window_size=args.window_size, u_embedding=node_embedding,
+                                        sparse=False).to(device)
+
+loss = F.binary_cross_entropy
+loss2 = torch.nn.BCEWithLogitsLoss(reduction='sum')
+
+summary(classifier_model, (3,))
+
+
+sentences = Word2Vec_Skipgram_Data_Empty()
+
+params_list = list(set(list(classifier_model.parameters()) + list(Randomwalk_Word2vec.parameters())))
+
+if args.feature == 'adj':
+    optimizer = torch.optim.Adam(params_list, lr=1e-3)
+else:
+    optimizer = torch.optim.RMSprop(params_list, lr=1e-3)
+
+model_parameters = filter(lambda p: p.requires_grad, params_list)
+params = sum([np.prod(p.size()) for p in model_parameters])
+print("params to be trained", params)
+
+train(args, (classifier_model, Randomwalk_Word2vec),
+      loss=((loss, 1.0), (loss2, 0.0)),
+      training_data=(train_data, train_weight, sentences),
+      validation_data=(test_data, test_weight),
+      optimizer=[optimizer], epochs=300, batch_size=batch_size, only_rw=False)
+3. "main.py"
+from torch.nn.utils.rnn import pad_sequence
+from torchsummary import summary
+from gensim.models import Word2Vec
+import tensorflow as tf
+
+from scipy.sparse import csr_matrix
+from scipy.sparse import vstack as s_vstack
+import os
+import time
+import argparse
+import warnings
+
+from random_walk import random_walk
+from random_walk_hyper import random_walk_hyper
+from Modules import *
+from utils import *
+
+import matplotlib as mpl
+mpl.use("Agg")
+import multiprocessing
+
+cpu_num = multiprocessing.cpu_count()
+
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+torch.backends.cudnn.benchmark = True
+torch.backends.cudnn.deterministic = False
+device_ids = [0, 1]
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+
+warnings.filterwarnings("ignore")
+
+
+def parse_args():
+    # Parses the node2vec arguments.
+    parser = argparse.ArgumentParser(description="Run node2vec.")
+    
+    parser.add_argument('--data', type=str, default='ramani')
+    parser.add_argument('--TRY', action='store_true')
+    parser.add_argument('--FILTER', action='store_true')
+    parser.add_argument('--grid', type=str, default='')
+    parser.add_argument('--remark', type=str, default='')
+    
+    parser.add_argument('--random-walk', action='store_true')
+    
+    parser.add_argument('--dimensions', type=int, default=64,
+                        help='Number of dimensions. Default is 64.')
+    
+    parser.add_argument('-l', '--walk-length', type=int, default=40,
+                        help='Length of walk per source. Default is 40.')
+    
+    parser.add_argument('-r', '--num-walks', type=int, default=10,
+                        help='Number of walks per source. Default is 10.')
+    
+    parser.add_argument('-k', '--window-size', type=int, default=10,
+                        help='Context size for optimization. Default is 10.')
+    
+    parser.add_argument('-i', '--iter', default=1, type=int,
+                        help='Number of epochs in SGD')
+    
+    parser.add_argument('--workers', type=int, default=8,
+                        help='Number of parallel workers. Default is 8.')
+    
+    parser.add_argument('--p', type=float, default=2,
+                        help='Return hyperparameter. Default is 1.')
+    
+    parser.add_argument('--q', type=float, default=0.25,
+                        help='Inout hyperparameter. Default is 1.')
+    
+    parser.add_argument('-a', '--alpha', type=float, default=0.0,
+                        help='The weight of random walk -skip-gram loss. Default is ')
+    parser.add_argument('--rw', type=float, default=0.01,
+                        help='The weight of reconstruction of adjacency matrix loss. Default is ')
+    parser.add_argument('-w', '--walk', type=str, default='',
+                        help='The walk type, empty stands for normal rw')
+    parser.add_argument('-d', '--diag', type=str, default='True',
+                        help='Use the diag mask or not')
+    parser.add_argument(
+        '-f',
+        '--feature',
+        type=str,
+        default='walk',
+        help='Features used in the first step')
+    
+    args = parser.parse_args()
+    
+    if not args.random_walk:
+        args.model_name = 'model_no_randomwalk'
+        args.epoch = 25
+    else:
+        args.model_name = 'model_{}_'.format(args.data)
+        args.epoch = 25
+    if args.TRY:
+        args.model_name = 'try' + args.model_name
+        if not args.random_walk:
+            args.epoch = 5
+        else:
+            args.epoch = 1
+    # args.epoch = 1
+    args.model_name += args.remark
+    print(args.model_name)
+    
+    args.save_path = os.path.join(
+        '../checkpoints/', args.data, args.model_name)
+    if not os.path.exists(args.save_path):
+        os.makedirs(args.save_path)
+    return args
+
+
+def train_batch_hyperedge(model, loss_func, batch_data, batch_weight, type, y=""):
+    x = batch_data
+    w = batch_weight
+    
+    # When label is not generated, prepare the data
+    if len(y) == 0:
+        x, y, w = generate_negative(x, "train_dict", type, w)
+        index = torch.randperm(len(x))
+        x, y, w = x[index], y[index], w[index]
+    
+    # forward
+    pred, recon_loss = model(x, return_recon = True)
+    loss = loss_func(pred, y, weight=w)
+    return pred, y, loss, recon_loss
+
+
+def train_batch_skipgram(model, loss_func, alpha, batch_data):
+    if alpha == 0:
+        return torch.zeros(1).to(device)
+    
+    examples, labels, neg_samples = batch_data
+    
+    # Embeddings for examples: [batch_size, emb_dim]
+    example_emb = model.forward_u(examples)
+    true_w, true_b = model.forward_w_b(labels)
+    sampled_w, sampled_b = model.forward_w_b(neg_samples)
+    
+    # True logits: [batch_size, 1]
+    true_logits = torch.sum(torch.mul(example_emb, true_w), dim=1) + true_b
+    
+    # Sampled logits: [batch_size, num_sampled]
+    # We replicate sampled noise labels for all examples in the batch
+    # using the matmul.
+    sampled_b_vec = sampled_b.view(1, -1)
+    
+    sampled_logits = torch.matmul(example_emb,
+                                  sampled_w.transpose(1, 0))
+    sampled_logits += sampled_b_vec
+    
+    true_xent = loss_func(true_logits, torch.ones_like(true_logits).to(device))
+    sampled_xent = loss_func(sampled_logits,
+                             torch.zeros_like(sampled_logits).to(device))
+    
+    # NCE-loss is the sum of the true and noise (sampled words)
+    # contributions, averaged over the batch.
+    loss = (true_xent + sampled_xent) / len(examples) / len(labels)
+    return loss
+
+
+def train_epoch(args, model, loss_func, training_data, optimizer, batch_size, only_rw, type):
+    # Epoch operation in training phase
+    # Simultaneously train on 2 models: hyperedge-prediction (1) & random-walk with skipgram (2)
+    model_1, model_2 = model
+    (loss_1, beta), (loss_2, alpha) = loss_func
+    edges, edge_weight, sentences = training_data
+    y = torch.tensor([])
+
+    
+    # Permutate all the data
+    index = torch.randperm(len(edges))
+    edges, edge_weight = edges[index], edge_weight[index]
+    if len(y) > 0:
+        y = y[index]
+    
+    model_1.train()
+    model_2.train()
+    
+    bce_total_loss = 0
+    skipgram_total_loss = 0
+    recon_total_loss = 0
+    acc_list, y_list, pred_list = [], [], []
+    
+    batch_num = int(math.floor(len(edges) / batch_size))
+    bar = trange(batch_num, mininterval=0.1, desc='  - (Training) ', leave=False, )
+    for i in bar:
+        if only_rw or alpha > 0:
+            examples, labels, neg_samples, epoch_finished, words = sentences.next_batch()
+            examples = torch.tensor(examples, dtype=torch.long, device=device)
+            labels = torch.tensor(labels, dtype=torch.long, device=device)
+            neg_samples = torch.tensor(neg_samples, dtype=torch.long, device=device)
+            loss_skipgram = train_batch_skipgram(
+                model_2, loss_2, alpha, [
+                    examples, labels, neg_samples])
+            loss = loss_skipgram
+            acc_list.append(0)
+            auc1, auc2 = 0.0, 0.0
+            
+        else:
+            batch_edge = edges[i * batch_size:(i + 1) * batch_size]
+            batch_edge_weight = edge_weight[i * batch_size:(i + 1) * batch_size]
+            batch_y = ""
+            if len(y) > 0:
+                batch_y = y[i * batch_size:(i + 1) * batch_size]
+                if len(batch_y) == 0:
+                    continue
+            
+            pred, batch_y, loss_bce, loss_recon = train_batch_hyperedge(model_1, loss_1, batch_edge, batch_edge_weight, type, y=batch_y)
+            loss_skipgram = torch.Tensor([0.0]).to(device)
+            loss = beta * loss_bce + alpha * loss_skipgram + loss_recon * args.rw
+            acc_list.append(accuracy(pred, batch_y))
+            y_list.append(batch_y)
+            pred_list.append(pred)
+        
+        for opt in optimizer:
+            opt.zero_grad()
+        
+        # backward
+        loss.backward()
+        
+        # update parameters
+        for opt in optimizer:
+            opt.step()
+        
+        bar.set_description(" - (Training) BCE:  %.4f  skipgram: %.4f recon: %.4f" %
+                            (bce_total_loss / (i + 1), skipgram_total_loss / (i + 1), recon_total_loss / (i + 1)))
+        bce_total_loss += loss_bce.item()
+        skipgram_total_loss += loss_skipgram.item()
+        recon_total_loss += loss_recon.item()
+    y = torch.cat(y_list)
+    pred = torch.cat(pred_list)
+    auc1, auc2 = roc_auc_cuda(y, pred)
+    return bce_total_loss / batch_num, skipgram_total_loss / batch_num,recon_total_loss / batch_num, np.mean(acc_list), auc1, auc2
+
+
+def eval_epoch(args, model, loss_func, validation_data, batch_size, type):
+    ''' Epoch operation in evaluation phase '''
+    bce_total_loss = 0
+    recon_total_loss = 0
+    (loss_1, beta), (loss_2, alpha) = loss_func
+    
+    loss_func = loss_1
+    
+    model.eval()
+    with torch.no_grad():
+        validation_data, validation_weight = validation_data
+        y = ""
+        
+        index = torch.randperm(len(validation_data))
+        validation_data, validation_weight = validation_data[index], validation_weight[index]
+        if len(y) > 0:
+            y = y[index]
+        
+        pred, label = [], []
+        
+        for i in tqdm(range(int(math.floor(len(validation_data) / batch_size))),
+                      mininterval=0.1, desc='  - (Validation)   ', leave=False):
+            # prepare data
+            batch_x = validation_data[i * batch_size:(i + 1) * batch_size]
+            batch_w = validation_weight[i * batch_size:(i + 1) * batch_size]
+            
+            if len(y) == 0:
+                batch_x, batch_y, batch_w = generate_negative(
+                    batch_x, "test_dict", type, weight=batch_w)
+            else:
+                batch_y = y[i * batch_size:(i + 1) * batch_size]
+            
+            index = torch.randperm(len(batch_x))
+            batch_x, batch_y, batch_w = batch_x[index], batch_y[index], batch_w[index]
+            
+            pred_batch, recon_loss = model(batch_x, return_recon = True)
+            pred.append(pred_batch)
+            label.append(batch_y)
+            
+            loss = loss_func(pred_batch, batch_y, weight=batch_w)
+            recon_total_loss += recon_loss.item()
+            bce_total_loss += loss.item()
+        
+        pred = torch.cat(pred, dim=0)
+        label = torch.cat(label, dim=0)
+        
+        acc = accuracy(pred, label)
+        
+        auc1, auc2 = roc_auc_cuda(label, pred)
+    
+    return bce_total_loss / (i + 1), recon_total_loss / (i + 1), acc, auc1, auc2
+
+
+def train(args, model, loss, training_data, validation_data, optimizer, epochs, batch_size, only_rw):
+    valid_accus = [0]
+    # outlier_data = generate_outlier()
+    
+    for epoch_i in range(epochs):
+        if only_rw:
+            save_embeddings(model[0], True)
+                
+                
+        
+        print('[ Epoch', epoch_i, 'of', epochs, ']')
+        
+        start = time.time()
+        
+        bce_loss, skipgram_loss,recon_loss, train_accu, auc1, auc2 = train_epoch(
+            args, model, loss, training_data, optimizer, batch_size, only_rw, train_type)
+        print('  - (Training)   bce: {bce_loss: 7.4f}, skipgram: {skipgram_loss: 7.4f}, '
+              'recon: {recon_loss: 7.4f}'
+              ' acc: {accu:3.3f} %, auc: {auc1:3.3f}, aupr: {auc2:3.3f}, '
+              'elapse: {elapse:3.3f} s'.format(
+            bce_loss=bce_loss,
+            skipgram_loss=skipgram_loss,
+            recon_loss = recon_loss,
+            accu=100 *
+                 train_accu,
+            auc1=auc1,
+            auc2=auc2,
+            elapse=(time.time() - start)))
+        
+        start = time.time()
+        valid_bce_loss, recon_loss, valid_accu, valid_auc1, valid_auc2 = eval_epoch(args, model[0], loss, validation_data, batch_size,
+                                                                        'hyper')
+        print('  - (Validation-hyper) bce: {bce_loss: 7.4f}, recon: {recon_loss: 7.4f},'
+              '  acc: {accu:3.3f} %,'
+              ' auc: {auc1:3.3f}, aupr: {auc2:3.3f},'
+              'elapse: {elapse:3.3f} s'.format(
+            bce_loss=valid_bce_loss,
+            recon_loss=recon_loss,
+            accu=100 *
+                 valid_accu,
+            auc1=valid_auc1,
+            auc2=valid_auc2,
+            elapse=(time.time() - start)))
+        
+        valid_accus += [valid_auc1]
+        # check_outlier(model[0], outlier_data)
+        
+        checkpoint = {
+            'model_link': model[0].state_dict(),
+            'model_node2vec': model[1].state_dict(),
+            'epoch': epoch_i}
+        
+        model_name = 'model.chkpt'
+        
+        if valid_auc1 >= max(valid_accus):
+            torch.save(checkpoint, os.path.join(args.save_path, model_name))
+        
+        torch.cuda.empty_cache()
+        
+    if not only_rw:
+        checkpoint = torch.load(os.path.join(args.save_path, model_name))
+        model[0].load_state_dict(checkpoint['model_link'])
+        model[1].load_state_dict(checkpoint['model_node2vec'])
+
+def generate_negative(x, dict1, get_type='all', weight="", forward=True):
+    if dict1 == 'train_dict':
+        dict1 = train_dict
+    elif dict1 == 'test_dict':
+        dict1 = test_dict
+    
+    if len(weight) == 0:
+        weight = torch.ones(len(x), dtype=torch.float)
+    
+    neg_list = []
+    
+    zero_num_list = [0] + list(num_list)
+    new_index = []
+    max_id = int(num[-1])
+    
+    if forward:
+        func1 = pass_
+    else:
+        func1 = tqdm
+    
+    if len(x.shape) > 1:
+        change_list_all = np.random.randint(
+            0, x.shape[-1], len(x) * neg_num).reshape((len(x), neg_num))
+    for j, sample in enumerate(func1(x)):
+        if len(x.shape) > 1:
+            change_list = change_list_all[j, :]
+        else:
+            change_list = np.random.randint(0, sample.shape[-1], neg_num)
+        for i in range(neg_num):
+            temp = np.copy(sample)
+            a = set()
+            a.add(tuple(temp))
+            
+            trial = 0
+            simple_or_hard = np.random.rand()
+            if simple_or_hard <= pair_ratio:
+                change = change_list[i]
+                
+            while not a.isdisjoint(dict1):
+                temp = np.copy(sample)
+                trial += 1
+                if trial >= 1000:
+                    temp = ""
+                    break
+                # Only change one node
+                if simple_or_hard <= pair_ratio:
+                    if len(num_list) == 1:
+                        # Only one node type
+                        temp[change] = np.random.randint(0, max_id, 1) + 1
+                    
+                    else:
+                        # Multiple node types
+                        start = zero_num_list[node_type_mapping[change]]
+                        end = zero_num_list[node_type_mapping[change] + 1]
+                        
+                        temp[change] = np.random.randint(
+                            int(start), int(end), 1) + 1
+                else:
+                    
+                    if len(num_list) == 1:
+                        # Only one node type
+                        temp = np.random.randint(
+                            0, max_id, sample.shape[-1]) + 1
+                    
+                    else:
+                        for k in range(temp.shape[-1]):
+                            start = zero_num_list[node_type_mapping[k]]
+                            end = zero_num_list[node_type_mapping[k] + 1]
+                            temp[k] = np.random.randint(
+                                int(start), int(end), 1) + 1
+                
+                temp.sort()
+                a = set([tuple(temp)])
+            
+            if len(temp) > 0:
+                neg_list.append(temp)
+                if i == 0:
+                    new_index.append(j)
+    if get_type == 'all' or get_type == 'edge':
+        x_e, neg_e = generate_negative_edge(x, int(len(x)))
+        if get_type == 'all':
+            x = list(x) + x_e
+            neg_list = neg_list + neg_e
+        else:
+            x = x_e
+            neg_list = neg_e
+    new_index = np.array(new_index)
+    new_x = x[new_index]
+    
+    if not forward:
+        device = 'cpu'
+    else:
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    
+    new_weight = torch.tensor(weight[new_index]).to(device)
+    
+    x = np2tensor_hyper(new_x, dtype=torch.long)
+    neg = np2tensor_hyper(neg_list, dtype=torch.long)
+    x = pad_sequence(x, batch_first=True, padding_value=0).to(device)
+    neg = pad_sequence(neg, batch_first=True, padding_value=0).to(device)
+    # print("x", x, "neg", neg)
+    
+    return torch.cat([x, neg]), torch.cat(
+        [torch.ones((len(x), 1), device=device), torch.zeros((len(neg), 1), device=device)], dim=0), torch.cat(
+        ((torch.ones((len(x), 1), device=device) * new_weight.view(-1, 1), (torch.ones((len(neg), 1), device=device)))))
+
+
+def save_embeddings(model, origin=False):
+    model.eval()
+    with torch.no_grad():
+        ids = np.arange(num_list[-1]) + 1
+        ids = torch.Tensor(ids).long().to(device).view(-1, 1)
+        embeddings = []
+        for j in range(math.ceil(len(ids) / batch_size)):
+            x = ids[j * batch_size:min((j + 1) * batch_size, len(ids))]
+            if origin:
+                embed = model.get_node_embeddings(x)
+            else:
+                embed = model.get_embedding_static(x)
+            embed = embed.detach().cpu().numpy()
+            embeddings.append(embed)
+        
+        embeddings = np.concatenate(embeddings, axis=0)[:, 0, :]
+        for i in range(len(num_list)):
+            start = 0 if i == 0 else num_list[i - 1]
+            static = embeddings[int(start):int(num_list[i])]
+            np.save("../mymodel_%d.npy" % (i), static)
+            
+            if origin:
+                np.save("../mymodel_%d_origin.npy" % (i), static)
+    
+    torch.cuda.empty_cache()
+    return embeddings
+
+
+def generate_H(edge, nums_type, weight):
+    nums_examples = len(edge)
+    H = [0 for i in range(len(nums_type))]
+    for i in range(edge.shape[-1]):
+        # np.sqrt(weight) because the dot product later would recovers it
+        H[node_type_mapping[i]] += csr_matrix((np.sqrt(weight), (edge[:, i], range(
+            nums_examples))), shape=(nums_type[node_type_mapping[i]], nums_examples))
+    return H
+
+
+def generate_embeddings(edge, nums_type, H=None, weight=1):
+    if len(num) == 1:
+        return [get_adjacency(edge, True)]
+    if H is None:
+        H = generate_H(edge, nums_type, weight)
+    
+    embeddings = [H[i].dot(s_vstack([H[j] for j in range(len(num))]).T).astype('float32') for i in
+                  range(len(nums_type))]
+    
+    new_embeddings = []
+    zero_num_list = [0] + list(num_list)
+    for i, e in enumerate(embeddings):
+        # This is to remove diag entrance
+        for j, k in enumerate(range(zero_num_list[i], zero_num_list[i + 1])):
+            e[j, k] = 0
+        
+        # Automatically removes all zero entries
+        col_sum = np.array(e.sum(0)).reshape((-1))
+        new_e = e[:, col_sum > 0]
+        new_e.eliminate_zeros()
+        new_embeddings.append(new_e)
+    
+    
+    # 0-1 scaling
+    for i in range(len(nums_type)):
+        col_max = np.array(new_embeddings[i].max(0).todense()).flatten()
+        _, col_index = new_embeddings[i].nonzero()
+        new_embeddings[i].data /= col_max[col_index]
+    return [new_embeddings[i] for i in range(len(nums_type))]
+
+
+def get_adjacency(data, norm=True):
+    A = np.zeros((num_list[-1], num_list[-1]))
+    
+    for datum in tqdm(data):
+        for i in range(datum.shape[-1]):
+            for j in range(datum.shape[-1]):
+                if i != j:
+                    A[datum[i], datum[j]] += 1.0
+    
+    if norm:
+        temp = np.concatenate((np.zeros((1), dtype='int'), num), axis=0)
+        temp = np.cumsum(temp)
+        
+        for i in range(len(temp) - 1):
+            A[temp[i]:temp[i + 1],
+            :] /= (np.max(A[temp[i]:temp[i + 1],
+                          :],
+                          axis=0,
+                          keepdims=True) + 1e-10)
+    
+    return csr_matrix(A).astype('float32')
+
+args = parse_args()
+neg_num = 5
+batch_size = 96
+neg_num_w2v = 5
+bottle_neck = args.dimensions
+pair_ratio = 0.9
+train_type = 'hyper'
+
+
+
+train_zip = np.load("../data/%s/train_data.npz" % (args.data), allow_pickle=True)
+test_zip = np.load("../data/%s/test_data.npz" % (args.data), allow_pickle=True)
+train_data, test_data = train_zip['train_data'], test_zip['test_data']
+
+
+
+try:
+    train_weight, test_weight = train_zip["train_weight"].astype('float32'), test_zip["test_weight"].astype('float32')
+except BaseException:
+    print("no specific train weight")
+    test_weight = np.ones(len(test_data), dtype='float32')
+    train_weight = np.ones(len(train_data), dtype='float32') * neg_num
+
+num = train_zip['nums_type']
+num_list = np.cumsum(num)
+print("Node type num", num)
+
+
+if len(num) > 1:
+    node_type_mapping = [0, 1, 2]
+    
+
+if args.feature == 'adj':
+    embeddings_initial = generate_embeddings(train_data, num, H=None, weight=train_weight)
+
+print(train_weight)
+print(train_weight, np.min(train_weight), np.max(train_weight))
+train_weight_mean = np.mean(train_weight)
+train_weight = train_weight / train_weight_mean * neg_num
+test_weight = test_weight / train_weight_mean * neg_num
+
+
+
+# Now for multiple node types, the first column id starts at 0, the second
+# starts at num_list[0]...
+if len(num) > 1:
+    for i in range(len(node_type_mapping) - 1):
+        train_data[:, i + 1] += num_list[node_type_mapping[i + 1] - 1]
+        test_data[:, i + 1] += num_list[node_type_mapping[i + 1] - 1]
+
+num = torch.as_tensor(num)
+num_list = torch.as_tensor(num_list)
+
+print("walk type", args.walk)
+# At this stage, the index still starts from zero
+
+node_list = np.arange(num_list[-1]).astype('int')
+if args.walk == 'hyper':
+    walk_path = random_walk_hyper(args, node_list, train_data)
+else:
+    walk_path = random_walk(args, num, train_data)
+del node_list
+
+
+# Add 1 for the padding index
+print("adding pad idx")
+train_data = add_padding_idx(train_data)
+test_data = add_padding_idx(test_data)
+
+
+
+
+# Note that, no matter how many node types are here, make sure the
+# hyperedge (N1,N2,N3,...) has id, N1 < N2 < N3...
+train_dict = parallel_build_hash(train_data, "build_hash", args, num, initial = set())
+test_dict = parallel_build_hash(test_data, "build_hash", args, num, initial = train_dict)
+print ("dict_size", len(train_dict), len(test_dict))
+
+# dict2 = build_hash2(train_data)
+# pos_edges = list(dict2)
+# pos_edges = np.array(pos_edges)
+# np.random.shuffle(pos_edges)
+
+print("train data amount", len(train_data))
+# potential_outliers = build_hash3(np.concatenate((train_data, test), axis=0))
+# potential_outliers = np.array(list(potential_outliers))
+
+
+with tf.Graph().as_default(), tf.Session() as session:
+    with tf.device("/cpu:0"):
+        if args.feature == 'walk':
+            # Note that for this part, the word2vec still takes sentences with
+            # words starts at "0"
+            if not args.TRY and os.path.exists(
+                    "../%s_wv_%d_%s.npy" %
+                    (args.data, args.dimensions, args.walk)):
+                A = np.load(
+                    "../%s_wv_%d_%s.npy" %
+                    (args.data,
+                     args.dimensions,
+                     args.walk),
+                    allow_pickle=True)
+            else:
+                print("start loading")
+                walks = np.loadtxt(walk_path, delimiter=" ").astype('int')
+                start = time.time()
+                split_num = 20
+                pool = ProcessPoolExecutor(max_workers=split_num)
+                process_list = []
+                walks = np.array_split(walks, split_num)
+                
+                result = []
+                print("Start turning path to strs")
+                for walk in walks:
+                    process_list.append(pool.submit(walkpath2str, walk))
+                
+                for p in as_completed(process_list):
+                    result += p.result()
+                
+                pool.shutdown(wait=True)
+                
+                walks = result
+                print(
+                    "Finishing Loading and processing %.2f s" %
+                    (time.time() - start))
+                print("Start Word2vec")
+                import multiprocessing
+                
+                print("num cpu cores", multiprocessing.cpu_count())
+                w2v = Word2Vec(
+                    walks,
+                    size=args.dimensions,
+                    window=args.window_size,
+                    min_count=0,
+                    sg=1,
+                    iter=1,
+                    workers=multiprocessing.cpu_count())
+                wv = w2v.wv
+                A = [wv[str(i)] for i in range(num_list[-1])]
+                np.save("../%s_wv_%d_%s.npy" %
+                        (args.data, args.dimensions, args.walk), A)
+                
+                from sklearn.preprocessing import StandardScaler
+                
+                A = StandardScaler().fit_transform(A)
+            
+            A = np.concatenate(
+                (np.zeros((1, A.shape[-1]), dtype='float32'), A), axis=0)
+            A = A.astype('float32')
+            A = torch.tensor(A).to(device)
+            print(A.shape)
+            
+            node_embedding = Wrap_Embedding(int(
+                num_list[-1] + 1), args.dimensions, scale_grad_by_freq=False, padding_idx=0, sparse=False)
+            node_embedding.weight = nn.Parameter(A)
+        
+        elif args.feature == 'adj':
+            flag = False
+            
+            node_embedding = MultipleEmbedding(
+                embeddings_initial,
+                bottle_neck,
+                flag,
+                num_list,
+                node_type_mapping).to(device)
+        
+        classifier_model = Classifier(
+            n_head=8,
+            d_model=args.dimensions,
+            d_k=16,
+            d_v=16,
+            node_embedding=node_embedding,
+            diag_mask=args.diag,
+            bottle_neck=bottle_neck).to(device)
+        
+        save_embeddings(classifier_model, True)
+        
+        Randomwalk_Word2vec = Word2vec_Skipgram(dict_size=int(num_list[-1] + 1), embedding_dim=args.dimensions,
+                                                window_size=args.window_size, u_embedding=node_embedding,
+                                                sparse=False).to(device)
+        
+        loss = F.binary_cross_entropy
+        loss2 = torch.nn.BCEWithLogitsLoss(reduction='sum')
+        
+        summary(classifier_model, (3,))
+    
+        try:
+            from datapipe import Word2Vec_Skipgram_Data
+            sentences = Word2Vec_Skipgram_Data(train_data=walk_path,
+                                               num_samples=neg_num_w2v,
+                                               batch_size=128,
+                                               window_size=args.window_size,
+                                               min_count=0,
+                                               subsample=1e-3,
+                                               session=session)
+        except:
+            sentences = Word2Vec_Skipgram_Data_Empty()
+        
+        params_list = list(set(list(classifier_model.parameters()) + list(Randomwalk_Word2vec.parameters())))
+        
+        if args.feature == 'adj':
+            optimizer = torch.optim.Adam(params_list, lr=1e-3)
+        else:
+            optimizer = torch.optim.RMSprop(params_list, lr=1e-3)
+        
+        model_parameters = filter(lambda p: p.requires_grad, params_list)
+        params = sum([np.prod(p.size()) for p in model_parameters])
+        print("params to be trained", params)
+        
+        train(args, (classifier_model, Randomwalk_Word2vec),
+              loss=((loss, 1.0), (loss2, 0.0)),
+              training_data=(train_data, train_weight, sentences),
+              validation_data=(test_data, test_weight),
+              optimizer=[optimizer], epochs=300, batch_size=batch_size, only_rw=False)
+
+4. "Modules.py"
+import torch.nn as nn
+import torch.nn.functional as F
+import torch
+import numpy as np
+from tqdm import tqdm, trange
+import copy
+import math
+
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+device_ids = [0, 1]
+
+
+def get_non_pad_mask(seq):
+    assert seq.dim() == 2
+    return seq.ne(0).type(torch.float).unsqueeze(-1)
+
+
+def get_attn_key_pad_mask(seq_k, seq_q):
+    ''' For masking out the padding part of key sequence. '''
+    
+    # Expand to fit the shape of key query attention matrix.
+    len_q = seq_q.size(1)
+    padding_mask = seq_k.eq(0)
+    padding_mask = padding_mask.unsqueeze(
+        1).expand(-1, len_q, -1)  # b x lq x lk
+    
+    return padding_mask
+
+
+class Wrap_Embedding(torch.nn.Embedding):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+    
+    def forward(self, *input):
+        return super().forward(*input), torch.Tensor([0]).to(device)
+
+# Used only for really big adjacency matrix
+
+
+class SparseEmbedding(nn.Module):
+    def __init__(self, embedding_weight, sparse=True):
+        super().__init__()
+        print(embedding_weight.shape)
+        self.sparse = sparse
+        if self.sparse:
+            self.embedding = embedding_weight
+        else:
+            try:
+                try:
+                    self.embedding = torch.from_numpy(
+                        np.asarray(embedding_weight.todense())).to(device)
+                except BaseException:
+                    self.embedding = torch.from_numpy(
+                        np.asarray(embedding_weight)).to(device)
+            except Exception as e:
+                print("Sparse Embedding Error",e)
+                self.sparse = True
+                self.embedding = embedding_weight
+    
+    def forward(self, x):
+        
+        if self.sparse:
+            x = x.cpu().numpy()
+            x = x.reshape((-1))
+            temp = np.asarray((self.embedding[x, :]).todense())
+            
+            return torch.from_numpy(temp).to(device)
+        else:
+            return self.embedding[x, :]
+
+
+class TiedAutoEncoder(nn.Module):
+    def __init__(self, inp, out):
+        super().__init__()
+        self.weight = nn.parameter.Parameter(torch.Tensor(out, inp))
+        self.bias1 = nn.parameter.Parameter(torch.Tensor(out))
+        self.bias2 = nn.parameter.Parameter(torch.Tensor(inp))
+        
+        self.register_parameter('tied weight',self.weight)
+        self.register_parameter('tied bias1', self.bias1)
+        self.register_parameter('tied bias2', self.bias2)
+        
+        self.reset_parameters()
+        
+    
+
+    def reset_parameters(self):
+        torch.nn.init.kaiming_uniform_(self.weight, a=math.sqrt(5))
+        if self.bias1 is not None:
+            fan_in, _ = torch.nn.init._calculate_fan_in_and_fan_out(self.weight)
+            bound = 1 / math.sqrt(fan_in)
+            torch.nn.init.uniform_(self.bias1, -bound, bound)
+        
+        if self.bias2 is not None:
+            fan_in, fan_out = torch.nn.init._calculate_fan_in_and_fan_out(self.weight)
+            bound = 1 / math.sqrt(fan_out)
+            torch.nn.init.uniform_(self.bias2, -bound, bound)
+
+    def forward(self, input):
+        encoded_feats = F.linear(input, self.weight, self.bias1)
+        encoded_feats = F.tanh(encoded_feats)
+        reconstructed_output = F.linear(encoded_feats, self.weight.t(), self.bias2)
+        return encoded_feats, reconstructed_output
+    
+class MultipleEmbedding(nn.Module):
+    def __init__(
+            self,
+            embedding_weights,
+            dim,
+            sparse=True,
+            num_list=None,
+            node_type_mapping=None):
+        super().__init__()
+        print(dim)
+        self.num_list = torch.tensor([0] + list(num_list)).to(device)
+        print(self.num_list)
+        self.node_type_mapping = node_type_mapping
+        self.dim = dim
+        
+        self.embeddings = []
+        for i, w in enumerate(embedding_weights):
+            try:
+                self.embeddings.append(SparseEmbedding(w, sparse))
+            except BaseException as e:
+                print ("Conv Embedding Mode")
+                self.add_module("ConvEmbedding1", w)
+                self.embeddings.append(w)
+        
+        test = torch.zeros(1, device=device).long()
+        self.input_size = []
+        for w in self.embeddings:
+            self.input_size.append(w(test).shape[-1])
+        
+        self.wstack = [TiedAutoEncoder(self.input_size[i],self.dim).to(device) for i,w in enumerate(self.embeddings)]
+        self.norm_stack =[nn.LayerNorm(self.dim).to(device) for w in self.embeddings]
+        for i, w in enumerate(self.wstack):
+            self.add_module("Embedding_Linear%d" % (i), w)
+            self.add_module("Embedding_norm%d" % (i), self.norm_stack[i])
+            
+        self.dropout = nn.Dropout(0.25)
+    
+    def forward(self, x):
+        
+        final = torch.zeros((len(x), self.dim)).to(device)
+        recon_loss = torch.Tensor([0.0]).to(device)
+        for i in range(len(self.num_list) - 1):
+            select = (x >= (self.num_list[i] + 1)) & (x < (self.num_list[i + 1] + 1))
+            if torch.sum(select) == 0:
+                continue
+            adj = self.embeddings[i](x[select] - self.num_list[i] - 1)
+            output = self.dropout(adj)
+            output, recon = self.wstack[i](output)
+            output = self.norm_stack[i](output)
+            final[select] = output
+            recon_loss += sparse_autoencoder_error(recon, adj)
+            
+        return final, recon_loss
+
+def sparse_autoencoder_error(y_pred, y_true):
+    return torch.mean(torch.sum((y_true.ne(0).type(torch.float) * (y_true - y_pred)) ** 2, dim = -1) / torch.sum(y_true.ne(0).type(torch.float), dim = -1))
+
+class Word2vec_Skipgram(nn.Module):
+    def __init__(
+            self,
+            dict_size,
+            embedding_dim,
+            window_size,
+            u_embedding=None,
+            sparse=False):
+        super(Word2vec_Skipgram, self).__init__()
+        '''
+        use context (u) to predict center (v)
+        '''
+        self.dict_size = dict_size
+        self.embedding_dim = embedding_dim
+        self.window_size = window_size
+        
+        self.u_embedding = u_embedding
+        self.sm_w_t = nn.Embedding(
+            dict_size,
+            embedding_dim,
+            sparse=sparse,
+            padding_idx=0,
+        )
+        self.sm_b = nn.Embedding(dict_size, 1, sparse=sparse, padding_idx=0, )
+    
+    def forward_u(self, u):
+        return self.u_embedding(u)
+    
+    def forward_w_b(self, id):
+        return self.sm_w_t(id), self.sm_b(id)
+
+class Classifier(nn.Module):
+    def __init__(
+            self,
+            n_head,
+            d_model,
+            d_k,
+            d_v,
+            node_embedding,
+            diag_mask,
+            bottle_neck,
+            **args):
+        super().__init__()
+        
+        self.pff_classifier = PositionwiseFeedForward(
+            [d_model, 1], reshape=True, use_bias=True)
+        
+        self.node_embedding = node_embedding
+        self.encode1 = EncoderLayer(
+            n_head,
+            d_model,
+            d_k,
+            d_v,
+            dropout_mul=0.3,
+            dropout_pff=0.4,
+            diag_mask=diag_mask,
+            bottle_neck=bottle_neck)
+        # self.encode2 = EncoderLayer(n_head, d_model, d_k, d_v, dropout_mul=0.0, dropout_pff=0.0, diag_mask = diag_mask, bottle_neck=bottle_neck)
+        self.diag_mask_flag = diag_mask
+        self.layer_norm1 = nn.LayerNorm(d_model)
+        self.layer_norm2 = nn.LayerNorm(d_model)
+    
+    def get_node_embeddings(self, x,return_recon = False):
+        
+        # shape of x: (b, tuple)
+        sz_b, len_seq = x.shape
+        # print(torch.max(x), torch.min(x))
+        
+        x, recon_loss = self.node_embedding(x.view(-1))
+        if return_recon:
+            return x.view(sz_b, len_seq, -1), recon_loss
+        else:
+            return x.view(sz_b, len_seq, -1)
+    
+    def get_embedding(self, x, slf_attn_mask, non_pad_mask,return_recon = False):
+        if return_recon:
+            x, recon_loss = self.get_node_embeddings(x,return_recon)
+        else:
+            x = self.get_node_embeddings(x, return_recon)
+        dynamic, static, attn = self.encode1(x, x, slf_attn_mask, non_pad_mask)
+        # dynamic, static1, attn = self.encode2(dynamic, static,slf_attn_mask, non_pad_mask)
+        if return_recon:
+            return dynamic, static, attn, recon_loss
+        else:
+            return dynamic, static, attn
+    
+    def get_embedding_static(self, x):
+        if len(x.shape) == 1:
+            x = x.view(-1, 1)
+            flag = True
+        else:
+            flag = False
+        slf_attn_mask = get_attn_key_pad_mask(seq_k=x, seq_q=x)
+        non_pad_mask = get_non_pad_mask(x)
+        x = self.get_node_embeddings(x)
+        dynamic, static, attn = self.encode1(x, x, slf_attn_mask, non_pad_mask)
+        # dynamic, static, attn = self.encode2(dynamic, static,slf_attn_mask, non_pad_mask)
+        if flag:
+            return static[:, 0, :]
+        return static
+    
+    def forward(self, x, mask=None, get_outlier=None, return_recon = False):
+        x = x.long()
+            
+        slf_attn_mask = get_attn_key_pad_mask(seq_k=x, seq_q=x)
+        non_pad_mask = get_non_pad_mask(x)
+        
+        if return_recon:
+            dynamic, static, attn, recon_loss = self.get_embedding(x, slf_attn_mask, non_pad_mask,return_recon)
+        else:
+            dynamic, static, attn = self.get_embedding(x, slf_attn_mask, non_pad_mask, return_recon)
+        dynamic = self.layer_norm1(dynamic)
+        static = self.layer_norm2(static)
+        sz_b, len_seq, dim = dynamic.shape
+        
+        if self.diag_mask_flag == 'True':
+            output = (dynamic - static) ** 2
+        else:
+            output = dynamic
+        
+        output = self.pff_classifier(output)
+        output = torch.sigmoid(output)
+        
+        
+        if get_outlier is not None:
+            k = get_outlier
+            outlier = (
+                    (1 -
+                     output) *
+                    non_pad_mask).topk(
+                k,
+                dim=1,
+                largest=True,
+                sorted=True)[1]
+            return outlier.view(-1, k)
+        
+        mode = 'sum'
+        
+        if mode == 'min':
+            output, _ = torch.max(
+                (1 - output) * non_pad_mask, dim=-2, keepdim=False)
+            output = 1 - output
+        
+        elif mode == 'sum':
+            output = torch.sum(output * non_pad_mask, dim=-2, keepdim=False)
+            mask_sum = torch.sum(non_pad_mask, dim=-2, keepdim=False)
+            output /= mask_sum
+        elif mode == 'first':
+            output = output[:, 0, :]
+            
+        if return_recon:
+            return output, recon_loss
+        else:
+            return output
+
+
+# A custom position-wise MLP.
+# dims is a list, it would create multiple layer with tanh between them
+# If dropout, it would add the dropout at the end. Before residual and
+# layer-norm
+
+
+class PositionwiseFeedForward(nn.Module):
+    def __init__(
+            self,
+            dims,
+            dropout=None,
+            reshape=False,
+            use_bias=True,
+            residual=False,
+            layer_norm=False):
+        super(PositionwiseFeedForward, self).__init__()
+        self.w_stack = []
+        self.dims = dims
+        for i in range(len(dims) - 1):
+            self.w_stack.append(nn.Conv1d(dims[i], dims[i + 1], 1, use_bias))
+            self.add_module("PWF_Conv%d" % (i), self.w_stack[-1])
+        self.reshape = reshape
+        self.layer_norm = nn.LayerNorm(dims[-1])
+        
+        if dropout is not None:
+            self.dropout = nn.Dropout(dropout)
+        else:
+            self.dropout = None
+        
+        self.residual = residual
+        self.layer_norm_flag = layer_norm
+    
+    def forward(self, x):
+        output = x.transpose(1, 2)
+        
+        
+        for i in range(len(self.w_stack) - 1):
+            output = self.w_stack[i](output)
+            output = torch.tanh(output)
+            if self.dropout is not None:
+                output = self.dropout(output)
+        
+        output = self.w_stack[-1](output)
+        output = output.transpose(1, 2)
+        
+        if self.reshape:
+            output = output.view(output.shape[0], -1, 1)
+        
+        if self.dims[0] == self.dims[-1]:
+            # residual
+            if self.residual:
+                output += x
+
+            if self.layer_norm_flag:
+                output = self.layer_norm(output)
+        
+        return output
+
+
+# A custom position wise MLP.
+# dims is a list, it would create multiple layer with torch.tanh between them
+# We don't do residual and layer-norm, because this is only used as the
+# final classifier
+
+
+class FeedForward(nn.Module):
+    ''' A two-feed-forward-layer module '''
+    
+    def __init__(self, dims, dropout=None, reshape=False, use_bias=True):
+        super(FeedForward, self).__init__()
+        self.w_stack = []
+        for i in range(len(dims) - 1):
+            self.w_stack.append(nn.Linear(dims[i], dims[i + 1], use_bias))
+            self.add_module("FF_Linear%d" % (i), self.w_stack[-1])
+        
+        if dropout is not None:
+            self.dropout = nn.Dropout(dropout)
+        else:
+            self.dropout = None
+        
+        self.reshape = reshape
+    
+    def forward(self, x):
+        output = x
+        for i in range(len(self.w_stack) - 1):
+            output = self.w_stack[i](output)
+            output = torch.tanh(output)
+            if self.dropout is not None:
+                output = self.dropout(output)
+        output = self.w_stack[-1](output)
+        
+        if self.reshape:
+            output = output.view(output.shape[0], -1, 1)
+        
+        return output
+
+
+class ScaledDotProductAttention(nn.Module):
+    ''' Scaled Dot-Product Attention '''
+    
+    def __init__(self, temperature):
+        super().__init__()
+        self.temperature = temperature
+    
+    def masked_softmax(self, vector: torch.Tensor,
+                       mask: torch.Tensor,
+                       dim: int = -1,
+                       memory_efficient: bool = False,
+                       mask_fill_value: float = -1e32) -> torch.Tensor:
+        
+        if mask is None:
+            result = torch.nn.functional.softmax(vector, dim=dim)
+        else:
+            mask = mask.float()
+            while mask.dim() < vector.dim():
+                mask = mask.unsqueeze(1)
+            if not memory_efficient:
+                # To limit numerical errors from large vector elements outside
+                # the mask, we zero these out.
+                result = torch.nn.functional.softmax(vector * mask, dim=dim)
+                result = result * mask
+                result = result / (result.sum(dim=dim, keepdim=True) + 1e-13)
+            else:
+                masked_vector = vector.masked_fill(
+                    (1 - mask).bool(), mask_fill_value)
+                result = torch.nn.functional.softmax(masked_vector, dim=dim)
+        return result
+    
+    def forward(self, q, k, v, diag_mask, mask=None):
+        attn = torch.bmm(q, k.transpose(1, 2))
+        attn = attn / self.temperature
+        
+        if mask is not None:
+            attn = attn.masked_fill(mask, -float('inf'))
+        
+        attn = self.masked_softmax(
+            attn, diag_mask, dim=-1, memory_efficient=True)
+        
+        
+        output = torch.bmm(attn, v)
+        
+        return output, attn
+
+
+class MultiHeadAttention(nn.Module):
+    ''' Multi-Head Attention module '''
+    
+    def __init__(
+            self,
+            n_head,
+            d_model,
+            d_k,
+            d_v,
+            dropout,
+            diag_mask,
+            input_dim):
+        super().__init__()
+        
+        self.n_head = n_head
+        self.d_k = d_k
+        self.d_v = d_v
+        
+        self.w_qs = nn.Linear(input_dim, n_head * d_k, bias=False)
+        self.w_ks = nn.Linear(input_dim, n_head * d_k, bias=False)
+        self.w_vs = nn.Linear(input_dim, n_head * d_v, bias=False)
+        
+        nn.init.normal_(self.w_qs.weight, mean=0,
+                        std=np.sqrt(2.0 / (d_model + d_k)))
+        nn.init.normal_(self.w_ks.weight, mean=0,
+                        std=np.sqrt(2.0 / (d_model + d_k)))
+        nn.init.normal_(self.w_vs.weight, mean=0,
+                        std=np.sqrt(2.0 / (d_model + d_v)))
+        
+        self.attention = ScaledDotProductAttention(
+            temperature=np.power(d_k, 0.5))
+        
+        self.fc1 = FeedForward([n_head * d_v, d_model], use_bias=False)
+        self.fc2 = FeedForward([n_head * d_v, d_model], use_bias=False)
+        
+        self.layer_norm1 = nn.LayerNorm(input_dim)
+        self.layer_norm2 = nn.LayerNorm(input_dim)
+        self.layer_norm3 = nn.LayerNorm(input_dim)
+        
+        if dropout is not None:
+            self.dropout = nn.Dropout(dropout)
+        else:
+            self.dropout = dropout
+        
+        self.diag_mask_flag = diag_mask
+        self.diag_mask = None
+    
+    def pass_(self, inputs):
+        return inputs
+    
+    def forward(self, q, k, v, diag_mask, mask=None):
+        d_k, d_v, n_head = self.d_k, self.d_v, self.n_head
+        
+        residual_dynamic = q
+        residual_static = v
+        
+        q = self.layer_norm1(q)
+        k = self.layer_norm2(k)
+        v = self.layer_norm3(v)
+        
+        sz_b, len_q, _ = q.shape
+        sz_b, len_k, _ = k.shape
+        sz_b, len_v, _ = v.shape
+        
+        q = self.w_qs(q).view(sz_b, len_q, n_head, d_k)
+        k = self.w_ks(k).view(sz_b, len_k, n_head, d_k)
+        v = self.w_vs(v).view(sz_b, len_v, n_head, d_v)
+        
+        q = q.permute(2, 0, 1, 3).contiguous(
+        ).view(-1, len_q, d_k)  # (n*b) x lq x dk
+        k = k.permute(2, 0, 1, 3).contiguous(
+        ).view(-1, len_k, d_k)  # (n*b) x lk x dk
+        v = v.permute(2, 0, 1, 3).contiguous(
+        ).view(-1, len_v, d_v)  # (n*b) x lv x dv
+        
+        n = sz_b * n_head
+        
+        if self.diag_mask is not None:
+            if (len(self.diag_mask) <= n) or (
+                    self.diag_mask.shape[1] != len_v):
+                self.diag_mask = torch.ones((len_v, len_v), device=device)
+                if self.diag_mask_flag == 'True':
+                    self.diag_mask -= torch.eye(len_v, len_v, device=device)
+                self.diag_mask = self.diag_mask.repeat(n, 1, 1)
+                diag_mask = self.diag_mask
+            else:
+                diag_mask = self.diag_mask[:n]
+        
+        else:
+            self.diag_mask = (torch.ones((len_v, len_v), device=device))
+            if self.diag_mask_flag == 'True':
+                self.diag_mask -= torch.eye(len_v, len_v, device=device)
+            self.diag_mask = self.diag_mask.repeat(n, 1, 1)
+            diag_mask = self.diag_mask
+        
+        if mask is not None:
+            mask = mask.repeat(n_head, 1, 1)  # (n*b) x .. x ..
+        
+        dynamic, attn = self.attention(q, k, v, diag_mask, mask=mask)
+        
+        dynamic = dynamic.view(n_head, sz_b, len_q, d_v)
+        dynamic = dynamic.permute(
+            1, 2, 0, 3).contiguous().view(
+            sz_b, len_q, -1)  # b x lq x (n*dv)
+        static = v.view(n_head, sz_b, len_q, d_v)
+        static = static.permute(
+            1, 2, 0, 3).contiguous().view(
+            sz_b, len_q, -1)  # b x lq x (n*dv)
+        
+        dynamic = self.dropout(self.fc1(dynamic)) if self.dropout is not None else self.fc1(dynamic)
+        static = self.dropout(self.fc2(static)) if self.dropout is not None else self.fc2(static)
+        
+        
+        return dynamic, static, attn
+
+
+class EncoderLayer(nn.Module):
+    '''A self-attention layer + 2 layered pff'''
+    
+    def __init__(
+            self,
+            n_head,
+            d_model,
+            d_k,
+            d_v,
+            dropout_mul,
+            dropout_pff,
+            diag_mask,
+            bottle_neck):
+        super().__init__()
+        self.n_head = n_head
+        self.d_k = d_k
+        self.d_v = d_v
+        
+        self.mul_head_attn = MultiHeadAttention(
+            n_head,
+            d_model,
+            d_k,
+            d_v,
+            dropout=dropout_mul,
+            diag_mask=diag_mask,
+            input_dim=bottle_neck)
+        self.pff_n1 = PositionwiseFeedForward(
+            [d_model, d_model, d_model], dropout=dropout_pff, residual=True, layer_norm=True)
+        self.pff_n2 = PositionwiseFeedForward(
+            [bottle_neck, d_model, d_model], dropout=dropout_pff, residual=False, layer_norm=True)
+    
+    # self.dropout = nn.Dropout(0.2)
+    
+    def forward(self, dynamic, static, slf_attn_mask, non_pad_mask):
+        dynamic, static1, attn = self.mul_head_attn(
+            dynamic, dynamic, static, slf_attn_mask)
+        dynamic = self.pff_n1(dynamic * non_pad_mask) * non_pad_mask
+        static1 = self.pff_n2(static * non_pad_mask) * non_pad_mask
+        
+        return dynamic, static1, attn
+5. "random_walk_hyper.py"
+from concurrent.futures import as_completed, ProcessPoolExecutor
+from scipy.sparse import csr_matrix, lil_matrix, csc_matrix
+from tqdm import tqdm, trange
+import time
+import numpy as np
+import os
+
+# os.environ["OMP_DISPLAY_ENV"] = "FALSE"
+# os.environ["OMP_NUM_THREADS"] = "20"
+os.environ["KMP_AFFINITY"] = 'none'
+# os.environ["KMP_AFFINITY"]="scatter"
+
+
+# FIXME: may be there is more efficient method
+
+weight_1st = 1.0
+weight_degree = -0.5
+
+print(weight_1st, weight_degree)
+
+
+def make_sparse_matrix(raw_data, m, n):
+    indptr = [len(row) for row in raw_data]
+    indptr = np.cumsum([0] + indptr)
+    indices = [i for row in raw_data for i in row]
+    data = [1] * len(indices)
+    return csr_matrix((data, indices, indptr), shape=(m, n), dtype='float32')
+
+
+def alias_setup(probs):
+    '''
+    Compute utility lists for non-uniform sampling from discrete distributions.
+    Refer to https://hips.seas.harvard.edu/blog/2013/03/03/the-alias-method-efficient-sampling-with-many-discrete-outcomes/
+    for details
+    '''
+    K = len(probs)
+    q = np.zeros(K)
+    J = np.zeros(K, dtype=np.int)
+
+    smaller = []
+    larger = []
+    for kk, prob in enumerate(probs):
+        q[kk] = K * prob
+        if q[kk] < 1.0:
+            smaller.append(kk)
+        else:
+            larger.append(kk)
+
+    while len(smaller) > 0 and len(larger) > 0:
+        small = smaller.pop()
+        large = larger.pop()
+
+        J[small] = large
+        q[large] = q[large] + q[small] - 1.0
+        if q[large] < 1.0:
+            smaller.append(large)
+        else:
+            larger.append(large)
+
+    return (J, q)
+
+
+def alias_draw(P):
+    '''
+    Draw sample from a non-uniform discrete distribution using alias sampling.
+    '''
+    J, q = P
+    K = len(J)
+
+    kk = int(np.floor(np.random.rand() * K))
+    if np.random.rand() < q[kk]:
+        return kk
+    else:
+        return J[kk]
+
+
+class HyperGraphRandomWalk():
+    def __init__(self, p, q, is_weighted=False):
+        self.p = p
+        self.q = q
+        # FIXME: current version is only for unweighted graph
+        self.is_weighted = is_weighted
+
+    def build_graph(self, node_list, edge_list):
+        # is considered to be range(num_node) FIXME: maybe a dict for nodes
+        # will be better
+        self.nodes = node_list
+        self.edges = edge_list  # the neighbors of hyperedges (without weight)
+
+        # the neighbors of nodes (with weight)
+        n_edge = [[] for _ in range(int(np.max(node_list) + 1))]
+
+        self.node_degree = np.zeros((int(np.max(node_list) + 1)))
+        self.edge_degree = np.array([len(e) for e in self.edges])
+        for i, e in enumerate(edge_list):
+            if isinstance(e, tuple):
+                e = list(e)
+            e.sort()
+            ww = 1  # FIXME: unweighted case
+            for v in e:
+                n_edge[v].append((i, ww))
+
+                self.node_degree[v] += 1
+
+        for v in node_list:
+            n_edge_i = sorted(n_edge[v])
+            n_edge[v] = np.array(n_edge_i)
+
+        self.n_edge = n_edge
+        # adjacent matrices of V x E, E x V, E x E
+        print('adj matrix:')
+        self.EV = make_sparse_matrix(
+            self.edges, len(
+                self.edges), int(
+                np.max(node_list) + 1))
+        self.delta = lil_matrix((self.EV.shape[0], self.EV.shape[0]))
+        size = np.array([1 / np.sqrt(len(e)) for e in self.edges])
+        self.delta.setdiag(size)
+
+        self.EV_over_delta = self.delta * self.EV
+
+        self.VE = self.EV.T
+        self.VE_over_delta = self.EV_over_delta.T
+
+        print("EV size", self.EV.shape)
+
+
+def get_first_order_part(nodes):
+    alias_n2n_1st = {}
+    node2ff_1st = {}
+
+    for src in tqdm(nodes):
+        dsts = node_nbr[src]
+        ff_1st = np.array(
+            (VE_over_delta[src, :] * EV_over_delta[:, dsts]).todense()).reshape((-1))
+        node2ff_1st[src] = ff_1st
+        unnormalized_probs = ff_1st / np.sqrt(node_degree[dsts])
+        normalized_probs = unnormalized_probs / np.sum(unnormalized_probs)
+        alias_n2n_1st[src] = alias_setup(normalized_probs)
+
+    return alias_n2n_1st, node2ff_1st
+
+
+def get_first_order(G):
+    print("1st order: ")
+    global EV, VE, EV_over_delta, VE_over_delta, node_nbr, node_degree
+
+    EV = G.EV
+    VE = G.VE
+    EV_over_delta = G.EV_over_delta
+    VE_over_delta = G.VE_over_delta
+    node_nbr = G.node_nbr
+    node_degree = G.node_degree
+
+    processes_num = 80
+    pool = ProcessPoolExecutor(max_workers=processes_num)
+    process_list = []
+
+    nodes = np.copy(G.nodes)
+
+    split_num = min(processes_num, int(len(nodes) / 100)) + 1
+    print("split_num", split_num)
+    np.random.shuffle(nodes)
+    nodes = np.array_split(nodes, split_num)
+
+    print("Start get first order")
+    for node in nodes:
+        process_list.append(pool.submit(get_first_order_part, node))
+
+    alias_n2n_1st = {}
+    node2ff_1st = {}
+    for p in as_completed(process_list):
+        alias_t1, alias_t2 = p.result()
+        alias_n2n_1st.update(alias_t1)
+        node2ff_1st.update(alias_t2)
+
+    pool.shutdown(wait=True)
+
+    print("start turn dict to list")
+
+    nodes = np.copy(G.nodes)
+
+    alias_n2n_1st_list = [[] for n in nodes]
+    node2ff_1st_list = [[] for n in nodes]
+
+    for n in nodes:
+        alias_n2n_1st_list[n] = alias_n2n_1st[n]
+        node2ff_1st_list[n] = node2ff_1st[n]
+
+    return alias_n2n_1st_list, node2ff_1st_list
+
+
+def get_src_dst2e(G, edges):
+    src_dst_2e = {}
+    node_nbr = [[] for n in range(int(np.max(G.nodes)) + 1)]
+
+    for e1 in tqdm(edges):
+        for src in G.edges[e1]:
+            for dst in G.edges[e1]:
+                if src != dst:
+                    if (src, dst) in src_dst_2e:
+                        src_dst_2e[(src, dst)].append(e1)
+                    else:
+                        src_dst_2e[(src, dst)] = [e1]
+
+                    node_nbr[src].append(dst)
+                    node_nbr[dst].append(src)
+
+    print("get node nbr")
+
+    for k in trange(len(node_nbr)):
+        list1 = node_nbr[k]
+        list1 = sorted(set(list1))
+        node_nbr[k] = list1
+    for k in tqdm(src_dst_2e.keys()):
+        list1 = sorted(src_dst_2e[k])
+        src_dst_2e[k] = list1
+    G.src_dst_2e = src_dst_2e
+    G.node_nbr = np.array(node_nbr)
+
+
+def get_alias_n2n_2nd(src, dst):
+    dst_nbr = node_nbr[dst]
+
+    pp = np.ones(len(dst_nbr))
+    pp /= q
+
+    e1_all = src_dst_2e[(src, dst)]
+    # ff_all_1 = EV[e1_all, :dst] * VE[:dst]
+    # ff_all_2 = EV[e1_all, dst+1:] * VE[dst+1:]
+    condition = np.array(VE[dst_nbr, :][:, e1_all].sum(axis=-1)).reshape((-1))
+    pp[condition > 0] /= p
+
+    for i, nb in enumerate(dst_nbr):
+        if nb == src:
+            pp[i] *= q
+        elif (src, nb) in src_dst_2e:
+            pp[i] *= q
+        # e2_all = src_dst_2e[(dst, nb)]
+        # ff_all_1 = EV[e1_all, :dst] * VE[:dst, e2_all]
+        # ff_all_2 = EV[e1_all, dst+1:] * VE[dst+1:, e2_all]
+        #
+        #
+        # pp[i] *= ((ff_all_1.sum() + ff_all_2.sum()) ** 0.5)
+
+    ff_1st = node2ff_1st[dst]
+    #pp += np.random.randn(pp.shape[0]) * 0.5
+    pp *= (ff_1st ** weight_1st)
+    pp *= (node_degree[dst_nbr] ** weight_degree)
+
+    unnormalized_probs = pp
+    normalized_probs = unnormalized_probs / np.sum(unnormalized_probs)
+    normalized_probs = normalized_probs / np.sum(normalized_probs)
+    return alias_setup(normalized_probs)
+
+
+def get_alias_n2n_2nd_dropped(src, dst):
+    dst_nbr = node_nbr[dst]
+
+    pp = np.zeros(len(dst_nbr))
+
+    e1_all = src_dst_2e[(src, dst)]
+    # ff_all_1 = EV[e1_all, :dst] * VE[:dst]
+    # ff_all_2 = EV[e1_all, dst+1:] * VE[dst+1:]
+    condition = np.array(VE[dst_nbr, :][:, e1_all].sum(axis=-1)).reshape((-1))
+    pp[condition > 0] += p * condition[condition > 0]
+
+    for i, nb in enumerate(dst_nbr):
+        if nb == src:
+            pp[i] += node_degree[src]
+        elif (src, nb) in src_dst_2e:
+            pp[i] += len(src_dst_2e[(src, nb)])
+        else:
+            pp[i] += 1 / q
+    # e2_all = src_dst_2e[(dst, nb)]
+    # ff_all_1 = EV[e1_all, :dst] * VE[:dst, e2_all]
+    # ff_all_2 = EV[e1_all, dst+1:] * VE[dst+1:, e2_all]
+    #
+    #
+    # pp[i] *= ((ff_all_1.sum() + ff_all_2.sum()) ** 0.5)
+
+    ff_1st = node2ff_1st[dst]
+    # pp += np.random.randn(pp.shape[0]) * 0.5
+    pp *= (ff_1st ** weight_1st)
+    pp *= (node_degree[dst_nbr] ** weight_degree)
+
+    unnormalized_probs = pp
+    normalized_probs = unnormalized_probs / np.sum(unnormalized_probs)
+    normalized_probs = normalized_probs / np.sum(normalized_probs)
+    return alias_setup(normalized_probs)
+
+
+def get_second_order(nodes):
+    alias_n2n_2nd = {}
+    for i in trange(len(nodes)):
+        src = nodes[i]
+        dsts = node_nbr[src]
+
+        for dst_index, dst in enumerate(dsts):
+            alias_n2n_2nd[(src, dst)] = get_alias_n2n_2nd(src, dst)
+    return alias_n2n_2nd
+# for multi-processing
+
+
+def parallel_get_second_order(G):
+    print("2nd order: ")
+    global p, q, node_nbr, VE, EV, src_dst_2e, node2ff_1st, node_degree, node_nbr
+    p, q = G.p, G.q
+    node_nbr = G.node_nbr
+    VE = G.VE
+    EV = G.EV
+    src_dst_2e = G.src_dst_2e
+    node2ff_1st = G.node2ff_1st
+    node_degree = G.node_degree
+    node_nbr = G.node_nbr
+
+    # f is a csr-matrix
+    # O(\sum_v (\sum_e\in nbr(v) |e|)^2)
+
+    processes_num = 80
+    pool = ProcessPoolExecutor(max_workers=processes_num)
+    process_list = []
+
+    second_start = time.time()
+
+    nodes = np.copy(G.nodes)
+
+    split_num = min(processes_num, int(len(nodes) / 100)) * 2 + 1
+    print("split_num", split_num)
+    np.random.shuffle(nodes)
+    nodes = np.array_split(nodes, split_num)
+
+    print("Start get second order alias")
+    for node in nodes:
+        process_list.append(pool.submit(get_second_order, node))
+
+    alias_n2n_2nd = {}
+    for p in as_completed(process_list):
+        alias_t1 = p.result()
+        alias_n2n_2nd.update(alias_t1)
+
+    print("get-second-order-term running time: " +
+          str(time.time() - second_start))
+
+    print("Start to turn the dict into list")
+    alias_n2n_2nd_list = []
+    alias_n2n_toid = {}
+    for i, k in enumerate(tqdm(alias_n2n_2nd.keys())):
+        alias_n2n_toid[k] = i
+        alias_n2n_2nd_list.append(alias_n2n_2nd[k])
+
+    G.alias_n2n_toid = alias_n2n_toid
+    G.alias_n2n_2nd_list = alias_n2n_2nd_list
+
+    pool.shutdown(wait=True)
+    return alias_n2n_2nd
+
+
+def random_walk_list(walk_length, start):
+    walk = [start]
+    while len(walk) < (walk_length):
+        cur = walk[-1]
+        cur_ns = node_nbr[cur]
+        if len(cur_ns) < 1:
+            walk.append(cur)
+            continue
+
+        try:
+            if len(walk) == 1:
+                next_n = cur_ns[alias_draw(alias_n2n_1st[cur])]
+            else:
+                prev_n = walk[-2]
+                next_n = cur_ns[alias_draw(
+                    alias_n2n_2nd_list[alias_n2n_toid[(prev_n, cur)]])]
+
+        except Exception as e:
+            print("error", e)
+            break
+        walk.append(next_n)
+
+    return walk
+
+
+def simulate_walks_part(num_walks, walk_length, nodes):
+    walks = []
+    for node in tqdm(nodes):
+        for walk_iter in range(num_walks):
+            walk = random_walk_list(walk_length, node)
+            walks.append(walk)
+    return walks
+
+
+def simulate_walks_para(G, num_walks, walk_length):
+    '''
+    Repeatedly simulate random walks from each node.
+    '''
+    global alias_n2n_1st, alias_n2n_2nd_list, alias_n2n_toid
+    alias_n2n_1st = G.alias_n2n_1st
+    alias_n2n_2nd_list = G.alias_n2n_2nd_list
+    alias_n2n_toid = G.alias_n2n_toid
+
+    processes_num = 30
+    pool = ProcessPoolExecutor(max_workers=processes_num)
+    process_list = []
+
+    print("sample walks:")
+    walks = []
+
+    nodes = np.copy(G.nodes)
+
+    split_num = processes_num
+    print("split_num", split_num)
+    np.random.shuffle(nodes)
+    nodes = np.array_split(nodes, split_num)
+
+    for node in nodes:
+        process_list.append(
+            pool.submit(
+                simulate_walks_part,
+                num_walks,
+                walk_length,
+                node))
+
+    for p in as_completed(process_list):
+        alias_t1 = p.result()
+        walks += alias_t1
+
+    pool.shutdown(wait=True)
+
+    print("start permutation")
+    idx = np.random.permutation(len(walks))
+    walks = np.array(walks, dtype='int')
+    return walks[idx]
+
+
+def toint(hyperedge_list):
+    return np.array([h.astype('int') for h in hyperedge_list])
+
+
+def random_walk_hyper(args, node_list, hyperedge_list):
+    p, q = args.p, args.q
+
+    num_walks, walk_length, window_size = args.num_walks, args.walk_length, args.window_size
+    walks_save_path = '../walks/{}/p{}_q{}_r{}_l{}_hyper_walks.txt'.format(
+        args.data, p, q, num_walks, walk_length)
+    
+    if not os.path.exists("../walks"):
+        os.mkdir("../walks")
+        
+    if not os.path.exists("../walks/{}/".format(args.data)):
+        os.mkdir("../walks/{}/".format(args.data))
+    start = time.time()
+
+    if not args.TRY and os.path.exists(walks_save_path):
+        return walks_save_path
+    else:
+        G = HyperGraphRandomWalk(p, q)
+        G.data = args.data
+        # FIXME: take care when the input are tensors, but I think other
+        # dataset they will not be
+        print('build')
+        hyperedge_list = toint(hyperedge_list)
+        G.build_graph(node_list, hyperedge_list)
+        edges = np.array(range(len(G.edges)))
+        print("Building pairwise to hyper dict")
+        get_src_dst2e(G, edges)
+        G.alias_n2n_1st, G.node2ff_1st = get_first_order(G)
+        parallel_get_second_order(G)
+        print("RandomWalk getting edges time: %.2lf" % (time.time() - start))
+        print(G.__dict__.keys())
+
+        name = [
+            'data',
+            'edges',
+            'node_degree',
+            'edge_degree',
+            'n_edge',
+            'EV',
+            'delta',
+            'EV_over_delta',
+            'VE',
+            'VE_over_delta',
+            'src_dst_2e',
+            'node_nbr',
+            'node2ff_1st']
+
+        for n in name:
+            delattr(G, n)
+
+        walks = simulate_walks_para(G, num_walks, walk_length)
+        print("RandomWalk running time: %.2lf" % (time.time() - start))
+        np.savetxt(walks_save_path, walks, fmt="%d", delimiter=" ")
+        # np.save(walks_save_path,walks)
+        del G
+        del walks
+        print("RandomWalk running time: %.2lf" % (time.time() - start))
+
+        return walks_save_path
+6. "random_walk.py"
+import os
+import time
+import numpy as np
+import networkx as nx
+import random
+from tqdm import tqdm
+import torch
+from concurrent.futures import as_completed, ProcessPoolExecutor
+
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+device_ids = [0, 1]
+
+
+class Graph():
+    def __init__(self, nx_G, p, q, is_directed=False):
+        self.G = nx_G
+        self.is_directed = is_directed
+        self.p = p
+        self.q = q
+        self.neighbors = []
+        print("initialization")
+        for i in range(len(nx_G.nodes())
+                       ):  # actualy nx_G.nodes() is already increasing order
+            self.neighbors.append(sorted(nx_G.neighbors(i)))
+        self.degree = np.zeros((len(nx_G.nodes())))
+        for i in range(len(nx_G.nodes())):
+            self.degree[i] = np.sum([nx_G[i][nbr]['weight']
+                                     for nbr in self.neighbors[i]])
+        print(self.degree)
+
+
+def get_alias_edge(src, dst):
+    '''
+    Get the alias edge setup lists for a given edge.
+    '''
+    global sG
+    G = sG.G
+    p = sG.p
+    q = sG.q
+
+    unnormalized_probs = []
+    for dst_nbr in sG.neighbors[dst]:
+        if dst_nbr == src:
+            unnormalized_probs.append(
+                (G[dst][dst_nbr]['weight'] / p) / np.sqrt(sG.degree[dst_nbr]))
+            # unnormalized_probs.append((G[dst][dst_nbr]['weight'] / p))
+        elif G.has_edge(dst_nbr, src):
+            unnormalized_probs.append(
+                (G[dst][dst_nbr]['weight']) /
+                np.sqrt(
+                    sG.degree[dst_nbr]))
+            # unnormalized_probs.append((G[dst][dst_nbr]['weight']))
+        else:
+            unnormalized_probs.append(
+                (G[dst][dst_nbr]['weight'] / q) / np.sqrt(sG.degree[dst_nbr]))
+            # unnormalized_probs.append((G[dst][dst_nbr]['weight'] / q))
+    norm_const = sum(unnormalized_probs)
+    normalized_probs = [
+        float(u_prob) /
+        norm_const for u_prob in unnormalized_probs]
+
+    return alias_setup(normalized_probs)
+
+
+def alias_some_edges(edges):
+    alias_edges = {}
+    for edge in tqdm(edges):
+        alias_edges[(edge[0], edge[1])] = get_alias_edge(edge[0], edge[1])
+        alias_edges[(edge[1], edge[0])] = get_alias_edge(edge[1], edge[0])
+    return alias_edges
+
+
+def preprocess_transition_probs(sg):
+    '''
+    Preprocessing of transition probabilities for guiding the random walks.
+    '''
+    global sG
+    sG = sg
+    G = sG.G
+    is_directed = sG.is_directed
+
+    print("transition probs: ")
+    alias_nodes = {}
+    for node in tqdm(G.nodes()):
+        unnormalized_probs = [
+            G[node][nbr]['weight'] /
+            np.sqrt(
+                sG.degree[nbr]) for nbr in sG.neighbors[node]]
+        # unnormalized_probs = [G[node][nbr]['weight'] for nbr in sG.neighbors[node]]
+        norm_const = sum(unnormalized_probs)
+        normalized_probs = [float(u_prob) /
+                            norm_const for u_prob in unnormalized_probs]
+        alias_nodes[node] = alias_setup(normalized_probs)
+
+    triads = {}
+
+    # Parallel alias edges
+    print("alias edges: ")
+    edges = G.edges()
+
+    threads_num = 100
+    pool = ProcessPoolExecutor(max_workers=threads_num)
+    process_list = []
+
+    edges = np.array_split(edges, threads_num * 2)
+    for e in edges:
+        process_list.append(pool.submit(alias_some_edges, e))
+
+    alias_edges = {}
+    for p in as_completed(process_list):
+        alias_t = p.result()
+        alias_edges.update(alias_t)
+    pool.shutdown(wait=True)
+
+    sG.alias_nodes = alias_nodes
+    sG.alias_edges = alias_edges
+
+
+def alias_setup(probs):
+    '''
+    Compute utility lists for non-uniform sampling from discrete distributions.
+    Refer to https://hips.seas.harvard.edu/blog/2013/03/03/the-alias-method-efficient-sampling-with-many-discrete-outcomes/
+    for details
+    '''
+    K = len(probs)
+    q = np.zeros(K)
+    J = np.zeros(K, dtype=np.int)
+
+    smaller = []
+    larger = []
+    for kk, prob in enumerate(probs):
+        q[kk] = K * prob
+        if q[kk] < 1.0:
+            smaller.append(kk)
+        else:
+            larger.append(kk)
+
+    while len(smaller) > 0 and len(larger) > 0:
+        small = smaller.pop()
+        large = larger.pop()
+
+        J[small] = large
+        q[large] = q[large] + q[small] - 1.0
+        if q[large] < 1.0:
+            smaller.append(large)
+        else:
+            larger.append(large)
+
+    return J, q
+
+
+def alias_draw(J, q):
+    '''
+    Draw sample from a non-uniform discrete distribution using alias sampling.
+    '''
+    K = len(J)
+
+    kk = int(np.floor(np.random.rand() * K))
+    if np.random.rand() < q[kk]:
+        return kk
+    else:
+        return J[kk]
+
+
+def add_weight(G, u, v):
+    if 'weight' not in G[u][v]:
+        G[u][v]['weight'] = 1
+    else:
+        G[u][v]['weight'] += 1
+
+
+def node2vec_walk(sG, walk_length, start_node):
+    '''
+    Simulate a random walk starting from start node.
+    '''
+    alias_nodes = sG.alias_nodes
+    alias_edges = sG.alias_edges
+
+    walk = [start_node]
+
+    while len(walk) < walk_length:
+        cur = walk[-1]
+        cur_nbrs = sG.neighbors[cur]
+        if len(cur_nbrs) > 0:
+            if len(walk) == 1:
+                walk.append(cur_nbrs[alias_draw(
+                    alias_nodes[cur][0], alias_nodes[cur][1])])
+            else:
+                prev = walk[-2]
+                next_n = cur_nbrs[alias_draw(alias_edges[(prev, cur)][0],
+                                             alias_edges[(prev, cur)][1])]
+                walk.append(next_n)
+        else:
+            walk.append(cur)
+            continue
+
+    return walk
+
+
+def simulate_walks(sG, num_walks, walk_length):
+    '''
+    Repeatedly simulate random walks from each node.
+    '''
+    print("sample walks:")
+    walks = []
+    nodes = sG.G.nodes()
+    for node in tqdm(nodes):
+        for walk_iter in range(num_walks):
+            temp = node2vec_walk(sG, walk_length, node)
+            if len(temp) == walk_length:
+                walks.append(temp)
+
+    random.shuffle(walks)
+    return walks
+
+
+def read_graph(num, hyperedge_list):
+    '''
+    Transfer the hyperedge to pairwise edge & Reads the input network in networkx.
+    '''
+    G = nx.Graph()
+    tot = sum(num)
+    G.add_nodes_from(range(tot))
+    for ee in tqdm(hyperedge_list):
+        e = ee
+        edges_to_add = []
+        for i in range(len(e)):
+            for j in range(i + 1, len(e)):
+                edges_to_add.append((e[i], e[j]))
+        G.add_edges_from(edges_to_add)
+        for i in range(len(e)):
+            for j in range(i + 1, len(e)):
+                add_weight(G, e[i], e[j])
+
+    G = G.to_undirected()
+
+    return G
+
+
+def toint(hyperedge_list):
+    return np.array([h.astype('int') for h in hyperedge_list])
+
+
+def random_walk(args, num, hyperedge_list):
+    '''
+    Learn embeddings by optimizing the Skipgram objective using SGD.
+    '''
+    # p, q = 1, 1
+    # num_walks, walk_length, window_size = 10, 80, 10
+    hyperedge_list = toint(hyperedge_list)
+    p, q = args.p, args.q
+    num_walks, walk_length, window_size = args.num_walks, args.walk_length, args.window_size
+    # emb_save_path = '../embs/{}/p{}_q{}_r{}_l{}_k{}_i{}.embs'.format(args.data, p, q, num_walks, walk_length, window_size, iteration)
+    if not os.path.exists("../walks"):
+        os.mkdir("../walks")
+        
+    if not os.path.exists("../walks/{}/".format(args.data)):
+        os.mkdir("../walks/{}/".format(args.data))
+    walks_save_path = '../walks/{}/p{}_q{}_r{}_l{}_walks.txt'.format(
+        args.data, p, q, num_walks, walk_length)
+    start = time.time()
+
+    if not args.TRY and os.path.exists(walks_save_path):
+        return walks_save_path
+    else:
+        nx_G = read_graph(num.numpy(), hyperedge_list)
+        G = Graph(nx_G, p, q)
+        preprocess_transition_probs(G)
+        walks = simulate_walks(G, num_walks, walk_length)
+        walks = np.array(walks)
+
+        print(walks.shape)
+        np.savetxt(walks_save_path, walks, fmt="%d", delimiter=" ")
+        #np.save(walks_save_path, walks)
+
+        print("RandomWalk running time: %.2lf" % (time.time() - start))
+
+        return walks_save_path
+7. "torchsummary.py"
+import torch
+import torch.nn as nn
+from torch.autograd import Variable
+
+from collections import OrderedDict
+import numpy as np
+
+
+def summary(model, input_size, batch_size=-1, device="cuda"):
+
+    def register_hook(module):
+
+        def hook(module, input, output):
+            class_name = str(module.__class__).split(".")[-1].split("'")[0]
+            module_idx = len(summary)
+
+            m_key = "%s-%i" % (class_name, module_idx + 1)
+            summary[m_key] = OrderedDict()
+            summary[m_key]["input_shape"] = list(input[0].size())
+            summary[m_key]["input_shape"][0] = batch_size
+            if isinstance(output, (list, tuple)):
+                summary[m_key]["output_shape"] = [
+                    [-1] + list(o.size())[1:] for o in output
+                ]
+            else:
+                summary[m_key]["output_shape"] = list(output.size())
+                summary[m_key]["output_shape"][0] = batch_size
+
+            params = 0
+            if hasattr(module, "weight") and hasattr(module.weight, "size"):
+                params += torch.prod(torch.LongTensor(list(module.weight.size())))
+                summary[m_key]["trainable"] = module.weight.requires_grad
+
+            if hasattr(module, "bias") and hasattr(module.bias, "size"):
+                params += torch.prod(torch.LongTensor(list(module.bias.size())))
+            summary[m_key]["nb_params"] = params
+
+        if (
+            not isinstance(module, nn.Sequential)
+            and not isinstance(module, nn.ModuleList)
+            and not (module == model)
+        ):
+            hooks.append(module.register_forward_hook(hook))
+
+    device = device.lower()
+    assert device in [
+        "cuda",
+        "cpu",
+    ], "Input device is not valid, please specify 'cuda' or 'cpu'"
+
+    if device == "cuda" and torch.cuda.is_available():
+        dtype = torch.cuda.FloatTensor
+    else:
+        dtype = torch.FloatTensor
+
+    # multiple inputs to the network
+    if isinstance(input_size, tuple):
+        input_size = [input_size]
+
+    # batch_size of 2 for batchnorm
+    x = [torch.rand(2, *in_size).type(dtype) for in_size in input_size]
+    # print(type(x[0]))
+
+    # create properties
+    summary = OrderedDict()
+    hooks = []
+
+    # register hook
+    model.apply(register_hook)
+
+    # make a forward pass
+    # print(x.shape)
+    model(*x)
+
+    # remove these hooks
+    for h in hooks:
+        h.remove()
+
+    print("----------------------------------------------------------------")
+    line_new = "{:>20}  {:>25} {:>15}".format("Layer (type)", "Output Shape", "Param #")
+    print(line_new)
+    print("================================================================")
+    total_params = 0
+    total_output = 0
+    trainable_params = 0
+    for layer in summary:
+        # input_shape, output_shape, trainable, nb_params
+        line_new = "{:>20}  {:>25} {:>15}".format(
+            layer,
+            str(summary[layer]["output_shape"]),
+            "{0:,}".format(summary[layer]["nb_params"]),
+        )
+        total_params += summary[layer]["nb_params"]
+        try:
+            total_output += np.prod(summary[layer]["output_shape"])
+        except:
+            print("error", layer)
+        if "trainable" in summary[layer]:
+            if summary[layer]["trainable"] == True:
+                trainable_params += summary[layer]["nb_params"]
+        print(line_new)
+
+    # assume 4 bytes/number (float on cuda).
+    total_input_size = abs(np.prod(input_size) * batch_size * 4. / (1024 ** 2.))
+    total_output_size = abs(2. * total_output * 4. / (1024 ** 2.))  # x2 for gradients
+    total_params_size = abs(total_params.numpy() * 4. / (1024 ** 2.))
+    total_size = total_params_size + total_output_size + total_input_size
+
+    print("================================================================")
+    print("Total params: {0:,}".format(total_params))
+    print("Trainable params: {0:,}".format(trainable_params))
+    print("Non-trainable params: {0:,}".format(total_params - trainable_params))
+    print("----------------------------------------------------------------")
+    print("Input size (MB): %0.2f" % total_input_size)
+    print("Forward/backward pass size (MB): %0.2f" % total_output_size)
+    print("Params size (MB): %0.2f" % total_params_size)
+    print("Estimated Total Size (MB): %0.2f" % total_size)
+    print("----------------------------------------------------------------")
+    # return summary
+8. "utils.py"
+import numpy as np
+import torch
+from tqdm import tqdm, trange
+from sklearn.metrics import average_precision_score, precision_score, recall_score, f1_score
+from sklearn.metrics import roc_auc_score, accuracy_score, matthews_corrcoef
+from concurrent.futures import as_completed, ProcessPoolExecutor
+
+
+def add_padding_idx(vec):
+    if len(vec.shape) == 1:
+        return np.asarray([np.sort(np.asarray(v) + 1).astype('int')
+                         for v in tqdm(vec)])
+    else:
+        vec = np.asarray(vec) + 1
+        vec = np.sort(vec, axis=-1)
+        return vec.astype('int')
+
+
+def np2tensor_hyper(vec, dtype):
+    vec = np.asarray(vec)
+    if len(vec.shape) == 1:
+        return [torch.as_tensor(v, dtype=dtype) for v in vec]
+    else:
+        return torch.as_tensor(vec, dtype = dtype)
+
+
+def walkpath2str(walk):
+    return [list(map(str, w)) for w in tqdm(walk)]
+
+
+def roc_auc_cuda(y_true, y_pred):
+    try:
+        y_true = y_true.cpu().detach().numpy().reshape((-1, 1))
+        y_pred = y_pred.cpu().detach().numpy().reshape((-1, 1))
+        return roc_auc_score(
+            y_true, y_pred), average_precision_score(
+            y_true, y_pred)
+    except BaseException:
+        return 0.0, 0.0
+
+
+def accuracy(output, target):
+    pred = output >= 0.5
+    truth = target >= 0.5
+    acc = torch.sum(pred.eq(truth))
+    acc = float(acc) * 1.0 / (truth.shape[0] * 1.0)
+    return acc
+
+
+def build_hash(data):
+    dict1 = set()
+
+    for datum in data:
+        # We need sort here to make sure the order is right
+        datum.sort()
+        dict1.add(tuple(datum))
+    del data
+    return dict1
+
+
+def build_hash2(data):
+    dict2 = set()
+    for datum in tqdm(data):
+        for x in datum:
+            for y in datum:
+                if x != y:
+                    dict2.add((x, y))
+    return dict2
+
+
+def build_hash3(data):
+    dict2 = set()
+    for datum in tqdm(data):
+        for i in range(3):
+            temp = np.copy(datum).astype('int')
+            temp[i] = 0
+            dict2.add(tuple(temp))
+
+    return dict2
+
+
+def parallel_build_hash(data, func, args, num, initial = None):
+    import multiprocessing
+    cpu_num = multiprocessing.cpu_count()
+    data = np.array_split(data, cpu_num * 3)
+    dict1 = initial.copy()
+    pool = ProcessPoolExecutor(max_workers=cpu_num)
+    process_list = []
+
+    if func == 'build_hash':
+        func = build_hash
+    if func == 'build_hash2':
+        func = build_hash2
+    if func == 'build_hash3':
+        func = build_hash3
+
+    for datum in data:
+        process_list.append(pool.submit(func, datum))
+
+    for p in as_completed(process_list):
+        a = p.result()
+        dict1.update(a)
+
+    pool.shutdown(wait=True)
+	
+    # if args.data in ['schic','ramani']:
+    # 	print (num[0])
+    # 	new_list_of_set = [set() for i in range(int(num[0]+1))]
+    # 	for s in dict1:
+    # 		try:
+    # 			new_list_of_set[s[0]].add(s)
+    # 		except:
+    # 			print (s)
+    # 			raise EOFError
+    # 	dict1 = new_list_of_set
+    return dict1
+
+def generate_negative_edge(x, length):
+    pos = np.random.choice(len(pos_edges), length)
+    pos = pos_edges[pos]
+    negative = []
+
+    temp_num_list = np.array([0] + list(num_list))
+
+    id_choices = np.array([[0, 1], [1, 2], [0, 2]])
+    id = np.random.choice([0, 1, 2], length * neg_num, replace=True)
+    id = id_choices[id]
+
+    start_1 = temp_num_list[id[:, 0]]
+    end_1 = temp_num_list[id[:, 0] + 1]
+
+    start_2 = temp_num_list[id[:, 1]]
+    end_2 = temp_num_list[id[:, 1] + 1]
+
+    if len(num_list) == 3:
+        for i in range(neg_num * length):
+            temp = [
+                np.random.randint(
+                    start_1[i],
+                    end_1[i]) + 1,
+                np.random.randint(
+                    start_2[i],
+                    end_2[i]) + 1]
+            while tuple(temp) in dict2:
+                temp = [
+                    np.random.randint(
+                        start_1[i],
+                        end_1[i]) + 1,
+                    np.random.randint(
+                        start_2[i],
+                        end_2[i]) + 1]
+            negative.append(temp)
+
+    return list(pos), negative
+
+
+def generate_outlier(k=20):
+    inputs = []
+    negs = []
+    split_num = 4
+    pool = ProcessPoolExecutor(max_workers=split_num)
+    data = np.array_split(potential_outliers, split_num)
+    dict_pair = build_hash2(np.concatenate([train_data, test]))
+
+    process_list = []
+
+    for datum in data:
+        process_list.append(
+            pool.submit(
+                generate_outlier_part,
+                datum,
+                dict_pair,
+                k))
+
+    for p in as_completed(process_list):
+        in_, ne = p.result()
+        inputs.append(in_)
+        negs.append(ne)
+    inputs = np.concatenate(inputs, axis=0)
+    negs = np.concatenate(negs, axis=0)
+
+    index = np.arange(len(inputs))
+    np.random.shuffle(index)
+    inputs, negs = inputs[index], negs[index]
+
+    pool.shutdown(wait=True)
+
+    x = np2tensor_hyper(inputs, dtype=torch.long)
+    x = pad_sequence(x, batch_first=True, padding_value=0).to(device)
+
+    return (torch.tensor(x).to(device), torch.tensor(negs).to(device))
+
+def pass_(x):
+    return x
+
+
+def generate_outlier_part(data, dict_pair, k=20):
+    inputs = []
+    negs = []
+	
+    for e in tqdm(data):
+        point = int(np.where(e == 0)[0])
+        start = 0 if point == 0 else int(num_list[point - 1])
+        end = int(num_list[point])
+		
+        count = 0
+        trial = 0
+        while count < k:
+            trial += 1
+            if trial >= 100:
+                break
+            j = np.random.randint(start, end) + 1
+            condition = [(j, n) in dict_pair for n in e]
+            if np.sum(condition) > 0:
+                continue
+            else:
+                temp = np.copy(e)
+                temp[point] = j
+                inputs.append(temp)
+                negs.append(point)
+                count += 1
+    inputs, index = np.unique(inputs, axis=0, return_index=True)
+    negs = np.array(negs)[index]
+    return np.array(inputs), np.array(negs)
+
+
+def check_outlier(model, data_):
+    data, negs = data_
+    bs = 1024
+    num_of_batches = int(np.floor(data.shape[0] / bs)) + 1
+    k = 3
+    outlier_prec = torch.zeros(k).to(device)
+	
+    model.eval()
+    with torch.no_grad():
+        for i in tqdm(range(num_of_batches)):
+            inputs = data[i * bs:(i + 1) * bs]
+            neg = negs[i * bs:(i + 1) * bs]
+            outlier = model(inputs, get_outlier=k)
+            outlier_prec += (outlier.transpose(1, 0) == neg).sum(dim=1).float()
+        # for kk in range(k):
+        # 	outlier_prec[kk] += (outlier[:,kk].view(-1)==neg).sum().float()
+        outlier_prec = outlier_prec.cumsum(dim=0)
+        outlier_prec /= data.shape[0]
+        for kk in range(k):
+            print("outlier top %d hitting: %.5f" % (kk + 1, outlier_prec[kk]))
+
+
+class Word2Vec_Skipgram_Data_Empty(object):
+    """Word2Vec model (Skipgram)."""
+	
+    def __init__(self):
+        return
+	
+    def next_batch(self):
+        """Train the model."""
+		
+        return 0, 0, 0, 0, 0

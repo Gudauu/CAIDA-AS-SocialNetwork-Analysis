@@ -1,0 +1,300 @@
+        print('  - (Validation-hyper) bce: {bce_loss: 7.4f}, recon: {recon_loss: 7.4f},'
+              '  acc: {accu:3.3f} %,'
+              ' auc: {auc1:3.3f}, aupr: {auc2:3.3f},'
+              'elapse: {elapse:3.3f} s'.format(
+            bce_loss=valid_bce_loss,
+            recon_loss=recon_loss,
+            accu=100 *
+                 valid_accu,
+            auc1=valid_auc1,
+            auc2=valid_auc2,
+            elapse=(time.time() - start)))
+        
+        valid_accus += [valid_auc1]
+        # check_outlier(model[0], outlier_data)
+        
+        checkpoint = {
+            'model_link': model[0].state_dict(),
+            'model_node2vec': model[1].state_dict(),
+            'epoch': epoch_i}
+        
+        model_name = 'model.chkpt'
+        
+        if valid_auc1 >= max(valid_accus):
+            torch.save(checkpoint, os.path.join(args.save_path, model_name))
+        
+        torch.cuda.empty_cache()
+        
+    if not only_rw:
+        checkpoint = torch.load(os.path.join(args.save_path, model_name))
+        model[0].load_state_dict(checkpoint['model_link'])
+        model[1].load_state_dict(checkpoint['model_node2vec'])
+
+def generate_negative(x, dict1, get_type='all', weight="", forward=True):
+    if dict1 == 'train_dict':
+        dict1 = train_dict
+    elif dict1 == 'test_dict':
+        dict1 = test_dict
+    
+    if len(weight) == 0:
+        weight = torch.ones(len(x), dtype=torch.float)
+    
+    neg_list = []
+    
+    zero_num_list = [0] + list(num_list)
+    new_index = []
+    max_id = int(num[-1])
+    
+    if forward:
+        func1 = pass_
+    else:
+        func1 = tqdm
+    
+    if len(x.shape) > 1:
+        change_list_all = np.random.randint(
+            0, x.shape[-1], len(x) * neg_num).reshape((len(x), neg_num))
+    for j, sample in enumerate(func1(x)):
+        if len(x.shape) > 1:
+            change_list = change_list_all[j, :]
+        else:
+            change_list = np.random.randint(0, sample.shape[-1], neg_num)
+        for i in range(neg_num):
+            temp = np.copy(sample)
+            a = set()
+            a.add(tuple(temp))
+            
+            trial = 0
+            simple_or_hard = np.random.rand()
+            if simple_or_hard <= pair_ratio:
+                change = change_list[i]
+                
+            while not a.isdisjoint(dict1):
+                temp = np.copy(sample)
+                trial += 1
+                if trial >= 1000:
+                    temp = ""
+                    break
+                # Only change one node
+                if simple_or_hard <= pair_ratio:
+                    if len(num_list) == 1:
+                        # Only one node type
+                        temp[change] = np.random.randint(0, max_id, 1) + 1
+                    
+                    else:
+                        # Multiple node types
+                        start = zero_num_list[node_type_mapping[change]]
+                        end = zero_num_list[node_type_mapping[change] + 1]
+                        
+                        temp[change] = np.random.randint(
+                            int(start), int(end), 1) + 1
+                else:
+                    
+                    if len(num_list) == 1:
+                        # Only one node type
+                        temp = np.random.randint(
+                            0, max_id, sample.shape[-1]) + 1
+                    
+                    else:
+                        for k in range(temp.shape[-1]):
+                            start = zero_num_list[node_type_mapping[k]]
+                            end = zero_num_list[node_type_mapping[k] + 1]
+                            temp[k] = np.random.randint(
+                                int(start), int(end), 1) + 1
+                
+                temp.sort()
+                a = set([tuple(temp)])
+            
+            if len(temp) > 0:
+                neg_list.append(temp)
+                if i == 0:
+                    new_index.append(j)
+    if get_type == 'all' or get_type == 'edge':
+        x_e, neg_e = generate_negative_edge(x, int(len(x)))
+        if get_type == 'all':
+            x = list(x) + x_e
+            neg_list = neg_list + neg_e
+        else:
+            x = x_e
+            neg_list = neg_e
+    new_index = np.array(new_index)
+    new_x = x[new_index]
+    
+    if not forward:
+        device = 'cpu'
+    else:
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    
+    new_weight = torch.tensor(weight[new_index]).to(device)
+    
+    x = np2tensor_hyper(new_x, dtype=torch.long)
+    neg = np2tensor_hyper(neg_list, dtype=torch.long)
+    x = pad_sequence(x, batch_first=True, padding_value=0).to(device)
+    neg = pad_sequence(neg, batch_first=True, padding_value=0).to(device)
+    # print("x", x, "neg", neg)
+    
+    return torch.cat([x, neg]), torch.cat(
+        [torch.ones((len(x), 1), device=device), torch.zeros((len(neg), 1), device=device)], dim=0), torch.cat(
+        ((torch.ones((len(x), 1), device=device) * new_weight.view(-1, 1), (torch.ones((len(neg), 1), device=device)))))
+
+
+def save_embeddings(model, origin=False):
+    model.eval()
+    with torch.no_grad():
+        ids = np.arange(num_list[-1]) + 1
+        ids = torch.Tensor(ids).long().to(device).view(-1, 1)
+        embeddings = []
+        for j in range(math.ceil(len(ids) / batch_size)):
+            x = ids[j * batch_size:min((j + 1) * batch_size, len(ids))]
+            if origin:
+                embed = model.get_node_embeddings(x)
+            else:
+                embed = model.get_embedding_static(x)
+            embed = embed.detach().cpu().numpy()
+            embeddings.append(embed)
+        
+        embeddings = np.concatenate(embeddings, axis=0)[:, 0, :]
+        for i in range(len(num_list)):
+            start = 0 if i == 0 else num_list[i - 1]
+            static = embeddings[int(start):int(num_list[i])]
+            np.save("../mymodel_%d.npy" % (i), static)
+            
+            if origin:
+                np.save("../mymodel_%d_origin.npy" % (i), static)
+    
+    torch.cuda.empty_cache()
+    return embeddings
+
+
+def generate_H(edge, nums_type, weight):
+    nums_examples = len(edge)
+    H = [0 for i in range(len(nums_type))]
+    for i in range(edge.shape[-1]):
+        # np.sqrt(weight) because the dot product later would recovers it
+        H[node_type_mapping[i]] += csr_matrix((np.sqrt(weight), (edge[:, i], range(
+            nums_examples))), shape=(nums_type[node_type_mapping[i]], nums_examples))
+    return H
+
+
+def generate_embeddings(edge, nums_type, H=None, weight=1):
+    if len(num) == 1:
+        return [get_adjacency(edge, True)]
+    if H is None:
+        H = generate_H(edge, nums_type, weight)
+    
+    embeddings = [H[i].dot(s_vstack([H[j] for j in range(len(num))]).T).astype('float32') for i in
+                  range(len(nums_type))]
+    
+    new_embeddings = []
+    zero_num_list = [0] + list(num_list)
+    for i, e in enumerate(embeddings):
+        # This is to remove diag entrance
+        for j, k in enumerate(range(zero_num_list[i], zero_num_list[i + 1])):
+            e[j, k] = 0
+        
+        # Automatically removes all zero entries
+        col_sum = np.array(e.sum(0)).reshape((-1))
+        new_e = e[:, col_sum > 0]
+        new_e.eliminate_zeros()
+        new_embeddings.append(new_e)
+    
+    
+    # 0-1 scaling
+    for i in range(len(nums_type)):
+        col_max = np.array(new_embeddings[i].max(0).todense()).flatten()
+        _, col_index = new_embeddings[i].nonzero()
+        new_embeddings[i].data /= col_max[col_index]
+    return [new_embeddings[i] for i in range(len(nums_type))]
+
+
+def get_adjacency(data, norm=True):
+    A = np.zeros((num_list[-1], num_list[-1]))
+    
+    for datum in tqdm(data):
+        for i in range(datum.shape[-1]):
+            for j in range(datum.shape[-1]):
+                if i != j:
+                    A[datum[i], datum[j]] += 1.0
+    
+    if norm:
+        temp = np.concatenate((np.zeros((1), dtype='int'), num), axis=0)
+        temp = np.cumsum(temp)
+        
+        for i in range(len(temp) - 1):
+            A[temp[i]:temp[i + 1],
+            :] /= (np.max(A[temp[i]:temp[i + 1],
+                          :],
+                          axis=0,
+                          keepdims=True) + 1e-10)
+    
+    return csr_matrix(A).astype('float32')
+
+args = parse_args()
+neg_num = 5
+batch_size = 96
+neg_num_w2v = 5
+bottle_neck = args.dimensions
+pair_ratio = 0.9
+train_type = 'hyper'
+
+
+
+train_zip = np.load("../data/%s/train_data.npz" % (args.data), allow_pickle=True)
+test_zip = np.load("../data/%s/test_data.npz" % (args.data), allow_pickle=True)
+train_data, test_data = train_zip['train_data'], test_zip['test_data']
+
+
+
+try:
+    train_weight, test_weight = train_zip["train_weight"].astype('float32'), test_zip["test_weight"].astype('float32')
+except BaseException:
+    print("no specific train weight")
+    test_weight = np.ones(len(test_data), dtype='float32')
+    train_weight = np.ones(len(train_data), dtype='float32') * neg_num
+
+num = train_zip['nums_type']
+num_list = np.cumsum(num)
+print("Node type num", num)
+
+
+if len(num) > 1:
+    node_type_mapping = [0, 1, 2]
+    
+
+if args.feature == 'adj':
+    embeddings_initial = generate_embeddings(train_data, num, H=None, weight=train_weight)
+
+print(train_weight)
+print(train_weight, np.min(train_weight), np.max(train_weight))
+train_weight_mean = np.mean(train_weight)
+train_weight = train_weight / train_weight_mean * neg_num
+test_weight = test_weight / train_weight_mean * neg_num
+
+
+
+# Now for multiple node types, the first column id starts at 0, the second
+# starts at num_list[0]...
+if len(num) > 1:
+    for i in range(len(node_type_mapping) - 1):
+        train_data[:, i + 1] += num_list[node_type_mapping[i + 1] - 1]
+        test_data[:, i + 1] += num_list[node_type_mapping[i + 1] - 1]
+
+num = torch.as_tensor(num)
+num_list = torch.as_tensor(num_list)
+
+print("walk type", args.walk)
+# At this stage, the index still starts from zero
+
+node_list = np.arange(num_list[-1]).astype('int')
+if args.walk == 'hyper':
+    walk_path = random_walk_hyper(args, node_list, train_data)
+else:
+    walk_path = random_walk(args, num, train_data)
+del node_list
+
+
+# Add 1 for the padding index
+print("adding pad idx")
+train_data = add_padding_idx(train_data)
+test_data = add_padding_idx(test_data)
+
+

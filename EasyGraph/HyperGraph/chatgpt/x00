@@ -1,0 +1,300 @@
+1: "datapipe.py"
+# Copyright 2015 The TensorFlow Authors. All Rights Reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# ==============================================================================
+
+"""Multi-threaded word2vec mini-batched skip-gram model.
+
+Trains the model described in:
+(Mikolov, et. al.) Efficient Estimation of Word Representations in Vector Space
+ICLR 2013.
+http://arxiv.org/abs/1301.3781
+This model does traditional minibatching.
+
+The key ops used are:
+* placeholder for feeding in tensors for each example.
+* embedding_lookup for fetching rows from the embedding matrix.
+* sigmoid_cross_entropy_with_logits to calculate the loss.
+* GradientDescentOptimizer for optimizing the loss.
+* skipgram custom op that does input processing.
+"""
+
+import torch
+import os
+import tensorflow as tf
+import warnings
+
+word2vec = tf.load_op_library(
+    os.path.join(
+        os.path.dirname(
+            os.path.realpath(__file__)),
+        'word2vec_ops.so'))
+warnings.filterwarnings("ignore")
+
+
+class Word2Vec_Skipgram_Data(object):
+    """Word2Vec model (Skipgram)."""
+
+    def __init__(
+            self,
+            train_data,
+            num_samples,
+            batch_size,
+            window_size,
+            min_count,
+            subsample,
+            session):
+        self.train_data = train_data
+        self.num_samples = num_samples
+        self.batch_size = batch_size
+        self.window_size = window_size
+        self.min_count = min_count
+        self.subsample = subsample
+        self._session = session
+        self._word2id = {}
+        self._id2word = []
+        self.build_graph()
+
+    def build_graph(self):
+        """Build the graph for the full model."""
+        # The training data. A text file.
+        (words, counts, words_per_epoch, self._epoch, self._words, examples,
+         labels) = word2vec.skipgram_word2vec(filename=self.train_data,
+                                              batch_size=self.batch_size,
+                                              window_size=self.window_size,
+                                              min_count=self.min_count,
+                                              subsample=self.subsample)
+        (self.vocab_words, self.vocab_counts,
+         self.words_per_epoch) = self._session.run([words, counts, words_per_epoch])
+        self.vocab_size = len(self.vocab_words)
+        print("Data file: ", self.train_data)
+        print("Vocab size: ", self.vocab_size - 1, " + UNK")
+        print("Words per epoch: ", self.words_per_epoch)
+        self._examples = examples
+        self._labels = labels
+        self._id2word = self.vocab_words
+        for i, w in enumerate(self._id2word):
+            self._word2id[w] = i
+
+        id2word = []
+        for i, w in enumerate(self._id2word):
+            try:
+                id2word.append(int(w))
+            except BaseException:
+                id2word.append(w)
+
+        self._id2word = id2word
+
+        # Nodes to compute the nce loss w/ candidate sampling.
+        labels_matrix = tf.reshape(
+            tf.cast(labels,
+                    dtype=tf.int64),
+            [self.batch_size, 1])
+        # Negative sampling.
+        self.sampled_ids, _, _ = (tf.nn.fixed_unigram_candidate_sampler(
+            true_classes=labels_matrix,
+            num_true=1,
+            num_sampled=self.num_samples,
+            unique=True,
+            range_max=self.vocab_size,
+            distortion=0.75,
+            unigrams=self.vocab_counts.tolist()))
+
+    def next_batch(self):
+        """Train the model."""
+
+        initial_epoch, e, l, s, words = self._session.run(
+            [self._epoch, self._examples, self._labels, self.sampled_ids, self._words])
+
+        # All + 1 because of the padding_idx
+        e_new = []
+        for e1 in e:
+            e_new.append(self._id2word[e1] + 1)
+
+        label_new = []
+        for l1 in l:
+            label_new.append(self._id2word[l1] + 1)
+
+        sampled_id_new = []
+        for s1 in s:
+            sampled_id_new.append(self._id2word[s1] + 1)
+
+        return e_new, label_new, sampled_id_new, initial_epoch, words
+2. "main_torch.py"
+from torch.nn.utils.rnn import pad_sequence
+from torchsummary import summary
+from gensim.models import Word2Vec
+
+from scipy.sparse import csr_matrix
+from scipy.sparse import vstack as s_vstack
+import os
+import time
+import argparse
+import warnings
+
+from random_walk import random_walk
+from random_walk_hyper import random_walk_hyper
+from Modules import *
+from utils import *
+
+import matplotlib as mpl
+mpl.use("Agg")
+import multiprocessing
+
+cpu_num = multiprocessing.cpu_count()
+
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+torch.backends.cudnn.benchmark = True
+torch.backends.cudnn.deterministic = False
+
+warnings.filterwarnings("ignore")
+
+
+def parse_args():
+    # Parses the node2vec arguments.
+    parser = argparse.ArgumentParser(description="Run node2vec.")
+    
+    parser.add_argument('--data', type=str, default='ramani')
+    parser.add_argument('--TRY', action='store_true')
+    parser.add_argument('--FILTER', action='store_true')
+    parser.add_argument('--grid', type=str, default='')
+    parser.add_argument('--remark', type=str, default='')
+    
+    parser.add_argument('--random-walk', action='store_true')
+    
+    parser.add_argument('--dimensions', type=int, default=64,
+                        help='Number of dimensions. Default is 64.')
+    
+    parser.add_argument('-l', '--walk-length', type=int, default=40,
+                        help='Length of walk per source. Default is 40.')
+    
+    parser.add_argument('-r', '--num-walks', type=int, default=10,
+                        help='Number of walks per source. Default is 10.')
+    
+    parser.add_argument('-k', '--window-size', type=int, default=10,
+                        help='Context size for optimization. Default is 10.')
+    
+    parser.add_argument('-i', '--iter', default=1, type=int,
+                        help='Number of epochs in SGD')
+    
+    parser.add_argument('--workers', type=int, default=8,
+                        help='Number of parallel workers. Default is 8.')
+    
+    parser.add_argument('--p', type=float, default=2,
+                        help='Return hyperparameter. Default is 1.')
+    
+    parser.add_argument('--q', type=float, default=0.25,
+                        help='Inout hyperparameter. Default is 1.')
+    
+    parser.add_argument('-a', '--alpha', type=float, default=0.0,
+                        help='The weight of random walk -skip-gram loss. Default is ')
+    parser.add_argument('--rw', type=float, default=0.01,
+                        help='The weight of reconstruction of adjacency matrix loss. Default is ')
+    parser.add_argument('-w', '--walk', type=str, default='',
+                        help='The walk type, empty stands for normal rw')
+    parser.add_argument('-d', '--diag', type=str, default='True',
+                        help='Use the diag mask or not')
+    parser.add_argument(
+        '-f',
+        '--feature',
+        type=str,
+        default='walk',
+        help='Features used in the first step')
+    
+    args = parser.parse_args()
+    
+    if not args.random_walk:
+        args.model_name = 'model_no_randomwalk'
+        args.epoch = 25
+    else:
+        args.model_name = 'model_{}_'.format(args.data)
+        args.epoch = 25
+    if args.TRY:
+        args.model_name = 'try' + args.model_name
+        if not args.random_walk:
+            args.epoch = 5
+        else:
+            args.epoch = 1
+    # args.epoch = 1
+    args.model_name += args.remark
+    print(args.model_name)
+    
+    args.save_path = os.path.join(
+        '../checkpoints/', args.data, args.model_name)
+    if not os.path.exists(args.save_path):
+        os.makedirs(args.save_path)
+    return args
+
+
+def train_batch_hyperedge(model, loss_func, batch_data, batch_weight, type, y=""):
+    x = batch_data
+    w = batch_weight
+    
+    # When label is not generated, prepare the data
+    if len(y) == 0:
+        x, y, w = generate_negative(x, "train_dict", type, w)
+        index = torch.randperm(len(x))
+        x, y, w = x[index], y[index], w[index]
+    
+    # forward
+    pred, recon_loss = model(x, return_recon = True)
+    loss = loss_func(pred, y, weight=w)
+    return pred, y, loss, recon_loss
+
+
+def train_batch_skipgram(model, loss_func, alpha, batch_data):
+    if alpha == 0:
+        return torch.zeros(1).to(device)
+    
+    examples, labels, neg_samples = batch_data
+    
+    # Embeddings for examples: [batch_size, emb_dim]
+    example_emb = model.forward_u(examples)
+    true_w, true_b = model.forward_w_b(labels)
+    sampled_w, sampled_b = model.forward_w_b(neg_samples)
+    
+    # True logits: [batch_size, 1]
+    true_logits = torch.sum(torch.mul(example_emb, true_w), dim=1) + true_b
+    
+    # Sampled logits: [batch_size, num_sampled]
+    # We replicate sampled noise labels for all examples in the batch
+    # using the matmul.
+    sampled_b_vec = sampled_b.view(1, -1)
+    
+    sampled_logits = torch.matmul(example_emb,
+                                  sampled_w.transpose(1, 0))
+    sampled_logits += sampled_b_vec
+    
+    true_xent = loss_func(true_logits, torch.ones_like(true_logits).to(device))
+    sampled_xent = loss_func(sampled_logits,
+                             torch.zeros_like(sampled_logits).to(device))
+    
+    # NCE-loss is the sum of the true and noise (sampled words)
+    # contributions, averaged over the batch.
+    loss = (true_xent + sampled_xent) / len(examples) / len(labels)
+    return loss
+
+
+def train_epoch(args, model, loss_func, training_data, optimizer, batch_size, only_rw, type):
+    # Epoch operation in training phase
+    # Simultaneously train on 2 models: hyperedge-prediction (1) & random-walk with skipgram (2)
+    model_1, model_2 = model
+    (loss_1, beta), (loss_2, alpha) = loss_func
+    edges, edge_weight, sentences = training_data
+    y = torch.tensor([])
+
+    
+    # Permutate all the data
+    index = torch.randperm(len(edges))
+    edges, edge_weight = edges[index], edge_weight[index]
