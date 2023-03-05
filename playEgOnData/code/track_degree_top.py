@@ -26,6 +26,11 @@ def find_top(year_start:int,year_end:int,limit:int=10) -> None:
             count += 1
             if count > limit:
                 break
+        # read degree and es again, tracking ASes inside set_top
+        # output file format: 
+        # ASN
+        # year2000 degree | rank;   year2001 degree| rank; ...  year2023 degree| rank      
+        # year2000 es | rank;   year2001 es| rank; ...  year2023 es| rank      
 
 
 
