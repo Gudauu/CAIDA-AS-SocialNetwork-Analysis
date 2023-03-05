@@ -20,6 +20,18 @@ def readDict(fn,separator=':') -> dict:
 
     return dictResult
 
+def readRank(fn,separator=':') -> dict:
+    dictResult = {}
+    ifile = open(fn,'r')
+    i = 0
+    for line_ in ifile:
+        i += 1
+        line = line_[:-1]
+        line_list = line.split(separator)
+        dictResult[line_list[0]] = i
+
+    return dictResult
+
 def getVersionFromName(fn:str) -> str:
     return fn[31:39] 
 
