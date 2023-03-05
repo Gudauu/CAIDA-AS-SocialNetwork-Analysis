@@ -8,7 +8,9 @@ if __name__ == '__main__':
     DEBUG = True
     # versions = ['19980101','19980201','19980301','19980401']
     for fn in dictInfile.values():
+
         G = buildAsRelGraph_nx(fn, flag_directed = False)
+        
 
         partition = algorithms.louvain(G, weight="weight", resolution=1.0)
         # Print the communities
