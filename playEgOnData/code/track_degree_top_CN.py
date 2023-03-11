@@ -1,7 +1,7 @@
 from include import *
 
 
-# find all the nodes that were / are in top 10 degree size and track their growth across 2000-2023
+# find all the nodes that were / are in top 10 degree size in CN and track their growth across 2000-2023
 
 def find_top(year_start:int,year_end:int,limit:int=10) -> None:
     month = "0101"
@@ -13,10 +13,11 @@ def find_top(year_start:int,year_end:int,limit:int=10) -> None:
         count = 0
         for line in ifile_degree:
             list_line = line.split(':')
-            set_top.add(str(list_line[0]))
-            count += 1
-            if count >= limit:
-                break
+            if ', CN' in list_line[-1]:
+                set_top.add(str(list_line[0]))
+                count += 1
+                if count >= limit:
+                    break
     # read degree again, tracking ASes inside set_top
     # output file format: 
     # ASN:company, country
@@ -41,12 +42,16 @@ def find_top(year_start:int,year_end:int,limit:int=10) -> None:
                 dict_ASN_trace[asn][year] = f'{dict_rank[str(asn)]}({dict_degree[str(asn)]})'
     
     # write the result
-    ofile = open("playEgOnData/results/2000-2023/track_degree_top_"+str(limit),'w')
+    ofile = open("playEgOnData/results/2000-2023/track_degree_top_CN_"+str(limit),'w')
     dict_asn_info = readDict("dataCAIDA/ASN_lookup/ASN_lookup")
     for asn in dict_ASN_trace:
         ofile.write(f'{asn} : {dict_asn_info[asn]}\n')
         for year in range(year_start,year_end+1):
-            ofile.write(f'{dict_ASN_trace[asn][year]};  ')
+            ofile.write(f'{year:<18};')
+        ofile.write('\n')
+
+        for year in range(year_start,year_end+1):
+            ofile.write(f'{dict_ASN_trace[asn][year]:<18};')
         ofile.write('\n\n')
     ofile.close()
 
