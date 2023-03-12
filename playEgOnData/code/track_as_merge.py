@@ -96,7 +96,7 @@ if __name__ == '__main__':
     # len common: 584   len covered: 1038
 
     # track_asn(8220,'20060101','20070101',float(3/7))  # 1133 -> 653, no specific change
-    # track_asn(39120,'20200101','20210101',float(3/7))  # 7563 -> 6407, Italy -> Hungarian
+    # track_asn(39120,'20200101','20210101',float(3/7))  # 7563 -> 6407, Italy -> Hungary
     # original length of neighbors: 3781
 
     # 39533:543 | 474
@@ -123,7 +123,7 @@ if __name__ == '__main__':
     # 267613:2853 | 1779
     # len common: 1358   len covered: 2137
 
-    track_asn(25462,'20080101','20090101',float(3/7))  # 1174 -> None
+    # track_asn(25462,'20080101','20090101',float(3/7))  # 1174 -> None. GB -> SG & CH(Switzerland)
     # original length of neighbors: 646
 
     # 9002: None
@@ -133,6 +133,47 @@ if __name__ == '__main__':
     # 9002:1031 | 570
     # 13030:928 | 425
     # len common: 237   len covered: 600
+    # track_asn(28186,'20200101','20210101',float(3/7))  # 5622 -> 1563, BR -> Hungary
+    # original length of neighbors: 2852
+
+    # 39533:543 | 439
+    # len common: 301   len covered: 2769
+
+    # 39533:3698 | 1973
+    # len common: 1273   len covered: 2520
+
+    # track_asn(9002,'20120101','20130101',float(3/7))  # 4124 -> 2593, GB -> (5580)Netherlands
+    # original length of neighbors: 2202
+
+    # 6939:2131 | 1320
+    # 5580:608 | 538
+    # len common: 149   len covered: 1737
+
+    # 6939:2793 | 1410
+    # 5580:1029 | 820
+    # len common: 233   len covered: 1793
+
+    track_asn(8492,'20180101','20190101',float(3/7))  # 4213 -> 3314, RU -> GB & BG
+    # original length of neighbors: 2126
+
+    # 24482:3425 | 1825
+    # 51185:1641 | 1338 (GB)
+    # 6939:6847 | 1553
+    # 49605:2077 | 1773
+    # 34224:1675 | 1221 (BG:Bulgaria)
+    # 25091:1961 | 1677
+    # len common: 909   len covered: 1978
+
+    # 24482:3792 | 1756
+    # 51185:2729 | 1678
+    # 6939:7364 | 1650
+    # 49605:2288 | 1627
+    # 34224:2329 | 1602
+    # 25091:2113 | 1575
+    # len common: 1247   len covered: 1919
+
+
+
 
 
 
