@@ -3,14 +3,13 @@ from include import *
 from icecream import ic
 # 25462: gone after 2008, had a degree of 1174 
 
-def track_asn(asn:int,version_first:str,version_second:str):  # 776 6939:1576 | 630
+def track_asn(asn:int,version_first:str,version_second:str,thresh:float):  # 776 6939:1576 | 630
     G_first = getG(version_first)
     G_second = getG(version_second)
 
     neighbors_ori = {n for n in G_first.neighbors(asn)}
     print(f"original length of neighbors: {len(neighbors_ori)}\n")
 
-    thresh = len(neighbors_ori)*3/7
     cand_limit = 6
 
     
@@ -50,7 +49,7 @@ def track_asn(asn:int,version_first:str,version_second:str):  # 776 6939:1576 | 
 
 
 if __name__ == '__main__':
-    track_asn(25462,'20080101','20090101')   # new node 9002 by the "same" company take up its role
+    # track_asn(25462,'20080101','20090101',float(3/7))   # new node 9002 by the "same" company take up its role
     # original length of neighbors: 646
 
     # 9002: None
@@ -61,7 +60,34 @@ if __name__ == '__main__':
     # 13030:928 | 425
     # len common: 237   len covered: 600
 
-    # track_asn(22822,'20100101','20110101')  # no other node seems to be taking up its role. neighbors before: 776
+    # track_asn(22822,'20100101','20110101',float(3/7))  # no other node seems to be taking up its role. neighbors before: 776
+    # track_asn(1,'20030101','20040101',float(2/7))  # node 3356 grow a lot while 1 reduce from 663 to 161
+    # original length of neighbors: 621
+
+    # 3356:558 | 74
+    # len common: 19   len covered: 408
+
+    # 3356:1003 | 332
+    # len common: 15   len covered: 476
+    # track_asn(3303,'20060101','20070101',float(2/7))  # 1051 -> 629
+    # original length of neighbors: 564
+
+    # 25462:125 | 47
+    # len common: 22   len covered: 491
+
+    # 25462:501 | 284
+    # len common: 119   len covered: 478
+    track_asn(14840,'20220101','20230101',float(2/7))  # 9554 -> 759
+    # original length of neighbors: 4895
+
+    # 35280:956 | 651
+    # len common: 524   len covered: 4316
+
+    # 35280:4339 | 2371
+    # len common: 1144   len covered: 4018
+
+
+    
      
 
     

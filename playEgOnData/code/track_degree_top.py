@@ -46,7 +46,11 @@ def find_top(year_start:int,year_end:int,limit:int=10) -> None:
     for asn in dict_ASN_trace:
         ofile.write(f'{asn} : {dict_asn_info[asn]}\n')
         for year in range(year_start,year_end+1):
-            ofile.write(f'{dict_ASN_trace[asn][year]};  ')
+            ofile.write(f'{year:<18};')
+        ofile.write('\n')
+
+        for year in range(year_start,year_end+1):
+            ofile.write(f'{dict_ASN_trace[asn][year]:<18};')
         ofile.write('\n\n')
     ofile.close()
 
