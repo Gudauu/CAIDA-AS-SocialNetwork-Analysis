@@ -1,6 +1,5 @@
 import easygraph as eg 
 import networkx as nx
-import whois
 
 listFileName_1998 = []
 for i in range(1,10):
