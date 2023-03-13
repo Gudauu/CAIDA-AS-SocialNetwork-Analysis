@@ -36,7 +36,7 @@ def track_neighbor(version:str,country_code:str) -> None:
                 dict_count_neighbor_by_country[code] += 1
     # print(len(dict_count_neighbor_by_country))
     ofile_directory_name = 'playEgOnData/results/'+ version + '/by_country/'+ country_code
-    # Path(ofile_directory_name).mkdir(parents=True, exist_ok=True)
+    Path(ofile_directory_name).mkdir(parents=True, exist_ok=True)
     ofile = open(ofile_directory_name+'/neighbors_count_by_country','w')
     for asn, count in sorted(dict_count_neighbor_by_country.items(),key = lambda x:-x[1]):
         ofile.write(f'{asn}:{count}\n')
