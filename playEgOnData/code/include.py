@@ -106,12 +106,4 @@ def getG(version,DEBUG = False,flag_directed = True, flag_nx = False):
             G = buildAsRelGraph(fn,flag_directed)
     return G
 
-def ASN_lookup(asn):
-    asn_info = whois.whois('AS{}'.format(asn))
-
-    # Extract the organization name from the ASN information
-    org_name = asn_info.get('org-name', 'Unknown')
-
-    # Print the ASN and its corresponding organization name
-    print('ASN {}: {}'.format(asn, org_name))
 
