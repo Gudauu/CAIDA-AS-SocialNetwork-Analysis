@@ -8,7 +8,14 @@ for i in range(1,10):
 for i in range(10,13):
     listFileName_1998.append('dataCAIDA/AS_relationships/raw/1998'+str(i)+ '01.as-rel.txt')
 
+def readList(fn) -> list:
+    listResult = []
+    ifile = open(fn,'r')
+    for line_ in ifile:
+        line = line_[:-1]
+        listResult.append(line)
 
+    return listResult
 
 def readDict(fn,separator=':') -> dict:
     dictResult = {}
