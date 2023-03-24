@@ -1,4 +1,5 @@
-# from "playEgOnData/code/include.py" import *
+# from playEgOnData.code.include import *
+from include import *
 import os, sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from pathlib import Path
@@ -37,7 +38,9 @@ def check_top_neighbor_across_year(country:str,year_start:int,year_end:int,month
 
 
 if __name__ == '__main__':
-    check_top_neighbor_across_year('CN',2001,2023,'0101',10)
+    list_country = readList('dataCAIDA/ASN_lookup/filterd_3_neighbor_country_list') 
+    for country in list_country:
+        check_top_neighbor_across_year(country,2001,2023,'0101',10)
 
         
 
