@@ -1,0 +1,46 @@
+2001
+('ZZ', 'US') ('PR', 'US') ('NO', '00') ('EU', 'DE') ('FR', '00') ('BE', 'US') ('SI', '00') ('SE', '00') ('BM', 'UA') ('CZ', 'RU') ('IE', '00') ('DK', 'US') ('MY', 'AU') 
+2002
+('ZZ', 'US') ('PR', 'US') ('NO', '00') ('IE', 'US') ('EU', 'DE') ('LU', 'US') ('FR', '00') ('BE', 'US') ('SE', '00') ('CZ', 'RU') ('BM', 'UA') 
+2003
+('ZZ', 'US') ('PR', 'US') ('NO', '00') ('EU', 'DE') ('LU', 'US') ('AE', 'US') ('GB', 'US') ('BE', 'US') ('BM', 'UA') ('CZ', 'NL') ('IE', 'NL') ('DK', 'US') 
+2004
+('ZZ', 'US') ('PR', 'US') ('DK', 'SE') ('AE', 'US') ('EU', '00') ('GB', 'US') ('NO', 'GB') ('BM', 'TR') ('CZ', 'NL') ('IE', 'NL') 
+2005
+('ZZ', 'US') ('PR', 'US') ('DK', 'SE') ('IE', 'US') ('BM', '00') ('AE', 'US') ('NO', 'US') ('CZ', 'NL') ('BE', 'NL') ('EU', 'US') 
+2006
+('ZZ', 'US') ('PR', 'US') ('AE', 'US') ('IE', 'GB') ('BE', 'US') ('FI', 'GB') ('LU', 'DE') ('DK', 'GB') ('EU', 'US') 
+2007
+('ZZ', 'US') ('PR', 'US') ('ZA', 'GB') ('IE', 'GB') ('AE', 'US') ('BE', 'US') ('FI', 'GB') ('LU', 'DE') ('EU', 'GB') 
+2008
+('ZZ', 'US') ('DK', 'SE') ('ZA', 'GB') ('AE', 'US') ('IE', 'GB') ('BE', 'US') ('SG', 'US') ('FI', 'GB') ('LU', 'DE') ('EU', 'GB') 
+2009
+('ZZ', 'US') ('PR', 'US') ('IE', 'GB') ('AE', 'US') ('LU', 'GB') ('BE', 'US') ('EU', 'GB') ('BM', 'KE') 
+2010
+('IE', 'GB') ('AE', 'US') ('LU', 'GB') ('ZZ', 'RU') ('BM', 'US') ('NO', 'GB') ('EU', 'GB') 
+2011
+('IE', 'GB') ('AE', 'US') ('LU', 'GB') ('ZZ', 'RU') ('BM', 'US') ('EU', 'GB') 
+2012
+('ZZ', 'BR') ('IE', 'GB') ('LU', 'GB') ('BE', 'US') ('BM', 'US') ('EU', 'GB') 
+2013
+('ZZ', 'BR') ('IE', 'GB') ('BE', 'GB') ('BM', 'US') ('PT', 'GB') ('LU', 'DE') ('EU', 'GB') 
+2014
+('ZA', 'GB') ('IE', 'GB') ('BE', 'GB') ('ZZ', 'BR') ('PT', 'GB') ('LU', 'DE') ('BM', 'DE') ('EU', 'GB') 
+2015
+('ZZ', 'BR') ('IE', 'GB') ('BE', 'GB') ('PT', 'GB') ('LU', 'DE') ('BM', 'DE') ('EU', 'GB') ('SE', 'US') 
+2016
+('ZZ', 'BR') ('IE', 'GB') ('BE', 'GB') ('LU', 'GB') ('SG', 'US') ('BM', 'DE') ('EU', 'GB') ('CY', 'GB') ('SE', 'US') 
+2017
+('ZZ', 'BR') ('IE', 'GB') ('BE', 'GB') ('LU', 'GB') ('SG', 'US') ('BM', 'GB') ('EU', 'GB') ('CY', 'GB') ('SE', 'US') 
+2018
+('IE', 'US') ('ZZ', 'BR') ('LU', 'US') ('SE', 'US') ('BE', 'US') ('SG', 'US') ('BM', 'GB') ('CY', 'GB') ('EU', 'US') 
+2019
+('ZZ', 'BR') ('IE', 'GB') ('DK', 'NL') ('EU', 'GB') ('SG', 'US') ('NO', 'RU') ('LU', 'FR') ('BE', 'NL') ('CY', 'GB') 
+2020
+('ZZ', 'BR') ('IE', 'GB') ('MY', 'GB') ('DK', 'NL') ('SG', 'US') ('LU', 'DE') ('BE', 'NL') ('NO', 'RU') ('AT', 'BR') ('EU', 'US') 
+2021
+('AT', 'DE') ('ZZ', 'BR') ('IE', 'GB') ('EU', 'SE') ('HU', 'BR') ('SG', 'US') ('BE', 'DE') ('LU', 'RU') ('HK', 'US') ('SE', 'US') 
+2022
+('AT', 'DE') ('ZZ', 'BR') ('AE', 'US') ('IE', 'GB') ('EU', 'SE') ('BM', 'US') ('SG', 'US') ('LU', 'RU') ('HK', 'US') ('SE', 'US') 
+2023
+('AT', 'DE') ('ZZ', 'BR') ('AE', 'US') ('IE', 'GB') ('EU', 'SE') ('BE', 'US') ('SG', 'US') ('LU', 'RU') ('HK', 'US') ('SE', 'US') 
