@@ -4,6 +4,13 @@ import os, sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from pathlib import Path
 
+
+
+# for each country during year range, count its:
+# domestic ASR sum
+# foreign ASR sum (all foreign countries together)
+# top foreign ASR sum
+# outfile format is ',' separated three lines without blank space(for R's process)
 def count_domestic_extern_across_year(country:str,year_start:int,year_end:int,month:str='0101'):
     ofile_directory_name = 'playEgOnData/results/by_country/'+ country
     Path(ofile_directory_name).mkdir(parents=True, exist_ok=True)
@@ -12,6 +19,7 @@ def count_domestic_extern_across_year(country:str,year_start:int,year_end:int,mo
 
     list_domestic = [0]*(year_end - year_start + 1)
     list_extern = [0]*(year_end - year_start + 1)
+    list_first_foreign = [0]*(year_end - year_start + 1)
     for year in range(year_start,year_end+1):
         dict_year_neib[year] = []
         ifile = open(f"playEgOnData/results/{year}{month}/by_country/{country}/neighbors_count_by_country",'r')
@@ -23,14 +31,18 @@ def count_domestic_extern_across_year(country:str,year_start:int,year_end:int,mo
             if cc == country:
                 list_domestic[year - year_start] = count 
             else:
+                if list_first_foreign[year - year_start] == 0:
+                    list_first_foreign[year - year_start] = count
                 count_extern += count 
         list_extern[year - year_start] = count_extern
 
     ofile = open(f'{ofile_directory_name}/count_domestic_extern_across_{year_start}_{year_end}','w')
 
-    ofile.write(str(list_domestic))
+    ofile.write(str(list_domestic)[1:-1])
     ofile.write('\n')
-    ofile.write(str(list_extern))
+    ofile.write(str(list_extern)[1:-1])
+    ofile.write('\n')
+    ofile.write(str(list_first_foreign)[1:-1])
     ofile.close()
 
             
