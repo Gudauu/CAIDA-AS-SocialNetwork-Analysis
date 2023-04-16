@@ -4,7 +4,36 @@ import os, sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from pathlib import Path
 
+def count_domestic_extern_across_year(country:str,year_start:int,year_end:int,month:str='0101'):
+    ofile_directory_name = 'playEgOnData/results/by_country/'+ country
+    Path(ofile_directory_name).mkdir(parents=True, exist_ok=True)
 
+    dict_year_neib = {}
+
+    list_domestic = [0]*(year_end - year_start + 1)
+    list_extern = [0]*(year_end - year_start + 1)
+    for year in range(year_start,year_end+1):
+        dict_year_neib[year] = []
+        ifile = open(f"playEgOnData/results/{year}{month}/by_country/{country}/neighbors_count_by_country",'r')
+        count_extern = 0
+        for line in ifile:
+            dict_year_neib[year].append(line[:-1])  # strip the last '\n'
+            cc = line.split(':')[0]
+            count = int(line.split(':')[1])
+            if cc == country:
+                list_domestic[year - year_start] = count 
+            else:
+                count_extern += count 
+        list_extern[year - year_start] = count_extern
+
+    ofile = open(f'{ofile_directory_name}/count_domestic_extern_across_{year_start}_{year_end}','w')
+
+    ofile.write(str(list_domestic))
+    ofile.write('\n')
+    ofile.write(str(list_extern))
+    ofile.close()
+
+            
 
 def check_top_neighbor_across_year(country:str,year_start:int,year_end:int,month:str='0101',limit:int=10):
     ofile_directory_name = 'playEgOnData/results/by_country/'+ country
@@ -35,6 +64,16 @@ def check_top_neighbor_across_year(country:str,year_start:int,year_end:int,month
         ofile.write('\n')
     
     ofile.close()
+
+
+
+if __name__ == '__main__':
+    list_country = readList('dataCAIDA/ASN_lookup/filterd_3_neighbor_country_list') 
+    # check_top_neighbor_not_self_across_year(list_country,2001,2023)
+    # calc_ratio_top_second_across_year(list_country,2001,2023)
+    count_domestic_extern_across_year('CN',2001,2023)
+
+
 
 # countries with at least one time top AS not self:
 # {"AT","HU","LU","FI","IE","AE","CZ","EU","SI","MY","HK","BM","FR","SE","ZA","BE","DK","NO","ZZ","GB","SG","CY","PT","PR"}
@@ -132,25 +171,6 @@ def calc_ratio_top_second_across_year(country_list:list,year_start:int,year_end:
 
 
 
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
-
-if __name__ == '__main__':
-    list_country = readList('dataCAIDA/ASN_lookup/filterd_3_neighbor_country_list') 
-    # check_top_neighbor_not_self_across_year(list_country,2001,2023)
-    calc_ratio_top_second_across_year(list_country,2001,2023)
 
         
 
