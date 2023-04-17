@@ -3,9 +3,8 @@
 
 library(ggplot2)
 
-# setwd("")
+# setwd("report/R/domestic_foreign_count")
 
-list_country = readLines("dataCAIDA/ASN_lookup/filterd_3_neighbor_country_list")
 
 
 function_draw_domestic_foreign_count <- function(cc){
@@ -68,5 +67,10 @@ function_draw_domestic_foreign_count <- function(cc){
   ggsave(graph_save_path,plot = p, width = 8, height = 6, dpi = 300, device = "png")
 }
 
-function_draw_domestic_foreign_count("CA")
+
+list_country = readLines("./dataCAIDA/ASN_lookup/filterd_3_neighbor_country_list")
+# Loop through the countries and process each file
+for (country in list_country) {
+  function_draw_domestic_foreign_count(country)
+}
 
