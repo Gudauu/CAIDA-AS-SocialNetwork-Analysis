@@ -53,7 +53,9 @@ p <- ggplot() +
   # tags, scale, label
   scale_color_manual(values = c("blue", "red","green"), labels = c("domestic count", "foreign count","top foreign country count")) +
   scale_x_continuous(breaks = seq(2001, 2023, 2)) +
-  labs(x = "Year", y = "Count of AS relationships", title = "CN domestic and foreign AS rel Count")
+  labs(x = "Year", y = "Count of AS relationships", title = "CN domestic and foreign AS rel Count") +
+  # hide title on color legend
+  guides(color = guide_legend(title = NULL))
 
 
 
