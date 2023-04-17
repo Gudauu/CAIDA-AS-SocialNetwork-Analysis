@@ -43,6 +43,7 @@ def count_domestic_extern_across_year(country:str,year_start:int,year_end:int,mo
     ofile.write(str(list_extern)[1:-1])
     ofile.write('\n')
     ofile.write(str(list_first_foreign)[1:-1])
+    ofile.write('\n')
     ofile.close()
 
             
@@ -83,7 +84,8 @@ if __name__ == '__main__':
     list_country = readList('dataCAIDA/ASN_lookup/filterd_3_neighbor_country_list') 
     # check_top_neighbor_not_self_across_year(list_country,2001,2023)
     # calc_ratio_top_second_across_year(list_country,2001,2023)
-    count_domestic_extern_across_year('CN',2001,2023)
+    for cc in list_country:
+        count_domestic_extern_across_year(cc,2001,2023)
 
 
 
