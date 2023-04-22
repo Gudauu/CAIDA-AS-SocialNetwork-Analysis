@@ -2,6 +2,7 @@ from include import readList
 import numpy as np
 from scipy.optimize import curve_fit
 import matplotlib.pyplot as plt
+from sklearn.metrics import r2_score
 
 # Define the exponential function
 def exponential_func(x, a, b, c):
@@ -10,35 +11,39 @@ def exponential_func(x, a, b, c):
 # calculate the exponential fit formula of foreign ASR counts during range, and generate plot the pic
 # right now I'm only using the "0101" month data and counted domestic foreign for 2001-2023.
 # strip: how many should be removed from calc at the last
+# note that data points stripped will still appear in the pic, just won't join the calculation
 def calc_exponential_draw_pic(country:str,year_start:int=2001, year_end:int=2023,strip:int = 0):
     ifile_name = f'playEgOnData/results/by_country/{country}/count_domestic_extern_across_{year_start}_{year_end}'
     with open(ifile_name,'r') as ifile:
         ilines = ifile.readlines()
-        if strip > 0:
-            foreign_data = (ilines[1][:-1].split(','))[:-1*strip]
-        else:
-            foreign_data = (ilines[1][:-1].split(','))
+        foreign_data = (ilines[1][:-1].split(','))
     foreign_data = [int(x) for x in foreign_data]
     data = np.array(foreign_data)
     # Define the x-axis values
-    x_range = range(len(data))
-    year_range = range(year_start,year_start + len(data))
-    x_values = np.array(x_range) 
-    x_show_values = np.array(year_range)
+    x_values = np.arange(len(data)-strip)  # strip the last ones
+    # year_values is what's gonna show on pic
+    year_values = np.arange(year_start,year_start + len(data))
 
     # Fit the exponential function to the data
-    popt, pcov = curve_fit(exponential_func, x_values, data)
+    popt, pcov = curve_fit(exponential_func, x_values, data[:-1*strip])
+    y_pred = exponential_func(x_values, *popt)
+
 
     # Print the fitted parameters
-    print(popt)
+    # print(popt)
 
     # Plot the data and the fitted function
-    plt.plot(x_show_values, data, 'bo', label='data')
-    plt.plot(x_show_values, exponential_func(x_values, *popt), 'r-', label='fit')
+    plt.plot(year_values, data, 'bo', label='data')
+    plt.plot(year_values[:-1*strip], y_pred, 'r-', label='fit')
 
     # Annotate the equation on the plot
     equation = f'y = {popt[0]:.2f} * exp({-1*popt[1]:.2f} * x) + ({popt[2]:.2f})'
-    plt.annotate(equation, xy=(0.3, 0.7), xycoords='axes fraction',fontsize=14)
+    # Calculate and print the R-squared value
+    r2 = r2_score(data[:-1*strip], y_pred)
+    # print(f"R-squared: {r2:.4f}")
+    annotation_R_square = f'R-square: {r2}'
+    plt.annotate(equation, xy=(0.05, 0.7), xycoords='axes fraction',fontsize=11)
+    plt.annotate(annotation_R_square, xy=(0.05, 0.6), xycoords='axes fraction',fontsize=10)
 
     # Add legend and axis labels
     plt.legend()
@@ -46,7 +51,10 @@ def calc_exponential_draw_pic(country:str,year_start:int=2001, year_end:int=2023
     plt.ylabel('foreign ASR count')
 
     # Save the figure
-    plt.savefig(f'playEgOnData/results/by_country/{country}/exponential_fit_foreign_ASR_count.png')
+    if strip > 0:
+        plt.savefig(f'playEgOnData/results/by_country/{country}/exponential_fit_foreign_ASR_count_{year_start}_{year_end}_strip_{strip}.png')
+    else:  
+        plt.savefig(f'playEgOnData/results/by_country/{country}/exponential_fit_foreign_ASR_count_{year_start}_{year_end}.png')
     plt.clf()
 
     # Show the plot
@@ -59,7 +67,7 @@ if __name__ == '__main__':
     failed_cc = []
     for cc in list_country:
         try:
-            calc_exponential_draw_pic(cc)
+            calc_exponential_draw_pic(cc,strip = 4)
         except RuntimeError:
             print(f"Failed to fit curve for country: {cc}")
             failed_cc.append(cc)
