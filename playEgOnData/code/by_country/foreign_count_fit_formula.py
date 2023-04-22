@@ -1,3 +1,4 @@
+from include import readList
 import numpy as np
 from scipy.optimize import curve_fit
 import matplotlib.pyplot as plt
@@ -20,7 +21,10 @@ def calc_exponential_draw_pic(country:str,year_start:int=2001, year_end:int=2023
     foreign_data = [int(x) for x in foreign_data]
     data = np.array(foreign_data)
     # Define the x-axis values
-    x_values = np.arange(len(data))
+    x_range = range(len(data))
+    year_range = range(year_start,year_start + len(data))
+    x_values = np.array(x_range) 
+    x_show_values = np.array(year_range)
 
     # Fit the exponential function to the data
     popt, pcov = curve_fit(exponential_func, x_values, data)
@@ -29,8 +33,8 @@ def calc_exponential_draw_pic(country:str,year_start:int=2001, year_end:int=2023
     print(popt)
 
     # Plot the data and the fitted function
-    plt.plot(x_values, data, 'bo', label='data')
-    plt.plot(x_values, exponential_func(x_values, *popt), 'r-', label='fit')
+    plt.plot(x_show_values, data, 'bo', label='data')
+    plt.plot(x_show_values, exponential_func(x_values, *popt), 'r-', label='fit')
 
     # Annotate the equation on the plot
     equation = f'y = {popt[0]:.2f} * exp({-1*popt[1]:.2f} * x) + ({popt[2]:.2f})'
@@ -38,17 +42,28 @@ def calc_exponential_draw_pic(country:str,year_start:int=2001, year_end:int=2023
 
     # Add legend and axis labels
     plt.legend()
-    plt.xlabel('x')
-    plt.ylabel('y')
+    plt.xlabel('year')
+    plt.ylabel('foreign ASR count')
 
     # Save the figure
     plt.savefig(f'playEgOnData/results/by_country/{country}/exponential_fit_foreign_ASR_count.png')
+    plt.clf()
 
     # Show the plot
-    plt.show()
+    # plt.show()
 
 if __name__ == '__main__':
-    calc_exponential_draw_pic("AU")
+    list_country = readList('dataCAIDA/ASN_lookup/filterd_3_neighbor_country_list') 
+    # check_top_neighbor_not_self_across_year(list_country,2001,2023)
+    # calc_ratio_top_second_across_year(list_country,2001,2023)
+    failed_cc = []
+    for cc in list_country[:2]:
+        try:
+            calc_exponential_draw_pic(cc)
+        except RuntimeError:
+            print(f"Failed to fit curve for country: {cc}")
+            failed_cc.append(cc)
+    print("Failed countries: ", failed_cc) # ['BG', 'BR', 'ZA', 'UA', 'PL', 'ZZ', 'FI', 'CA', 'JP']
 
 
     
