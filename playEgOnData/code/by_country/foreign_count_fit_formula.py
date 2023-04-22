@@ -57,7 +57,7 @@ if __name__ == '__main__':
     # check_top_neighbor_not_self_across_year(list_country,2001,2023)
     # calc_ratio_top_second_across_year(list_country,2001,2023)
     failed_cc = []
-    for cc in list_country[:2]:
+    for cc in list_country:
         try:
             calc_exponential_draw_pic(cc)
         except RuntimeError:
