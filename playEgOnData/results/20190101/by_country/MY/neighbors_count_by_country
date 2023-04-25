@@ -10,10 +10,10 @@ ID:73
 FR:70
 IT:66
 AU:64
-CH:44
+CH:46
 KH:44
 BG:42
-AT:31
+AT:32
 ZA:26
 JP:26
 PH:26
@@ -28,8 +28,8 @@ TH:14
 DK:13
 IE:13
 UA:12
-RO:11
 KR:10
+RO:10
 TW:10
 BD:10
 BH:10
@@ -80,7 +80,6 @@ AG:2
 SC:2
 MW:2
 GH:2
-ts:1
 HR:1
 MV:1
 BM:1
@@ -88,7 +87,6 @@ QA:1
 SI:1
 LA:1
 KE:1
-by:1
 MK:1
 GE:1
 MG:1

@@ -9,10 +9,10 @@ BR:49
 FR:49
 BG:38
 IT:35
-AT:24
+AT:25
 00:19
 PL:19
-CH:16
+CH:18
 CA:15
 UA:14
 ES:11
@@ -26,13 +26,13 @@ AU:9
 SE:9
 IE:7
 SG:7
-RO:6
 CY:6
 IL:5
 CZ:5
 TH:5
 MY:5
 HU:5
+RO:5
 IS:5
 MD:4
 SK:4
@@ -65,7 +65,6 @@ MU:2
 UG:2
 MN:2
 CL:2
-ts:1
 KW:1
 HR:1
 MV:1
@@ -85,7 +84,6 @@ PR:1
 TW:1
 AR:1
 CW:1
-by:1
 AI:1
 GE:1
 SC:1

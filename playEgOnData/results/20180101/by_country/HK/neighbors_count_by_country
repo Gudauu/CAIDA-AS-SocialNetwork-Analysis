@@ -14,7 +14,7 @@ DK:74
 CN:73
 ID:73
 IT:60
-CH:53
+CH:55
 MY:51
 TW:48
 BR:33
@@ -22,7 +22,7 @@ CA:29
 BG:29
 00:29
 SE:28
-IN:21
+IN:22
 LU:20
 TH:19
 ZA:17
@@ -30,8 +30,8 @@ VN:17
 AT:14
 KR:13
 ZZ:11
-NO:11
 BD:11
+NO:10
 BE:10
 MU:9
 EU:8
@@ -72,7 +72,6 @@ MM:2
 IM:2
 GI:2
 MN:2
-ts:1
 MD:1
 MC:1
 EG:1
@@ -83,7 +82,6 @@ KE:1
 GP:1
 PR:1
 DJ:1
-by:1
 GE:1
 RE:1
 MG:1

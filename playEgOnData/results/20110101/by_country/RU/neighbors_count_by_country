@@ -1,4 +1,4 @@
-RU:6842
+RU:6851
 GB:864
 00:550
 DE:468
@@ -8,7 +8,7 @@ ZZ:391
 FR:360
 AG:179
 AT:145
-CH:136
+CH:138
 UA:135
 SE:74
 LT:71
@@ -37,10 +37,10 @@ KZ:14
 MD:13
 IE:13
 TW:11
+GE:11
 HU:10
 GI:10
 BY:10
-GE:10
 AU:9
 CY:9
 PT:9
@@ -50,13 +50,13 @@ CN:8
 LV:8
 EE:7
 MT:7
-RS:6
 AM:6
 TJ:6
 JP:5
 PK:5
 PH:4
 HR:4
+RS:4
 SI:4
 LI:4
 IM:4
@@ -69,8 +69,6 @@ BT:3
 QA:3
 ID:3
 TM:3
-re:3
-ts:2
 KR:2
 SG:2
 JE:2
@@ -78,18 +76,15 @@ IN:2
 KE:2
 AR:2
 TH:2
-nk:2
 KG:2
 SK:2
 DM:2
-n :2
 SC:2
 BZ:2
 BR:1
 GU:1
 NZ:1
 MW:1
-ww:1
 BM:1
 MN:1
 AL:1

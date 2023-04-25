@@ -4,13 +4,13 @@ GB:232
 NL:212
 DE:159
 SE:135
-CH:80
+CH:82
 FR:72
 RU:70
-NO:69
+NO:70
 IT:51
 EU:25
-AT:22
+AT:23
 BG:21
 CA:21
 00:20
@@ -29,10 +29,10 @@ UA:10
 CZ:9
 ES:9
 IE:8
-RO:8
 KR:8
 MU:8
 ZA:7
+RO:7
 TW:7
 BR:7
 IL:6
@@ -60,7 +60,6 @@ BH:2
 NZ:2
 QA:2
 GE:2
-ts:1
 KW:1
 AM:1
 LK:1
@@ -70,7 +69,6 @@ PK:1
 VN:1
 LI:1
 SK:1
-by:1
 NG:1
 KZ:1
 MN:1
@@ -86,5 +84,4 @@ CN:1
 PT:1
 GL:1
 FO:1
-ng:1
 CL:1

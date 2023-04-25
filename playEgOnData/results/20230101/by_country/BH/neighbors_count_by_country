@@ -3,9 +3,9 @@ US:233
 ID:70
 GB:60
 RU:56
-AT:50
+AT:51
+CH:50
 SG:48
-CH:46
 IT:40
 BH:38
 NL:37
@@ -22,9 +22,9 @@ TH:14
 ZA:14
 MY:13
 AE:12
-RO:12
 SE:12
 LU:11
+RO:11
 KH:11
 LT:11
 CN:10
@@ -51,7 +51,6 @@ VG:4
 AO:4
 AG:4
 MU:4
-ts:4
 JO:3
 LA:3
 LK:3
@@ -91,7 +90,7 @@ VE:1
 IR:1
 SC:1
 PE:1
-e :1
+HR:1
 SZ:1
 UY:1
 SI:1

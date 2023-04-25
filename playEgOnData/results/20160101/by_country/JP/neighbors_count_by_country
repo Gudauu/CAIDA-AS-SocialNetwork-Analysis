@@ -1,4 +1,4 @@
-JP:1312
+JP:1314
 US:631
 GB:326
 AU:266
@@ -9,17 +9,17 @@ DE:80
 RU:68
 FR:62
 ID:45
+CH:37
 IT:36
-CH:35
 TW:35
 00:32
 PH:31
 CA:30
 MY:29
 KR:22
+IN:22
 TH:21
 CN:21
-IN:21
 DK:18
 BG:17
 KH:16
@@ -34,7 +34,7 @@ SE:10
 LU:9
 PL:9
 AT:8
-NO:8
+NO:7
 RO:7
 IE:6
 IS:6
@@ -67,8 +67,6 @@ MW:2
 UG:2
 EE:2
 FI:2
-ty:2
-ts:1
 MV:1
 GI:1
 BM:1
@@ -81,7 +79,6 @@ LI:1
 GE:1
 AZ:1
 SK:1
-by:1
 AG:1
 MG:1
 NG:1

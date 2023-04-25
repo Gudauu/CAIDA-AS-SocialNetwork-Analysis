@@ -8,8 +8,8 @@ FR:47
 BG:40
 IT:34
 SG:27
-AT:23
-CH:23
+CH:25
+AT:24
 BH:22
 PL:20
 HK:19
@@ -23,7 +23,7 @@ CA:11
 ZA:10
 MY:10
 LU:10
-RO:10
+RO:9
 BD:9
 ES:8
 SA:8
@@ -72,7 +72,6 @@ AZ:2
 MW:2
 MU:2
 JO:2
-ts:1
 HR:1
 BM:1
 SI:1
@@ -82,7 +81,6 @@ BN:1
 AR:1
 GI:1
 DJ:1
-by:1
 AG:1
 MK:1
 GE:1

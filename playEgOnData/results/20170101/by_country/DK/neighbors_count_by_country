@@ -5,8 +5,8 @@ GB:201
 DE:163
 SE:148
 RU:114
-CH:98
-NO:69
+CH:100
+NO:70
 IT:57
 FR:56
 BG:46
@@ -14,9 +14,9 @@ ID:44
 SG:31
 AU:26
 CA:22
+AT:19
 IS:19
 EU:18
-AT:18
 FI:16
 JP:15
 UA:13
@@ -24,12 +24,12 @@ MU:13
 BE:12
 ZA:12
 LU:12
-RO:12
 PL:12
 00:12
 ES:11
 HK:11
 IE:11
+RO:11
 LT:11
 CO:10
 CZ:9
@@ -63,7 +63,6 @@ SA:2
 BH:2
 NZ:2
 QA:2
-ts:1
 KW:1
 KG:1
 LK:1
@@ -72,7 +71,6 @@ PK:1
 VN:1
 LI:1
 AZ:1
-by:1
 AI:1
 GE:1
 KZ:1
@@ -86,5 +84,4 @@ BT:1
 IQ:1
 GL:1
 FO:1
-ng:1
 CL:1

@@ -15,9 +15,9 @@ BR:37
 MY:37
 TH:36
 CN:35
-CH:32
+CH:33
 BG:31
-AT:24
+AT:25
 MM:24
 PL:23
 LU:22
@@ -30,9 +30,9 @@ ZA:18
 DK:15
 TW:13
 SE:13
-RO:12
 BH:12
 IE:11
+RO:11
 ES:10
 CZ:10
 IN:10
@@ -83,7 +83,6 @@ UG:2
 GH:2
 MN:2
 BN:2
-ts:1
 BM:1
 JE:1
 SZ:1
@@ -95,7 +94,7 @@ MG:1
 NG:1
 BW:1
 BF:1
-e :1
+HR:1
 IR:1
 ZZ:1
 MT:1

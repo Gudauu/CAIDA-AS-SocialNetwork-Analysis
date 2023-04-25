@@ -6,9 +6,9 @@ GB:58
 BR:44
 SG:42
 IT:37
+AT:36
 NL:35
-AT:35
-CH:33
+CH:34
 FR:33
 BG:30
 BH:27
@@ -26,10 +26,10 @@ LU:11
 IE:9
 AE:9
 CN:8
-RO:8
 LT:8
 BD:8
 CZ:7
+RO:7
 VN:7
 ES:7
 KW:7
@@ -72,7 +72,6 @@ NZ:2
 JO:2
 SC:2
 00:2
-ts:1
 NP:1
 SK:1
 EG:1

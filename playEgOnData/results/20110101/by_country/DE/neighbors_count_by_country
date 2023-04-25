@@ -1,8 +1,8 @@
-DE:1998
+DE:2000
 GB:845
 US:629
-AT:527
-CH:516
+AT:529
+CH:519
 RU:441
 NL:431
 FR:213
@@ -15,7 +15,7 @@ FI:87
 SE:78
 DK:67
 CA:42
-RO:38
+RO:36
 PL:33
 ZZ:28
 BE:27
@@ -44,7 +44,6 @@ JP:6
 PT:5
 MY:4
 AE:4
-ts:3
 EE:3
 ZA:3
 HR:3
@@ -70,7 +69,6 @@ MK:1
 IN:1
 JE:1
 FO:1
-es:1
 SY:1
 MA:1
 SA:1
@@ -78,7 +76,6 @@ IM:1
 BM:1
 PK:1
 BY:1
- E:1
 GH:1
 AL:1
 UZ:1

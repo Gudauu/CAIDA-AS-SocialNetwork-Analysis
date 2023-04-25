@@ -8,9 +8,9 @@ RU:96
 ID:63
 IT:57
 BG:46
+CH:38
 KE:38
-CH:36
-AT:27
+AT:28
 LU:25
 PL:23
 DK:20
@@ -22,9 +22,9 @@ TZ:17
 BE:16
 UA:16
 MZ:16
-RO:14
 UG:14
 NO:13
+RO:13
 HK:13
 SE:13
 IE:12
@@ -88,7 +88,6 @@ GH:2
 BH:2
 BF:2
 ZM:2
-ts:1
 KW:1
 HR:1
 MC:1
@@ -99,7 +98,6 @@ QA:1
 CW:1
 GP:1
 AR:1
-by:1
 MK:1
 GE:1
 RE:1

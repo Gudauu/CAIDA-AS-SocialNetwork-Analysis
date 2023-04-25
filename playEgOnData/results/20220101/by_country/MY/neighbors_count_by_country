@@ -9,10 +9,10 @@ AU:105
 HK:87
 RU:80
 IT:69
-CH:57
+CH:61
 FR:56
 BR:51
-AT:46
+AT:47
 KH:40
 BG:39
 ZA:33
@@ -22,7 +22,7 @@ PL:28
 TH:23
 LU:23
 CN:18
-RO:18
+RO:17
 IE:16
 JP:16
 MM:16
@@ -49,7 +49,6 @@ CO:5
 KR:5
 AO:5
 FI:5
-ts:4
 MD:4
 SK:4
 GR:4
@@ -97,7 +96,7 @@ DJ:1
 GE:1
 MG:1
 BW:1
-e :1
+HR:1
 IR:1
 MN:1
 PE:1

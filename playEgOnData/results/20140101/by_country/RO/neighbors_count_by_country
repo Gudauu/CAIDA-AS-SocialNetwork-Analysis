@@ -1,5 +1,5 @@
 RO:1003
-GB:135
+GB:136
 US:116
 RU:115
 DE:87
@@ -35,6 +35,7 @@ BE:6
 SK:5
 EE:5
 ES:4
+CY:4
 IQ:4
 SA:3
 BY:3
@@ -45,10 +46,8 @@ RS:2
 IN:2
 LI:2
 CL:2
-el:2
 KG:2
 IE:2
-CY:2
 KZ:2
 GE:2
 CW:2
@@ -60,7 +59,6 @@ AL:1
 MK:1
 LB:1
 BA:1
-it:1
 AE:1
 TJ:1
 IM:1

@@ -13,8 +13,8 @@ BG:42
 IT:37
 NG:37
 ZZ:29
-AT:25
-CH:23
+AT:26
+CH:25
 PL:21
 CA:16
 PT:13
@@ -23,8 +23,8 @@ BE:12
 HK:12
 LU:11
 SG:10
-RO:10
 SE:10
+RO:9
 NO:8
 CZ:8
 AU:8
@@ -77,7 +77,6 @@ TZ:2
 UG:2
 ZW:2
 GH:2
-ts:1
 KW:1
 HR:1
 UY:1
@@ -93,7 +92,6 @@ GP:1
 EC:1
 SX:1
 DJ:1
-by:1
 AG:1
 MK:1
 GE:1

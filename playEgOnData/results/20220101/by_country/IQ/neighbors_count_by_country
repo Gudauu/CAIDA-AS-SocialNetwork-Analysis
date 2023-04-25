@@ -5,11 +5,11 @@ IQ:269
 NL:147
 US:143
 IT:67
-CH:61
+CH:65
 ID:59
 FR:51
 BR:49
-AT:45
+AT:46
 BG:34
 UA:30
 PL:27
@@ -18,8 +18,8 @@ LU:21
 HK:19
 AU:18
 SG:15
-RO:15
 IE:14
+RO:14
 ES:13
 SE:13
 LT:13
@@ -48,7 +48,6 @@ KZ:4
 KR:4
 JP:4
 IS:4
-ts:3
 EU:3
 SK:3
 RS:3
@@ -90,11 +89,10 @@ BT:1
 SZ:1
 TG:1
 DJ:1
-by:1
 GE:1
 MG:1
 BW:1
-e :1
+HR:1
 00:1
 IR:1
 VC:1

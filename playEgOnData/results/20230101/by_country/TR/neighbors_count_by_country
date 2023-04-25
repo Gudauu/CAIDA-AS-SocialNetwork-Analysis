@@ -1,9 +1,9 @@
-TR:888
+TR:889
 NL:116
 DE:105
 US:86
+CH:61
 GB:58
-CH:58
 IT:52
 BR:39
 BG:34
@@ -36,7 +36,6 @@ EU:4
 BF:3
 CN:3
 MY:3
-ts:3
 AO:3
 AG:3
 AE:3
@@ -61,7 +60,7 @@ MV:1
 TH:1
 MD:1
 AZ:1
-e :1
+HR:1
 VG:1
 CL:1
 IS:1
@@ -70,5 +69,4 @@ PL:1
 JP:1
 EE:1
 MM:1
-No:1
 AM:1

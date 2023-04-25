@@ -1,10 +1,10 @@
-FI:346
+FI:348
 DE:146
 US:145
 NL:122
 GB:116
+CH:60
 RU:59
-CH:57
 SE:57
 FR:42
 IT:38
@@ -42,9 +42,7 @@ IQ:4
 PH:4
 CN:3
 SC:3
-CY:3
 GR:3
-ts:3
 CO:3
 TW:2
 JP:2
@@ -64,6 +62,7 @@ LV:1
 NG:1
 PT:1
 MG:1
+CY:1
 QA:1
 AM:1
 HU:1

@@ -9,10 +9,10 @@ RU:105
 IT:89
 BG:82
 FR:74
-CH:68
+CH:70
 ZZ:48
 SG:41
-AT:36
+AT:38
 SE:36
 AU:34
 00:24
@@ -29,7 +29,6 @@ BW:15
 LU:14
 JP:14
 CA:12
-RO:11
 CY:11
 KE:11
 TH:10
@@ -37,6 +36,7 @@ MY:10
 IS:10
 CO:10
 CZ:9
+RO:9
 GR:9
 LT:9
 IL:8
@@ -93,12 +93,10 @@ CM:2
 RW:2
 SS:2
 LS:2
-ts:1
 KW:1
 HR:1
 EG:1
 DJ:1
-by:1
 AI:1
 IQ:1
 VN:1

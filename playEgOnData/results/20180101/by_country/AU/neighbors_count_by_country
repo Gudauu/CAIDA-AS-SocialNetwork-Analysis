@@ -1,4 +1,4 @@
-AU:5908
+AU:5915
 US:1723
 GB:628
 DE:474
@@ -14,8 +14,8 @@ SG:113
 IT:105
 BG:96
 CA:91
-CH:75
-AT:60
+CH:79
+AT:62
 CN:54
 TH:43
 PH:42
@@ -41,9 +41,9 @@ ES:21
 CZ:19
 IE:17
 PG:17
-RO:16
 IN:16
 CY:15
+RO:14
 NC:14
 IL:12
 HU:12
@@ -62,7 +62,6 @@ VG:8
 OM:7
 KZ:7
 SC:7
-as:7
 TO:7
 GI:6
 RS:6
@@ -88,7 +87,6 @@ IQ:3
 FI:3
 MN:3
 BH:3
-ts:2
 KW:2
 HR:2
 KG:2
@@ -96,7 +94,6 @@ EG:2
 BM:2
 KE:2
 DJ:2
-by:2
 AG:2
 AI:2
 MK:2

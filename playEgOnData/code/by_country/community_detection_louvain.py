@@ -21,7 +21,7 @@ def community_detection(year:int,suffix:str = "0101") -> None:
         with open(filepath, "r") as f:
             for line in f:
                 neighbor, weight = line.strip().split(":")
-                if str(neighbor) in ["n ","es"]:#["ZZ","00","et","ts"]:  
+                if str(neighbor) in ["ZZ","00"]:#[,"et","ts"]:  
                     continue
                 weight = int(weight)
                 # Check if the edge already exists

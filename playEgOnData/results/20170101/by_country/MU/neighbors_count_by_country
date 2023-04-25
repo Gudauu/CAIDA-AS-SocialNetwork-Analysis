@@ -9,9 +9,9 @@ ID:63
 IT:51
 BG:50
 SE:34
-AT:25
+CH:26
+AT:26
 KE:25
-CH:24
 ZZ:20
 PL:20
 00:20
@@ -26,10 +26,10 @@ CA:11
 AU:10
 IE:9
 HK:9
-RO:9
 SG:9
 MZ:9
 CZ:8
+RO:8
 TZ:8
 IL:7
 TH:6
@@ -78,7 +78,6 @@ MN:2
 CO:2
 BR:2
 BI:2
-ts:1
 KW:1
 HR:1
 PH:1
@@ -96,7 +95,6 @@ VN:1
 LI:1
 GP:1
 DJ:1
-by:1
 AG:1
 AI:1
 GE:1

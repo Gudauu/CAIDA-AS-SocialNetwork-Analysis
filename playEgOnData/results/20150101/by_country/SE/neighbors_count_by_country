@@ -1,18 +1,18 @@
 US:466
-SE:412
+SE:414
 DE:360
 GB:314
 NL:240
 RU:239
 FR:112
 NO:87
-CH:78
+CH:80
 DK:74
 00:63
 IT:60
 FI:54
+AT:43
 PL:43
-AT:42
 CZ:34
 AG:32
 CA:27
@@ -22,7 +22,7 @@ BE:24
 ES:23
 ZA:21
 HK:21
-RO:20
+RO:19
 ZZ:18
 UA:17
 AU:17
@@ -53,6 +53,7 @@ AE:5
 IN:5
 LV:5
 TR:5
+HR:4
 IS:4
 TW:4
 SA:4
@@ -60,7 +61,6 @@ PA:4
 CO:4
 SK:4
 VN:4
-HR:3
 PH:3
 GR:3
 BA:3
@@ -72,7 +72,6 @@ MT:3
 MX:3
 EC:3
 NP:3
-ts:2
 BY:2
 OM:2
 QA:2
@@ -103,7 +102,6 @@ LI:1
 MW:1
 MG:1
 KZ:1
-on:1
 AM:1
 MN:1
 UY:1
@@ -115,8 +113,6 @@ FO:1
 SV:1
 MK:1
 MZ:1
-e :1
 HT:1
 CR:1
 TZ:1
-Id:1

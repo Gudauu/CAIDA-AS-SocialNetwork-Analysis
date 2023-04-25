@@ -2,7 +2,7 @@ SI:403
 AT:60
 US:49
 IT:46
-CH:39
+CH:40
 GB:30
 DE:30
 NL:26
@@ -13,9 +13,9 @@ RS:10
 AU:10
 SG:10
 MK:8
+HR:8
 BA:7
 PH:7
-HR:7
 LU:7
 DK:5
 HK:4
@@ -42,12 +42,10 @@ IQ:1
 AG:1
 CO:1
 IS:1
-ts:1
 CA:1
 ES:1
 BH:1
 UA:1
 CZ:1
-e :1
 TR:1
 EE:1

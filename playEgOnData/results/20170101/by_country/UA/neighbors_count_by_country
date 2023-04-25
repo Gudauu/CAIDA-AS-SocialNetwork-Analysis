@@ -1,4 +1,4 @@
-UA:2428
+UA:2429
 RU:485
 BG:324
 US:227
@@ -33,6 +33,7 @@ CZ:4
 EU:4
 LV:4
 GI:4
+GE:4
 IE:4
 BE:3
 CA:3
@@ -42,10 +43,8 @@ SC:3
 TR:3
 IR:3
 LB:2
-GE:2
 MY:2
 LK:2
-ww:2
 EE:2
 HN:2
 CN:1
@@ -54,7 +53,6 @@ PK:1
 ZA:1
 PT:1
 LU:1
-as:1
 VG:1
 HU:1
 SI:1

@@ -55,7 +55,7 @@ def track_neighbor(version:str,country_code:str) -> None:
 
 if __name__ == '__main__':
     list_country = readList('dataCAIDA/ASN_lookup/country_list') 
-    for year in range(2001,2023+1):
+    for year in [2000,2023]:
         version = str(year) + '0101'
         for cc in list_country:
             track_neighbor(version,cc)

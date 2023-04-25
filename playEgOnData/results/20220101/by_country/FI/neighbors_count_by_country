@@ -1,11 +1,11 @@
-FI:338
+FI:340
 US:129
 DE:129
 GB:119
 NL:78
 RU:61
+CH:51
 SE:51
-CH:48
 IT:36
 FR:34
 ID:32
@@ -35,10 +35,8 @@ EE:4
 ES:4
 CZ:3
 TH:3
-CY:3
 MU:3
 AO:3
-ts:3
 BF:3
 IQ:3
 ZZ:3
@@ -59,6 +57,7 @@ QA:1
 AE:1
 SI:1
 LV:1
+CY:1
 GR:1
 RS:1
 MK:1

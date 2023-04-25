@@ -1,4 +1,4 @@
-RU:5558
+RU:5567
 GB:602
 00:590
 DE:573
@@ -8,7 +8,7 @@ ZZ:333
 FR:197
 AG:189
 UA:115
-CH:89
+CH:96
 AT:77
 IT:50
 LT:50
@@ -43,9 +43,7 @@ PT:9
 TJ:9
 BY:8
 MD:8
-ts:7
 EE:7
-RS:7
 AM:7
 UZ:7
 GE:7
@@ -54,6 +52,7 @@ MT:6
 HK:6
 AU:6
 MY:5
+RS:5
 SI:5
 IM:5
 KR:5
@@ -67,7 +66,6 @@ IN:3
 ID:3
 BT:3
 ZW:3
-re:3
 AZ:3
 TH:3
 IS:3
@@ -75,9 +73,7 @@ JE:3
 MW:3
 NZ:2
 KG:2
-nk:2
 DM:2
-n :2
 BZ:2
 SC:2
 HR:2

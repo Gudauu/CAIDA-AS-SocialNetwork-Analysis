@@ -3,8 +3,8 @@ US:512
 GB:364
 FR:324
 DE:309
+CH:299
 IT:290
-CH:290
 BR:204
 NL:136
 RU:100
@@ -34,7 +34,6 @@ UA:10
 MY:10
 KH:10
 MU:10
-ts:9
 EC:9
 CN:8
 BH:8
@@ -77,6 +76,7 @@ TD:2
 AD:2
 GR:2
 TR:2
+HR:2
 UY:2
 MA:2
 CR:2
@@ -108,12 +108,10 @@ SL:1
 RE:1
 GN:1
 ST:1
-e :1
 VE:1
 AW:1
 CU:1
 CM:1
-HR:1
 HN:1
 NI:1
 TT:1

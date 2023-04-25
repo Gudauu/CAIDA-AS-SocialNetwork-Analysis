@@ -9,8 +9,8 @@ ID:62
 IT:58
 BG:48
 SE:38
-CH:34
-AT:27
+CH:36
+AT:28
 KE:26
 ZZ:25
 LU:20
@@ -27,11 +27,11 @@ MU:11
 MZ:11
 IE:10
 ES:10
-RO:9
 CA:9
 HK:9
 NO:8
 CZ:8
+RO:8
 IL:7
 CY:7
 SO:7
@@ -79,7 +79,6 @@ IM:2
 AZ:2
 KZ:2
 MG:2
-ts:1
 KW:1
 HR:1
 PH:1
@@ -94,7 +93,6 @@ BT:1
 GP:1
 AR:1
 DJ:1
-by:1
 AG:1
 AI:1
 MK:1

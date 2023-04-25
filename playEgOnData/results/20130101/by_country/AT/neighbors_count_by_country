@@ -1,21 +1,21 @@
-AT:895
+AT:905
 DE:506
 GB:215
 US:194
 FR:191
-CH:157
+CH:160
 NL:150
 RU:121
 IT:90
 00:66
 SI:38
-RO:34
 BG:32
 PL:32
 UA:31
+RO:29
 CZ:25
+HR:22
 EU:21
-HR:21
 SE:20
 LU:17
 LT:15
@@ -57,7 +57,6 @@ BY:2
 AE:2
 AG:2
 MG:2
-it:2
 UZ:2
 JO:2
 KR:2
@@ -65,13 +64,8 @@ ID:2
 KE:2
 IM:2
 AU:2
-s]:2
-ts:1
 CN:1
-es:1
-by:1
 RE:1
-e :1
 EE:1
 IS:1
 OM:1
@@ -87,4 +81,3 @@ NG:1
 SG:1
 MT:1
 SK:1
-er:1

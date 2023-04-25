@@ -1,5 +1,5 @@
 RO:1171
-GB:239
+GB:240
 DE:182
 RU:131
 00:105
@@ -16,7 +16,7 @@ MD:22
 UA:21
 CZ:19
 IT:18
-SE:17
+SE:18
 LT:17
 BE:12
 AG:12
@@ -30,8 +30,8 @@ AZ:7
 AU:7
 LU:6
 LV:5
+CY:5
 ES:5
-CY:4
 SK:4
 DK:4
 SA:4
@@ -64,12 +64,9 @@ GR:1
 BA:1
 GI:1
 PS:1
-Id:1
-el:1
 CW:1
 KY:1
 IM:1
 BW:1
-it:1
 SC:1
 CL:1

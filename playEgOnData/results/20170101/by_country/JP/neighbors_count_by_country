@@ -1,4 +1,4 @@
-JP:1299
+JP:1301
 US:603
 AU:282
 GB:269
@@ -13,15 +13,15 @@ BG:41
 IT:40
 PH:36
 MY:34
+CH:33
 TW:33
 00:33
-CH:31
 CN:29
 CA:27
 KH:24
 TH:23
 KR:20
-IN:19
+IN:20
 DK:16
 ES:13
 BE:13
@@ -34,9 +34,9 @@ LU:11
 AT:9
 UA:9
 ZZ:8
-NO:8
 RO:8
 PL:8
+NO:7
 IE:6
 IL:5
 IS:5
@@ -68,8 +68,6 @@ KZ:2
 MW:2
 UG:2
 FI:2
-ty:2
-ts:1
 MD:1
 MV:1
 GI:1
@@ -79,7 +77,6 @@ KE:1
 BT:1
 PG:1
 LI:1
-by:1
 AG:1
 AI:1
 GE:1

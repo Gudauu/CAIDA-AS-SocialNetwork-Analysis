@@ -8,8 +8,8 @@ UA:64
 FR:51
 00:27
 IT:24
+CH:21
 AT:20
-CH:20
 PL:14
 SE:14
 DK:11
@@ -41,6 +41,7 @@ FI:3
 SI:3
 KR:3
 IM:3
+GE:3
 PT:2
 AU:2
 HU:2
@@ -54,11 +55,9 @@ TW:2
 JP:2
 PK:2
 NA:2
-GE:2
 KW:2
 IQ:2
 IR:2
-ts:1
 HR:1
 PH:1
 MV:1
@@ -82,7 +81,6 @@ UG:1
 NG:1
 SA:1
 SK:1
-ww:1
 MN:1
 VG:1
 JO:1

@@ -3,7 +3,7 @@ US:565
 GB:403
 DE:316
 IT:246
-CH:220
+CH:229
 BR:176
 FR:175
 NL:156
@@ -39,7 +39,6 @@ IL:10
 AG:10
 PE:10
 KH:9
-ts:9
 CL:9
 CY:8
 FI:7
@@ -93,6 +92,7 @@ SC:2
 NA:2
 VE:2
 AD:2
+HR:2
 GP:2
 CR:2
 NI:2
@@ -113,8 +113,6 @@ IR:1
 SZ:1
 SI:1
 JO:1
-e :1
-HR:1
 MA:1
 DZ:1
 HN:1

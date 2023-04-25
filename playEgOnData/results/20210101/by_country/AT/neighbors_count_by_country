@@ -1,6 +1,6 @@
 DE:1728
-AT:1535
-CH:891
+AT:1544
+CH:902
 RU:734
 US:727
 NL:573
@@ -20,9 +20,9 @@ ZA:86
 SG:82
 SK:74
 AU:66
-RO:63
 LT:63
 HU:59
+RO:57
 IE:55
 ES:55
 BE:45
@@ -50,6 +50,7 @@ AG:22
 SA:21
 SC:21
 EU:19
+HR:19
 ZZ:17
 AZ:17
 GR:16
@@ -58,7 +59,6 @@ IS:15
 VG:14
 OM:13
 PS:13
-HR:13
 AM:12
 EG:12
 AE:12
@@ -76,13 +76,10 @@ BM:6
 SZ:6
 PY:6
 GI:6
-by:6
 MW:6
-e :6
 MN:6
 AF:6
 IQ:6
-ts:5
 BF:5
 EE:5
 CL:4
@@ -96,7 +93,5 @@ BD:3
 MO:3
 KG:3
 QA:2
-s]:2
 JP:2
 MV:1
-it:1

@@ -7,10 +7,10 @@ FR:56
 RU:53
 IT:33
 SE:31
+CH:22
 BG:21
-CH:20
+AT:18
 PL:18
-AT:17
 ZZ:15
 00:15
 KE:15
@@ -18,8 +18,8 @@ BE:12
 UA:12
 ES:11
 LU:11
-RO:10
 MU:10
+RO:9
 TZ:9
 MZ:9
 DK:8
@@ -73,7 +73,6 @@ IQ:2
 CO:2
 LS:2
 ZM:2
-ts:1
 KW:1
 HR:1
 PH:1
@@ -89,7 +88,6 @@ VN:1
 LI:1
 BR:1
 AZ:1
-by:1
 AG:1
 MG:1
 SZ:1

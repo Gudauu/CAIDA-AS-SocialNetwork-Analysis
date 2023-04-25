@@ -8,10 +8,10 @@ RU:107
 IT:61
 ID:48
 BG:47
-CH:40
+CH:42
 BR:37
 KE:32
-AT:28
+AT:29
 DK:23
 ZZ:22
 PL:22
@@ -22,9 +22,9 @@ UA:17
 SG:16
 AU:16
 IE:15
-RO:15
 SE:15
 BE:14
+RO:14
 HK:14
 MZ:14
 UG:13
@@ -92,7 +92,6 @@ RE:2
 MG:2
 GH:2
 BD:2
-ts:1
 KW:1
 HR:1
 MC:1
@@ -105,7 +104,6 @@ PS:1
 GP:1
 PY:1
 AR:1
-by:1
 MK:1
 GE:1
 DZ:1

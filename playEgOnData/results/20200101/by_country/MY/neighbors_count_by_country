@@ -12,9 +12,9 @@ IT:79
 FR:61
 BR:60
 KH:53
+CH:51
 BG:50
-CH:49
-AT:41
+AT:42
 ZA:36
 PH:33
 PL:30
@@ -22,8 +22,8 @@ JP:25
 SE:25
 TH:23
 CN:23
-RO:21
 UA:20
+RO:20
 IE:19
 LU:18
 NO:18
@@ -90,7 +90,6 @@ GE:2
 MW:2
 GH:2
 CO:2
-ts:1
 GU:1
 NP:1
 HR:1
@@ -99,7 +98,6 @@ QA:1
 KE:1
 SZ:1
 PY:1
-by:1
 DZ:1
 MG:1
 NG:1

@@ -5,7 +5,7 @@ GB:306
 RU:257
 DE:253
 IT:232
-CH:129
+CH:137
 FR:123
 BR:121
 AT:81
@@ -41,9 +41,9 @@ CO:12
 IL:11
 BE:11
 RS:11
+CY:11
 FI:10
 BH:10
-CY:10
 IN:9
 TW:8
 CN:8
@@ -58,7 +58,6 @@ EU:6
 LV:6
 PH:6
 AZ:6
-by:6
 IS:5
 AE:5
 OM:4
@@ -72,7 +71,6 @@ PK:3
 LK:3
 MW:3
 AL:3
-ts:2
 GE:2
 NG:2
 MO:2
@@ -90,4 +88,3 @@ BY:1
 SI:1
 MN:1
 KZ:1
-el:1
