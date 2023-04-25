@@ -1,4 +1,4 @@
-RU:2622
+RU:2630
 00:448
 GB:218
 DE:155
@@ -31,21 +31,20 @@ DK:6
 LB:6
 AM:6
 CA:5
-RS:5
 KG:5
 ES:4
 IS:4
 BE:4
 PT:4
+RS:4
 MK:4
+GE:4
 BY:4
 MY:3
 LU:3
 AE:3
 TR:3
 LV:3
-re:3
-GE:3
 UZ:3
 EE:2
 SI:2
@@ -58,8 +57,6 @@ NZ:2
 SC:2
 MT:2
 CN:2
-n :2
-nk:2
 BZ:2
 TJ:2
 MN:1
@@ -69,7 +66,6 @@ HK:1
 MD:1
 ME:1
 IQ:1
-ww:1
 TM:1
 CY:1
 AL:1

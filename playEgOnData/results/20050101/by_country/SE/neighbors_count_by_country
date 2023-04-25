@@ -3,12 +3,12 @@ SE:271
 US:126
 NL:105
 GB:93
-NO:79
+NO:81
 DK:68
 DE:67
-FI:65
+FI:66
 RU:32
-CH:28
+CH:29
 EU:25
 FR:19
 PL:19
@@ -31,12 +31,10 @@ KR:2
 LV:2
 PT:2
 LT:2
-ng:2
 SI:1
 HK:1
 MY:1
 IM:1
-ts:1
 MD:1
 MC:1
 JP:1
@@ -46,5 +44,4 @@ IL:1
 KZ:1
 AZ:1
 LB:1
-CY:1
 TH:1

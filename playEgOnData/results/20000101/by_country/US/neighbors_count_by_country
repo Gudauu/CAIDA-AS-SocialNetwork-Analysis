@@ -10,8 +10,8 @@ DE:44
 AU:37
 SE:32
 RU:29
+CH:28
 EU:28
-CH:27
 KR:27
 FR:26
 IL:19
@@ -47,12 +47,12 @@ NO:8
 PL:8
 EG:8
 GT:7
+CR:7
 CY:6
 FI:6
 PT:5
 JO:5
 MY:5
-CR:5
 MD:5
 GU:4
 SV:4
@@ -88,7 +88,6 @@ AS:2
 BZ:2
 EE:2
 IS:2
-et:2
 LU:2
 CW:2
 DM:2
@@ -96,7 +95,6 @@ AW:2
 KZ:2
 GI:2
 HN:2
-ts:1
 ZM:1
 UZ:1
 AZ:1

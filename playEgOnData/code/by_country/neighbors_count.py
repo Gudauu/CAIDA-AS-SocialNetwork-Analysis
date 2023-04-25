@@ -14,7 +14,16 @@ def read_degree_top_by_country(ifile_name:str,c_code:str) -> dict:
             dict_result[line_list[0]] = (line_list[1],line_list[2])  # {asn:(degree,info)}
     return dict_result
 
+# Just found ASN_lookup isn't all formatted as ASN:info, so...
+def readDict_ASN_lookup() -> None:
+    dictResult = {}
+    ifile = open("dataCAIDA/ASN_lookup/ASN_lookup",'r')
+    for line_ in ifile:
+        line = line_[:-1]
+        line_list = line.split(":")
+        dictResult[line_list[0]] = line_list[-1]
 
+    return dictResult
 
 
 
@@ -24,7 +33,7 @@ def track_neighbor(version:str,country_code:str) -> None:
     # 6939: 5048:HURRICANE, US
     dict_asn = read_degree_top_by_country(ifile,country_code)
     # print(len(dict_CN))
-    dict_asn_info = readDict('dataCAIDA/ASN_lookup/ASN_lookup')
+    dict_asn_info = readDict_ASN_lookup()
     dict_count_neighbor_by_country = {}
     for asn in dict_asn.keys():
         neighbors = G.neighbors(int(asn))
@@ -46,7 +55,7 @@ def track_neighbor(version:str,country_code:str) -> None:
 
 if __name__ == '__main__':
     list_country = readList('dataCAIDA/ASN_lookup/country_list') 
-    for year in range(2000,2023):
+    for year in range(2001,2023+1):
         version = str(year) + '0101'
         for cc in list_country:
             track_neighbor(version,cc)

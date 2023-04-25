@@ -1,4 +1,4 @@
-UA:500
+UA:502
 00:132
 DE:67
 RU:29
@@ -12,15 +12,14 @@ RO:4
 GI:4
 ZZ:4
 SC:4
+AT:3
 MT:3
 SK:3
-AT:2
 EU:2
 CZ:2
 PT:2
 IR:2
 CY:2
-as:2
 IE:1
 LU:1
 FI:1
@@ -38,5 +37,4 @@ DK:1
 GG:1
 CA:1
 MD:1
-it:1
 CW:1

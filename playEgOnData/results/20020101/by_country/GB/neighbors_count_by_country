@@ -3,7 +3,7 @@ US:269
 00:258
 DE:132
 NL:85
-CH:54
+CH:56
 FR:49
 NO:39
 IT:32
@@ -14,8 +14,8 @@ BE:20
 AT:18
 SE:17
 CA:17
+ES:14
 HK:14
-ES:13
 JP:12
 RU:11
 SG:11
@@ -39,7 +39,6 @@ SI:2
 HU:2
 GR:2
 SK:2
-ts:2
 FI:2
 TR:2
 LT:2
@@ -57,7 +56,6 @@ SD:1
 BT:1
 CN:1
 UG:1
-fo:1
 CY:1
 LB:1
 AZ:1

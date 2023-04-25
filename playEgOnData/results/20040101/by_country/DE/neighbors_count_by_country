@@ -1,12 +1,12 @@
 DE:574
 US:252
 00:208
-CH:194
+CH:198
 NL:158
 GB:98
 EU:75
 ES:63
-AT:48
+AT:50
 FR:38
 NO:37
 DK:27
@@ -26,9 +26,7 @@ HK:4
 LB:4
 IE:3
 KR:3
-RO:3
 SI:3
-ts:3
 TR:3
 IR:3
 SK:2
@@ -38,6 +36,7 @@ HR:2
 CN:2
 SG:2
 MD:2
+RO:1
 MQ:1
 IN:1
 MK:1
@@ -46,7 +45,6 @@ TW:1
 RS:1
 LI:1
 IL:1
-es:1
 CY:1
 AM:1
 PS:1

@@ -24,6 +24,12 @@ def calc_exponential_draw_pic(country:str,year_start:int=2001, year_end:int=2023
     # year_values is what's gonna show on pic
     year_values = np.arange(year_start,year_start + len(data))
 
+    if strip <= 0:  # won't strip
+        outfile_name = f'playEgOnData/results/by_country/{country}/exponential_fit_foreign_ASR_count_{year_start}_{year_end}.png'
+        strip = -1*(year_end - year_start + 1)
+    else:  # strip some nodes
+        outfile_name = f'playEgOnData/results/by_country/{country}/exponential_fit_foreign_ASR_count_{year_start}_{year_end}_strip_{strip}.png'
+
     # Fit the exponential function to the data
     popt, pcov = curve_fit(exponential_func, x_values, data[:-1*strip])
     y_pred = exponential_func(x_values, *popt)
@@ -51,10 +57,7 @@ def calc_exponential_draw_pic(country:str,year_start:int=2001, year_end:int=2023
     plt.ylabel('foreign ASR count')
 
     # Save the figure
-    if strip > 0:
-        plt.savefig(f'playEgOnData/results/by_country/{country}/exponential_fit_foreign_ASR_count_{year_start}_{year_end}_strip_{strip}.png')
-    else:  
-        plt.savefig(f'playEgOnData/results/by_country/{country}/exponential_fit_foreign_ASR_count_{year_start}_{year_end}.png')
+    plt.savefig(outfile_name)
     plt.clf()
 
     # Show the plot
@@ -67,7 +70,7 @@ if __name__ == '__main__':
     failed_cc = []
     for cc in list_country:
         try:
-            calc_exponential_draw_pic(cc,strip = 4)
+            calc_exponential_draw_pic(cc,strip = 0)
         except RuntimeError:
             print(f"Failed to fit curve for country: {cc}")
             failed_cc.append(cc)

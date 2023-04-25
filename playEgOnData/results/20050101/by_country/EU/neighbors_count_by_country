@@ -3,16 +3,16 @@ GB:137
 00:128
 DE:124
 NL:65
-CH:52
+CH:55
 FR:52
 SE:50
 NO:34
 IT:30
 CZ:24
 RU:24
+AT:23
+ES:23
 GR:23
-AT:22
-ES:22
 DK:21
 BE:19
 EU:18
@@ -26,11 +26,10 @@ IE:5
 KR:4
 PL:3
 PT:3
-RO:3
 AE:3
 CY:3
-ts:2
 LU:2
+RO:2
 SI:2
 TW:2
 UA:2
@@ -39,7 +38,6 @@ IR:2
 EE:1
 SG:1
 SM:1
-fo:1
 RS:1
 MY:1
 BH:1
@@ -63,5 +61,4 @@ MT:1
 HU:1
 HR:1
 GL:1
-es:1
 KW:1
