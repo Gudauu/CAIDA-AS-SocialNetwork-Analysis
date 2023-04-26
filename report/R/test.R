@@ -19,4 +19,6 @@ p <- ggplot(data, aes(x = year, y = value)) +
 
 
 
-ggsave("domestic_ASR_count_CN.png", path = "/home/gudau/Documents/School/year4/graduatePaper/report/R",plot = p, width = 8, height = 6, dpi = 300, device = "png")
+
+
+ggsave("test.png", path = "/home/gudau/Documents/School/year4/graduatePaper/report/R",plot = p, width = 8, height = 6, dpi = 300, device = "png")

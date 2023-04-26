@@ -1,0 +1,36 @@
+library(igraph)
+
+# Read in communities file
+communities <- readLines("communities.txt")
+communities <- lapply(communities, function(x) strsplit(x, ",")[[1]])
+communities <- lapply(communities, function(x) sort(x))
+names(communities) <- paste("Community", seq_along(communities), sep = "_")
+
+# Get unique country codes
+unique_codes <- unique(unlist(communities))
+
+# Read in coordinates file
+coordinates <- read.table("coordinates.txt", sep = ":", 
+                           col.names = c("code", "country", "latitude", "longitude"))
+
+# Merge coordinates with unique country codes
+coordinates <- merge(data.frame(code = unique_codes), coordinates, by = "code")
+
+# Create graph
+edges <- data.frame(from = character(), to = character(), stringsAsFactors = FALSE)
+for (community in communities) {
+  edges <- rbind(edges, data.frame(from = community[-length(community)], 
+                                    to = community[-1], 
+                                    stringsAsFactors = FALSE))
+}
+g <- graph_from_data_frame(edges, vertices = coordinates)
+
+# Set vertex attributes
+V(g)$name <- V(g)$code
+V(g)$community <- factor(rep(names(communities), sapply(communities, length)))
+V(g)$coordinate <- data.frame(latitude = V(g)$latitude, longitude = V(g)$longitude)
+set_vertex_attr(g, "color", value = as.numeric(V(g)$community))
+
+# Plot graph
+plot(g, vertex.size = 5, vertex.label = V(g)$code, vertex.color = V(g)$color, 
+     vertex.label.color = "black", vertex.label.dist = 0.5, vertex.label.cex = 0.8)
