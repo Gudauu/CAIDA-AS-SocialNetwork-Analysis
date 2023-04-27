@@ -22,7 +22,7 @@ def readDict(fn,separator=':') -> dict:
     for line_ in ifile:
         line = line_[:-1]
         line_list = line.split(separator)
-        dictResult[line_list[0]] = line_list[1]
+        dictResult[line_list[0].strip()] = line_list[1].strip()
 
     return dictResult
 
