@@ -62,10 +62,10 @@ function_visualize_louvain <- function(version,palette){
   }
 
   # print(communities)
-  xmin <- -140
+  xmin <- -100
   xmax <- 180
   ymin <- -50
-  ymax <- 75
+  ymax <- 70
 
   # Define the range of the world map
   xlim <- c(xmin, xmax)
