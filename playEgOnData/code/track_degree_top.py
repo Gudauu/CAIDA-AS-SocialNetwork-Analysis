@@ -27,7 +27,7 @@ def find_top(year_start:int,year_end:int,limit:int=10) -> None:
     for asn in set_top:
         dict_ASN_trace[asn] = {}  
         for year in range(year_start,year_end+1):
-            dict_ASN_trace[asn][year] = ['None','None'] # ini to None
+            dict_ASN_trace[asn][year] = ['NA','NA'] # ini to None
 
     # go over all the degree files and record each asn in set_top
     for year in range(year_start,year_end+1):
@@ -50,10 +50,10 @@ def find_top(year_start:int,year_end:int,limit:int=10) -> None:
         # ofile.write('\n')
 
         for year in range(year_start,year_end+1):
-            ofile.write(f'{dict_ASN_trace[asn][year][1]};') # degree
+            ofile.write(f'{dict_ASN_trace[asn][year][1]},') # degree
         ofile.write('\n')
         for year in range(year_start,year_end+1):
-            ofile.write(f'{dict_ASN_trace[asn][year][0]};') # rank
+            ofile.write(f'{dict_ASN_trace[asn][year][0]},') # rank
         ofile.write('\n\n')
     ofile.close()
     # # write the result with human friendly format

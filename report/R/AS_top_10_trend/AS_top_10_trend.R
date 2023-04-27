@@ -1,7 +1,10 @@
 library(ggplot2)
 
 
-ID <- c(61568,6939)#,1828,35280,24482,51185)
+# ID <- c(61568,6939,1828,35280,24482,51185) # 2023 top 6
+ID <- c(39120,3356,58511,174,137409,199524)
+palette <- as.character(c("yellow","green","pink","orange","brown","purple"))
+idx_color <- 1
 
 # read the file
 # format:
@@ -16,26 +19,28 @@ p <- ggplot() +
   scale_x_continuous(breaks = seq(2000, 2023, 2)) +
   labs(x = "Year", y = "Degree", title = "Degree & Rank of Top 10 ASes") +
   scale_color_manual(values = c("blue", "red"), labels = seq(1,2,1))
+
+
 # filter the rows for the specified IDs
-result <- lapply(ID, function(id) {
+for(id in ID){
   idx <- grep(paste0("^", id, " :"), top_AS_info)
-  AS_names = c(AS_names, top_AS_info[idx])
+  AS_names <- c(AS_names, top_AS_info[idx])
   AS_degree <- as.numeric(scan(text = top_AS_info[idx + 1] , sep = ","))
   AS_rank <- as.numeric(scan(text = top_AS_info[idx + 2] , sep = ","))
 
   df <- data.frame(year = seq(2000, 2023, 1), 
-  degree = AS_degree,
-  rank = AS_rank)
-  # print(df)
-
+                   degree = AS_degree,
+                   rank = AS_rank)
   p <- p + 
-    geom_line(data = df, aes(x = year, y = degree), color = "blue") +
+    geom_line(data = df, aes(x = year, y = degree), color = palette[idx_color]) +
     geom_point(data = df,aes(x = year, y = degree), color = ifelse(df$rank > 10, 1, 2), size = 1) +
-    geom_text(data = df,aes(x = year, y = degree, label = rank), vjust = -1, size = 2, color = ifelse(df$rank > 10, 1, 2))
-})
+    geom_text(data = df,aes(x = year, y = degree, label = ifelse(rank <= 30, rank, "")), vjust = -1, hjust = 1, size = 2, color = ifelse(df$rank > 10, 1, 2))
+  
+  idx_color <- idx_color + 1
 
-print(p)
-ggsave("AS_top_10_degree_rank.png", path = "report/R/AS_top_10_trend/results",plot = p, width = 8, height = 6, dpi = 300, device = "png")
+}
+
+ggsave("AS_7_12_degree_rank.png", path = "report/R/AS_top_10_trend/results",plot = p, width = 8, height = 6, dpi = 300, device = "png")
 
 
 
