@@ -2,8 +2,12 @@ library(ggplot2)
 
 
 # ID <- c(61568,6939,1828,35280,24482,51185) # 2023 top 6
-ID <- c(39120,3356,58511,174,137409,199524)
-palette <- as.character(c("yellow","green","pink","orange","brown","purple"))
+# ID <- c(39120,3356,58511,174,137409,199524)
+# ID <- c(209,22822,12389,174,701,13030,7018,3356,9002) # 2010 except 6939
+# ID <- c(49605,34224,25091,174,8220,58511,43531,3356,24482) #2017 except 6939
+ID <- c(7018,12989,8492,174,31500,48166,3549,3356,9002) #2014 except 6939
+# palette <- as.character(c("yellow","green","pink","orange","brown","purple",""))
+palette <- as.character(c("brown","red","orange","yellow","green","skyblue","blue","pink","gray")) #"purple"
 idx_color <- 1
 
 # read the file
@@ -17,8 +21,11 @@ top_AS_info <- readLines(ifile_path)
 AS_names = c()
 p <- ggplot() +
   scale_x_continuous(breaks = seq(2000, 2023, 2)) +
-  labs(x = "Year", y = "Degree", title = "Degree & Rank of Top 10 ASes") +
-  scale_color_manual(values = c("blue", "red"), labels = seq(1,2,1))
+  labs(x = "Year", y = "Degree", title = "Degree & Rank of Top 10 ASes")
+  # scale_color_manual(values = palette, labels = ID) + 
+  # guides(color = guide_legend(title = NULL))
+  # scale_color_manual(values = c("blue", "red"), labels = seq(1,2,1))
+
 
 
 # filter the rows for the specified IDs
@@ -39,8 +46,8 @@ for(id in ID){
   idx_color <- idx_color + 1
 
 }
-
-ggsave("AS_7_12_degree_rank.png", path = "report/R/AS_top_10_trend/results",plot = p, width = 8, height = 6, dpi = 300, device = "png")
+p <- p + scale_color_manual(values = palette, labels = ID)
+ggsave("AS_2014_top_10_degree_rank.png", path = "report/R/AS_top_10_trend/results",plot = p, width = 8, height = 6, dpi = 300, device = "png")
 
 
 
