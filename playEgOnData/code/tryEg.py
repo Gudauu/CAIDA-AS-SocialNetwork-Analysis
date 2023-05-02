@@ -2,9 +2,9 @@ from include import *
 
 if __name__ == '__main__':
     DEBUG = 0
-    for fn in listFileName_1998:
-        G = buildAsRelGraph(fn)
-        version = fn[31:39]
+    for year in range(2000,2023+1):
+        version = f'{year}0101'
+        G = getG(version)
 
         ofile = open('playEgOnData/results/'+version+'/basic','w')
         ofile.write('node size: '+str(len(G.nodes))+'\n')
