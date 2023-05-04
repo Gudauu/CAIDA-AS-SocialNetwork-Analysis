@@ -26,20 +26,20 @@ function_ASR_size_across_year <- function(version = "0101"){
 
 
     p <- ggplot() +
+    # edges expo fit line
+    geom_line(data = df_edge_fit, aes(x = x, y = y, color = "ASRPredict")) +
+    geom_point(data = df_edge_fit, aes(x = x, y = y, color = "ASRPredict"), size = 2) +
+    # geom_text(data = df_edge_fit, aes(x = x, y = y, label = y), vjust = -1, size = 2, color = "black") +
     # nodes line
-    geom_line(data = df_node, aes(x = x, y = y, color = "red")) +
-    geom_point(data = df_node, aes(x = x, y = y, color = "red"), size = 2) +
+    geom_line(data = df_node, aes(x = x, y = y, color = "AS")) +
+    geom_point(data = df_node, aes(x = x, y = y, color = "AS"), size = 2) +
     geom_text(data = df_node, aes(x = x, y = y, label = y), vjust = -1, size = 2, color = "black") +
     # edges line
-    geom_line(data = df_edge, aes(x = x, y = y, color = "blue")) +
-    geom_point(data = df_edge, aes(x = x, y = y, color = "blue"), size = 2) +
+    geom_line(data = df_edge, aes(x = x, y = y, color = "ASR")) +
+    geom_point(data = df_edge, aes(x = x, y = y, color = "ASR"), size = 2) +
     geom_text(data = df_edge, aes(x = x, y = y, label = y), vjust = -1, size = 2, color = "black") +
-    # edges expo fit line
-    geom_line(data = df_edge_fit, aes(x = x, y = y, color = "grey")) +
-    geom_point(data = df_edge_fit, aes(x = x, y = y, color = "grey"), size = 2) +
-    # geom_text(data = df_edge_fit, aes(x = x, y = y, label = y), vjust = -1, size = 2, color = "black") +
     # tags, scale, label
-    # scale_color_manual(values = c("blue", "red","grey"), labels = c("AS count", "ASR count","ASR count predict")) +
+    scale_color_manual(values = c("blue", "red","grey"), labels = c("AS count", "ASR count","ASR Prediction")) +
     scale_x_continuous(breaks = seq(2000, 2023, 2)) +
     labs(x = "Year", y = "Total Size", title = "Size of ASes and ASRs") +
     # hide title on color legend

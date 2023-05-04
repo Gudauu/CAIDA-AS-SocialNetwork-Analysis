@@ -3,7 +3,6 @@ import numpy as np
 from scipy.optimize import curve_fit
 import matplotlib.pyplot as plt
 from sklearn.metrics import r2_score
-from icecream import ic
 
 # Define the exponential function
 def exponential_func(x, a, b, c):
@@ -28,7 +27,6 @@ def calc_exponential_draw_pic(version:"0101"):
     outfile_name = f'playEgOnData/results/2000-2023/exponential_fit_ASR_count.png'
     ofile_fit_data = open('report/R/basic/ASR_exponential_pred','w')
 
-    # ic(data,x_values)
     # Fit the exponential function to the data
     popt, pcov = curve_fit(exponential_func, x_values[:-3], data[:-3])
     y_pred = exponential_func(x_values, *popt)
