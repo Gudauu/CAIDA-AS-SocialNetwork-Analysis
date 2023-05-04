@@ -1,6 +1,9 @@
 import easygraph as eg 
 import networkx as nx
 
+import warnings
+warnings.filterwarnings("ignore")
+
 listFileName_1998 = []
 for i in range(1,10):
     listFileName_1998.append('dataCAIDA/AS_relationships/raw/19980'+str(i)+ '01.as-rel.txt')
