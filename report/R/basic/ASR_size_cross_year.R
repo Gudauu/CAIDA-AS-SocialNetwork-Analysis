@@ -39,7 +39,7 @@ function_ASR_size_across_year <- function(version = "0101"){
     geom_point(data = df_edge, aes(x = x, y = y, color = "ASR"), size = 2) +
     geom_text(data = df_edge, aes(x = x, y = y, label = y), vjust = -1, size = 2, color = "black") +
     # tags, scale, label
-    scale_color_manual(values = c("blue", "red","grey"), labels = c("AS count", "ASR count","ASR Prediction")) +
+    scale_color_manual(values = c("#0277BD", "#E64A19","#4DB6AC"), labels = c("AS count", "ASR count","ASR Prediction")) +
     scale_x_continuous(breaks = seq(2000, 2023, 2)) +
     labs(x = "Year", y = "Total Size", title = "Size of ASes and ASRs") +
     # hide title on color legend
