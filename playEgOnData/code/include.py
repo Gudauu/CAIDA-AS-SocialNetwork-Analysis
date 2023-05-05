@@ -1,8 +1,9 @@
 import easygraph as eg 
 import networkx as nx
-
+import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # or any {'0', '1', '2'}
 import warnings
-warnings.filterwarnings("ignore")
+warnings.filterwarnings('ignore', category=DeprecationWarning)
 
 listFileName_1998 = []
 for i in range(1,10):

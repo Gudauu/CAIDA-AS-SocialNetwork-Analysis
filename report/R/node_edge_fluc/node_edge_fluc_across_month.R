@@ -30,7 +30,7 @@ function_fluc_across_month <- function(year){
         scale_x_continuous(breaks = seq(1, 12, 2)) +
         theme(legend.position = "middle")
 
-    ggsave(paste0("report/R/node_edge_fluc/result/AS_", year, ".png"),plot = p, width = 8, height = 6, dpi = 300, device = "png")
+    ggsave(paste0("report/R/node_edge_fluc/result/across_month/AS_", year, ".png"),plot = p, width = 8, height = 6, dpi = 300, device = "png")
     ## edges next
     added_amount <- scan(text = lines[3], sep = ",")
     deleted_amount <- scan(text = lines[4], sep = ",")
@@ -56,8 +56,11 @@ function_fluc_across_month <- function(year){
         scale_x_continuous(breaks = seq(1, 12, 2)) +
         theme(legend.position = "middle")
 
-    ggsave(paste0("report/R/node_edge_fluc/result/ASR_", year, ".png"),plot = p, width = 8, height = 6, dpi = 300, device = "png")
+    ggsave(paste0("report/R/node_edge_fluc/result/across_month/ASR_", year, ".png"),plot = p, width = 8, height = 6, dpi = 300, device = "png")
 }
 
-function_fluc_across_month(1998)
+years = c(2006, 2010, 2014, 2018)
+for(year in years){
+    function_fluc_across_month(year)
+}
 

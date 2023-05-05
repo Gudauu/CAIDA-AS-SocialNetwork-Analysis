@@ -125,9 +125,28 @@ def across_months(year:str) -> None:
     ofile.write(",".join(list_edge_gone))
     ofile.write("\n")
 
+def ratio_delte_add() -> None:
+    iofile = open('playEgOnData/results/2000-2023/edge_fluc','r+')
+    list_add = []
+    list_del = []
+    for line in iofile:
+        if list_add == []:
+            list_add = line[:-1].split(',')
+        elif list_del == []:
+            list_del = line[:-1].split(',')
+    list_ratio = []
+    for i in range(len(list_add)):
+        list_ratio.append(str("{:.2f}".format(float(list_add[i])/float(list_del[i]))))
+    # ic(list_ratio)
+    iofile.write(",".join(list_ratio))
+    iofile.write('\n')
+
+
 
 
 
 if __name__ == '__main__':
     # across_2000_2023("0101")
-    across_months("2003")
+    # for year in [2006, 2010, 2014, 2018]:
+    #     across_months(year)
+    ratio_delte_add()
