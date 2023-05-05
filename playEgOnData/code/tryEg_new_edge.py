@@ -45,7 +45,7 @@ def difference_between(fn_old,fn_new) -> None:
     for i in list_node_removed:
         ofile_removed.write(str(i)+"|"+str(dict_degree[str(i)])+"|"+str(dict_es[str(i)])+'\n')
 
-def node_edge_diff(version1:str,version2:str) -> list:
+def node_edge_diff_count(version1:str,version2:str) -> list:
     g1 = getG(version1)
     g2 = getG(version2)
     set_node1 = set(g1.nodes)
@@ -73,7 +73,7 @@ def across_2000_2023(version:str = "0101") -> None:
     for year in range(2000,2022+1):
         cur_version = f"{year}{version}"
         nxt_version = f"{year+1}{version}"
-        list_fluc = node_edge_diff(cur_version, nxt_version)
+        list_fluc = node_edge_diff_count(cur_version, nxt_version)
         list_node_new.append(str(list_fluc[0]))
         list_node_gone.append(str(list_fluc[1]))
         list_edge_new.append(str(list_fluc[2]))
@@ -141,6 +141,95 @@ def ratio_delte_add() -> None:
     iofile.write(",".join(list_ratio))
     iofile.write('\n')
 
+def add_del_nodes_attributes(version:str = "0101") -> None:
+    for year in range(2000,2000+1):
+        dic_degree_distribution_del = {}
+        dic_degree_distribution_add = {}
+
+        version1 = f"{year}{version}"
+        version2 = f"{year+1}{version}"
+        # both added and deleted result will be written to version2 directory
+        g1 = getG(version1)
+        g2 = getG(version2)
+        set_node1 = set(g1.nodes)
+        set_node2 = set(g2.nodes)
+
+        set_node_del = set_node1 - set_node2
+        set_node_add = set_node2 - set_node1
+        dict_degree1 = g1.degree()
+        dict_degree2 = g2.degree()
+        # deleted nodes
+        for node in set_node_del:
+            degree_cur = dict_degree1[node]
+            if degree_cur not in dic_degree_distribution_del:
+                dic_degree_distribution_del[degree_cur] = 1
+            else:
+                dic_degree_distribution_del[degree_cur] += 1
+
+        ofile_del = open(f'playEgOnData/results/{version2}/deleted_AS_degree_distribution','w')
+        for k in sorted(dic_degree_distribution_del.keys()):
+            ofile_del.write(f"{k}:{dic_degree_distribution_del[k]}\n")
+        ofile_del.close()
+        # added nodes
+        for node in set_node_add:
+            degree_cur = dict_degree2[node]
+            if degree_cur not in dic_degree_distribution_add:
+                dic_degree_distribution_add[degree_cur] = 1
+            else:
+                dic_degree_distribution_add[degree_cur] += 1
+
+        ofile_add = open(f'playEgOnData/results/{version2}/added_AS_degree_distribution','w')
+        for k in sorted(dic_degree_distribution_add.keys()):
+            ofile_add.write(f"{k}:{dic_degree_distribution_add[k]}\n")
+        ofile_add.close()
+
+def add_del_nodes_degree_aggregated(version:str = "0101") -> None:
+    for year in range(2023,2023+1):
+        dict_standards = {
+            1: "<= 1",
+            2: "<= 2",
+            5: "<= 5",
+            10: "<= 10",
+            100: "<= 100",
+            999999: ">100"
+        }
+        list_standards = list(dict_standards.keys())
+
+        # deleted nodes
+        dic_degree_distribution_del = readDict(f"playEgOnData/results/{year}{version}/deleted_AS_degree_distribution")
+        
+        list_aggregate_count = [0]*len(list_standards)
+        for _degree, _count in dic_degree_distribution_del.items():
+            degree = int(_degree)
+            count = int(_count)
+            which = 0
+            while degree > list_standards[which]:
+                which += 1
+            list_aggregate_count[which] += count
+
+        ofile_del = open(f'playEgOnData/results/{year}{version}/deleted_AS_degree_distribution_aggregated','w')
+        for i in range(len(list_aggregate_count)):
+            ofile_del.write(f"{dict_standards[list_standards[i]]}:{list_aggregate_count[i]}\n")
+        ofile_del.close()
+        # added nodes
+        dic_degree_distribution_add = readDict(f"playEgOnData/results/{year}{version}/added_AS_degree_distribution")
+                
+        list_aggregate_count = [0]*len(list_standards)
+        for _degree, _count in dic_degree_distribution_add.items():
+            degree = int(_degree)
+            count = int(_count)
+            which = 0
+            while degree > list_standards[which]:
+                which += 1
+            list_aggregate_count[which] += count
+
+        ofile_add = open(f'playEgOnData/results/{year}{version}/added_AS_degree_distribution_aggregated','w')
+        for i in range(len(list_aggregate_count)):
+            ofile_add.write(f"{dict_standards[list_standards[i]]}:{list_aggregate_count[i]}\n")
+        ofile_add.close()
+
+
+     
 
 
 
@@ -149,4 +238,6 @@ if __name__ == '__main__':
     # across_2000_2023("0101")
     # for year in [2006, 2010, 2014, 2018]:
     #     across_months(year)
-    ratio_delte_add()
+    # ratio_delte_add()
+    # add_del_nodes_attributes()
+    add_del_nodes_degree_aggregated()
