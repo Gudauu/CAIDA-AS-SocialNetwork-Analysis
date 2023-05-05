@@ -46,7 +46,7 @@ def readRank(fn,separator=':') -> dict:
 def getVersionFromName(fn:str) -> str:
     return fn[31:39] 
 
-def buildAsRelGraph(ifileName,flag_directed = True, flag_community = False) -> eg.DiGraph:
+def buildAsRelGraph(version,flag_directed = True, flag_community = False) -> eg.DiGraph:
     if flag_directed:
         G = eg.DiGraph()
     else:
@@ -54,9 +54,17 @@ def buildAsRelGraph(ifileName,flag_directed = True, flag_community = False) -> e
     
     if flag_community:
         dict_asn_community = {}
-        
+        ifile_community = open(f"playEgOnData/results/{version}/community_louvain",'r')
+        num = 0
+        for line in ifile_community:
+            list_AS = line[:-1].split(",")
+            for asn in list_AS:
+                dict_asn_community[int(asn)] = num 
+            num += 1
+        ifile_community.close()
 
 
+    ifileName = 'dataCAIDA/AS_relationships/raw/'+version+'.as-rel.txt'
     ifile = open(ifileName,'r')
 
     for line in ifile:
@@ -64,9 +72,23 @@ def buildAsRelGraph(ifileName,flag_directed = True, flag_community = False) -> e
             continue
         listLine = line.split('|')  # ASN|ASN|type
         type_edge = int(listLine[2])
-        G.add_edge(int(listLine[0]),int(listLine[1]))  # ,edge_attr={'type':type_edge}
+        asn1 = int(listLine[0])
+        asn2 = int(listLine[1])
+
+        if flag_community:  
+            num_community1 = -1
+            num_community2 = -1
+            if asn1 in dict_asn_community:
+                num_community1 = dict_asn_community[asn1]
+            if asn2 in dict_asn_community:
+                num_community2 = dict_asn_community[asn2]
+            G.add_node(asn1, node_attr={'community':num_community1})
+            G.add_node(asn2, node_attr={'community':num_community2})
+            G.add_edge(asn1, asn2)  # ,edge_attr={'type':type_edge}
+        else:
+            G.add_edge(asn1, asn2)  # ,edge_attr={'type':type_edge}
         if type_edge == 0 and flag_directed: # if undirected, no need to add edge: # peer edge
-            G.add_edge(int(listLine[1]),int(listLine[0])) # ,edge_attr={'type':type_edge}
+            G.add_edge(asn2, asn1) # ,edge_attr={'type':type_edge}
     return G
 
 
@@ -112,8 +134,7 @@ def getG(version,DEBUG = False,flag_directed = True, flag_nx = False, flag_commu
             G = eg.DiGraph() if flag_directed else eg.Graph()
             G.add_edges([(5,6),(7,8),(6,5),(1,20),(2,1)])
         else:  
-            fn = 'dataCAIDA/AS_relationships/raw/'+version+'.as-rel.txt'
-            G = buildAsRelGraph(fn,flag_directed, flag_community)
+            G = buildAsRelGraph(version,flag_directed, flag_community)
     return G
 
 

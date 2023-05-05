@@ -125,7 +125,7 @@ def across_months(year:str) -> None:
     ofile.write(",".join(list_edge_gone))
     ofile.write("\n")
 
-def ratio_delte_add() -> None:
+def ratio_delete_add() -> None:
     iofile = open('playEgOnData/results/2000-2023/edge_fluc','r+')
     list_add = []
     list_del = []
@@ -141,7 +141,7 @@ def ratio_delte_add() -> None:
     iofile.write(",".join(list_ratio))
     iofile.write('\n')
 
-def add_del_nodes_attributes(version:str = "0101") -> None:
+def add_del_nodes_degree(version:str = "0101") -> None:
     for year in range(2000,2000+1):
         dic_degree_distribution_del = {}
         dic_degree_distribution_add = {}
@@ -229,6 +229,19 @@ def add_del_nodes_degree_aggregated(version:str = "0101") -> None:
         ofile_add.close()
 
 
+def add_del_edges_community(year1:int, year2:int, version:str = "0101") -> None:
+    g1 = getG(f"{year1}{version}",flag_community=True)
+    g2 = getG(f"{year2}{version}")
+
+
+    print(g1.nodes)
+    # set_edge1 = set([(na,nb) for na,nb,_ in g1.edges])
+    # set_edge2 = set([(na,nb) for na,nb,_ in g2.edges])
+
+
+
+
+
      
 
 
@@ -238,6 +251,7 @@ if __name__ == '__main__':
     # across_2000_2023("0101")
     # for year in [2006, 2010, 2014, 2018]:
     #     across_months(year)
-    # ratio_delte_add()
-    # add_del_nodes_attributes()
-    add_del_nodes_degree_aggregated()
+    # ratio_delete_add()
+    # add_del_nodes_degree()
+    # add_del_nodes_degree_aggregated()
+    add_del_edges_community(2001,2002)
