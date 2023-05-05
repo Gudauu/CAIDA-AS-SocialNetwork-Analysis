@@ -1,6 +1,7 @@
 import os
 import networkx as nx
 import community
+# import community.community_louvain
 
 class louvain:
     def community_detection(self,year:int,suffix:str = "0101") -> None:
@@ -48,10 +49,6 @@ class louvain:
         for i, nodes in self.communities.items():
             ofile.write(f"{','.join(sorted(nodes))}\n")
             # print(f"Community {i}: {', '.join(sorted(nodes))}")
-    
-    # visualize self.communities
-    # for community C, draw them with the same color on a world map(each cc represented by capital)
-    def visualize_community(self,year:int,suffix:str = "0101") -> None:
 
 
 

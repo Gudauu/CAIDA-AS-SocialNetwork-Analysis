@@ -1,27 +1,37 @@
 from include import *
 from time import *
 import community
-from cdlib import algorithms
 
 
 if __name__ == '__main__':
     DEBUG = True
     # versions = ['19980101','19980201','19980301','19980401']
-    for fn in dictInfile.values():
+    for year in range(2000,2023+1):
 
-        G = buildAsRelGraph_nx(fn, flag_directed = False)
-        
+        version = f"{year}0101"
 
-        partition = algorithms.louvain(G, weight="weight", resolution=1.0)
-        # Print the communities
-        list_communties = partition.communities
-        list_communties =  sorted(list_communties,key = lambda x:(-len(x),x))
+        G = getG(version, flag_directed = False, flag_nx = True)
 
-        version = getVersionFromName(fn)
-        ofile = open('playEgOnData/results/'+version+'/communityDetection_louvain','w')
-        for i in range(len(list_communties)):
-            ofile.write("community "+ str(i+1)+'\n')
-            ofile.write(str(list_communties[i])+'\n')
+        # run community detection louvain
+        # Run Louvain community detection algorithm
+        partition = community.best_partition(G)
+
+        # Create a dictionary to store the communities
+        communities = {}
+
+        # Loop through each node and its community assignment
+        for node, community_id in partition.items():
+            # If the community doesn't exist yet, create a new one
+            if community_id not in communities:
+                communities[community_id] = []
+
+            # Add the node to the community
+            communities[community_id].append(str(node))
+        ofile = open(f"playEgOnData/results/{version}/community_louvain","w")
+        # Print the communities in an easy-to-read format
+        for i, nodes in communities.items():
+            ofile.write(f"{','.join(sorted(nodes))}\n")
+            # print(f"Community {i}: {', '.join(sorted(nodes))}")
 
         ofile.close()
 
