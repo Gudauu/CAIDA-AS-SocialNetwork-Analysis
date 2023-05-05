@@ -130,4 +130,4 @@ def across_months(year:str) -> None:
 
 if __name__ == '__main__':
     # across_2000_2023("0101")
-    across_months("1998")
+    across_months("2003")
