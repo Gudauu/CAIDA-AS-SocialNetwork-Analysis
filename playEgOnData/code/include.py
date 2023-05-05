@@ -20,6 +20,7 @@ def readList(fn) -> list:
 
     return listResult
 
+
 def readDict(fn,separator=':') -> dict:
     dictResult = {}
     ifile = open(fn,'r')
@@ -45,11 +46,16 @@ def readRank(fn,separator=':') -> dict:
 def getVersionFromName(fn:str) -> str:
     return fn[31:39] 
 
-def buildAsRelGraph(ifileName,flag_directed = True) -> eg.DiGraph:
+def buildAsRelGraph(ifileName,flag_directed = True, flag_community = False) -> eg.DiGraph:
     if flag_directed:
         G = eg.DiGraph()
     else:
         G = eg.Graph()
+    
+    if flag_community:
+        dict_asn_community = {}
+        
+
 
     ifile = open(ifileName,'r')
 
@@ -92,7 +98,7 @@ def buildAsRelGraph_nx(ifileName, flag_directed = True) -> nx.DiGraph:
     return G
 
 
-def getG(version,DEBUG = False,flag_directed = True, flag_nx = False):
+def getG(version,DEBUG = False,flag_directed = True, flag_nx = False, flag_community = False):
     if flag_nx:
         if DEBUG:
             G = nx.DiGraph() if flag_directed else nx.Graph()
@@ -100,14 +106,14 @@ def getG(version,DEBUG = False,flag_directed = True, flag_nx = False):
             
         else:  
             fn = 'dataCAIDA/AS_relationships/raw/'+version+'.as-rel.txt'
-            G = buildAsRelGraph_nx(fn,flag_directed)
+            G = buildAsRelGraph_nx(fn,flag_directed, flag_community)
     else:  # eg
         if DEBUG:
             G = eg.DiGraph() if flag_directed else eg.Graph()
             G.add_edges([(5,6),(7,8),(6,5),(1,20),(2,1)])
         else:  
             fn = 'dataCAIDA/AS_relationships/raw/'+version+'.as-rel.txt'
-            G = buildAsRelGraph(fn,flag_directed)
+            G = buildAsRelGraph(fn,flag_directed, flag_community)
     return G
 
 
