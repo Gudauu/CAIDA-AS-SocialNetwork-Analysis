@@ -31,7 +31,7 @@ function_community_rank_CDF <- function(year, flag_add){
       mutate(percent = cumsum(count)/sum(count))
     
     percentage_same = read.table(paste0("report/R/edge_fluc_community_distribution/middle/", year, version, flag_add))
-
+    middle_x <- round((max(data$rank2) - min(data$rank2))/2 + min(data$rank2))
     p <- ggplot() +
         geom_line(data = cdf_data, aes(x=rank1, y=percent, color = "One end")) +
         geom_line(data = cdf_data2, aes(x=rank2, y=percent, color = "Both end")) +
@@ -39,8 +39,8 @@ function_community_rank_CDF <- function(year, flag_add){
         xlab("Community Rank(by size)") +
         ylab("Percentage of ASR") +
         ggtitle(gtitle) +
-        annotate("text", x=9, y=0.08, label=paste0("Percentage of ASR within same community: ", percentage_same)) +
-        scale_x_continuous(breaks = seq(min(data$rank2), max(data$rank2), by = 2)) +
+        annotate("text", x=middle_x, y=0.08, label=paste0("Percentage of ASR within same community: ", percentage_same)) +
+        scale_x_continuous(breaks = seq(min(data$rank2), max(data$rank2), by = round((max(data$rank2)-min(data$rank2))/20,digits = 0))) +
         scale_y_continuous(breaks = seq(round(min(cdf_data$percent),digits = 1), max(cdf_data$percent), by = 0.1)) +
         scale_fill_manual(values=c("#FDD835","#1b9e77"), 
             labels=c("One end", "Both end")) +
@@ -49,7 +49,10 @@ function_community_rank_CDF <- function(year, flag_add){
     ggsave(ofile_name, plot = p, width = 8, height = 6, dpi = 300)
 }
 
-# years <- seq(2000, 2023, 1)
-function_community_rank_CDF(2001, 1)
-function_community_rank_CDF(2001, 0)
+years <- seq(2001, 2022, 1)
+for(year in years) {
+    function_community_rank_CDF(year, 1)
+    function_community_rank_CDF(year, 0)
+}
+
 

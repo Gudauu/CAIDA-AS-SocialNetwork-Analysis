@@ -324,4 +324,6 @@ if __name__ == '__main__':
     # ratio_delete_add()
     # add_del_nodes_degree()
     # add_del_nodes_degree_aggregated()
-    add_del_edges_community(2000,2001, flag_add=False)
+    for year in range(2000, 2022 +1):
+        add_del_edges_community(year,year + 1, flag_add=False)
+        add_del_edges_community(year,year + 1, flag_add=True)
