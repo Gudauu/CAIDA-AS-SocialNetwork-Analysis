@@ -231,12 +231,50 @@ def add_del_nodes_degree_aggregated(version:str = "0101") -> None:
 
 def add_del_edges_community(year1:int, year2:int, version:str = "0101") -> None:
     g1 = getG(f"{year1}{version}",flag_community=True)
-    g2 = getG(f"{year2}{version}")
+    g2 = getG(f"{year2}{version}",flag_community=True)
 
 
-    print(g1.nodes)
-    # set_edge1 = set([(na,nb) for na,nb,_ in g1.edges])
-    # set_edge2 = set([(na,nb) for na,nb,_ in g2.edges])
+    # print(g1.nodes)
+    set_edge1 = set([(na,nb) for na,nb,_ in g1.edges])
+    set_edge2 = set([(na,nb) for na,nb,_ in g2.edges])
+
+    set_edges_add = set_edge2 - set_edge1
+    set_edges_del = set_edge1 - set_edge2 
+
+    # add first
+    dict_node_community2 = g2.nodes
+    dict_community_pair_count = {}
+    for n1,n2 in set_edges_add:
+        pair_community = (dict_node_community2[n1]['node_attr']['community'],dict_node_community2[n2]['node_attr']['community'])
+        # keep order
+        if pair_community[0] > pair_community[1]:
+            pair_community = (pair_community[1],pair_community[0])
+
+        if pair_community not in dict_community_pair_count:
+            dict_community_pair_count[pair_community] = 1
+        else:
+            dict_community_pair_count[pair_community] += 1
+
+
+    ofile = open(f'playEgOnData/results/{year2}{version}/added_ASR_community_distribution','w')
+    def compare(pair1, pair2):
+        if pair1[0] == pair1[1]:
+            if pair2[0] == pair2[1]:
+                return pair1[0] <= pair2[0]
+            else:
+                return True 
+        elif pair2[0] == pair2[1]:
+            return False 
+        else:
+            return pair1[0] <= pair2[0]
+    from functools import cmp_to_key
+    for pa in sorted(dict_community_pair_count.keys(), key = cmp_to_key(compare)):
+        ic(pa)
+        # ofile.write(f"{pa[0]},{pa[1]}:{dict_community_pair_count[pa]}\n")
+    ofile.close()
+
+
+        
 
 
 
@@ -254,4 +292,4 @@ if __name__ == '__main__':
     # ratio_delete_add()
     # add_del_nodes_degree()
     # add_del_nodes_degree_aggregated()
-    add_del_edges_community(2001,2002)
+    add_del_edges_community(2000,2001)
