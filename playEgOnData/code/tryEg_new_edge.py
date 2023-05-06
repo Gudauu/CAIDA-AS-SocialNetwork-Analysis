@@ -229,17 +229,13 @@ def add_del_nodes_degree_aggregated(version:str = "0101") -> None:
         ofile_add.close()
 
 
-def add_del_edges_community(year1:int, year2:int, version:str = "0101") -> None:
+def add_del_edges_community(year1:int, year2:int, version:str = "0101", flag_add = True) -> None:
     g1 = getG(f"{year1}{version}",flag_community=True)
     g2 = getG(f"{year2}{version}",flag_community=True)
 
-
-    # print(g1.nodes)
     set_edge1 = set([(na,nb) for na,nb,_ in g1.edges])
     set_edge2 = set([(na,nb) for na,nb,_ in g2.edges])
 
-    set_edges_add = set_edge2 - set_edge1
-    set_edges_del = set_edge1 - set_edge2 
     def compare(pair1, pair2):
         if pair1[0] == pair1[1]:
             if pair2[0] == pair2[1]:
@@ -251,42 +247,62 @@ def add_del_edges_community(year1:int, year2:int, version:str = "0101") -> None:
         else:
             return pair1[0] - pair2[0] or pair1[1] - pair2[1]
 
-    # add first
-    dict_node_community2 = g2.nodes
-    dict_community_pair_count = {}
-    for n1,n2 in set_edges_add:
-        pair_community = (dict_node_community2[n1]['node_attr']['community'],dict_node_community2[n2]['node_attr']['community'])
-        # keep order
-        if pair_community[0] > pair_community[1]:
-            pair_community = (pair_community[1],pair_community[0])
+    # add 
+    if flag_add:
+        set_edges = set_edge2 - set_edge1
+        dict_node_community = g2.nodes
+        dict_community_len = {num:len(asList) for num,asList in readCommunity(f"{year2}{version}").items()}
 
-        if pair_community not in dict_community_pair_count:
-            dict_community_pair_count[pair_community] = 1
-        else:
-            dict_community_pair_count[pair_community] += 1
+    else: # del
+        set_edges = set_edge1 - set_edge2
+        dict_node_community = g1.nodes
+        dict_community_len = {num:len(asList) for num,asList in readCommunity(f"{year1}{version}").items()}
 
-    # community(g2) info
-    dict_community_len = {num:len(asList) for num,asList in readCommunity(f"{year2}{version}").items()}
+    # community info
     dict_community_len = dict(sorted(dict_community_len.items(), key = lambda x:-x[1]))
-
-    # community:order
-    dict_community_order = {}
+    dict_community_order = {}  # community:order
     order = 1
     for community in dict_community_len:
         dict_community_order[community] = order
         order += 1
 
-    ofile_community = open(f'playEgOnData/results/{year2}{version}/community_order','w')
-    # dictDegree = sorted(dictDegree.items(), key=lambda x:x[0])
-    for k,v in dict_community_order.items():
-        ofile_community.write(str(k) + ":"+str(v)+'\n')
-    ofile_community.close()
+    def compare_rank(tup):
+        return (dict_community_order[tup[0]], dict_community_order[tup[1]])
+
+    dict_communityPair_count = {}
+    for n1,n2 in set_edges:
+        pair_community = (dict_node_community[n1]['node_attr']['community'],dict_node_community[n2]['node_attr']['community'])
+        # keep order
+        if dict_community_order[pair_community[0]] > dict_community_order[pair_community[1]]:
+            pair_community = (pair_community[1],pair_community[0])
+
+        if pair_community not in dict_communityPair_count:
+            dict_communityPair_count[pair_community] = 1
+        else:
+            dict_communityPair_count[pair_community] += 1
+
+    # count edges from same community <> diff community
+    count_same = 0
+    count_all = 0
+    for pair, count in dict_communityPair_count.items():
+        if pair[0] == pair[1]:
+            count_same += count
+        count_all += count 
+    ofile_R_count_same_percentage = open(f"report/R/edge_fluc_community_distribution/middle/{year2}{version}{int(flag_add)}",'w')
+    percentage = "{:.2f}".format(float(count_same)/count_all)
+    ofile_R_count_same_percentage.write(f"{percentage}\n")
+    ofile_R_count_same_percentage.close()
 
 
-    ofile = open(f'playEgOnData/results/{year2}{version}/added_ASR_community_distribution','w')
+
+    # whatever add or del, write to year2
+    if flag_add:
+        ofile = open(f'playEgOnData/results/{year2}{version}/added_ASR_community_distribution','w')
+    else:
+        ofile = open(f'playEgOnData/results/{year2}{version}/deleted_ASR_community_distribution','w')
     from functools import cmp_to_key
-    for pa in sorted(dict_community_pair_count.keys(), key = cmp_to_key(compare)):
-        ofile.write(f"{pa[0]},{pa[1]}:{dict_community_pair_count[pa]}:{dict_community_order[pa[0]]},{dict_community_order[pa[1]]}\n")
+    for pa in sorted(dict_communityPair_count.keys(), key = compare_rank): #cmp_to_key(compare)
+        ofile.write(f"{pa[0]}:{pa[1]}:{dict_communityPair_count[pa]}:{dict_community_order[pa[0]]}:{dict_community_order[pa[1]]}\n")
     ofile.close()
 
 
@@ -308,4 +324,4 @@ if __name__ == '__main__':
     # ratio_delete_add()
     # add_del_nodes_degree()
     # add_del_nodes_degree_aggregated()
-    add_del_edges_community(2000,2001)
+    add_del_edges_community(2000,2001, flag_add=False)
