@@ -46,6 +46,19 @@ def readRank(fn,separator=':') -> dict:
 def getVersionFromName(fn:str) -> str:
     return fn[31:39] 
 
+
+def readCommunity(version) -> dict:
+    dict_community_asList = {}
+    ifile_community = open(f"playEgOnData/results/{version}/community_louvain",'r')
+    num = 0
+    for line in ifile_community:
+        list_AS = line[:-1].split(",")
+        dict_community_asList[num] = list_AS
+        num += 1
+    ifile_community.close()
+    return dict_community_asList
+
+
 def buildAsRelGraph(version,flag_directed = True, flag_community = False) -> eg.DiGraph:
     if flag_directed:
         G = eg.DiGraph()

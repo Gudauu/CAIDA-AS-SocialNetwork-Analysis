@@ -240,6 +240,16 @@ def add_del_edges_community(year1:int, year2:int, version:str = "0101") -> None:
 
     set_edges_add = set_edge2 - set_edge1
     set_edges_del = set_edge1 - set_edge2 
+    def compare(pair1, pair2):
+        if pair1[0] == pair1[1]:
+            if pair2[0] == pair2[1]:
+                return pair1[0] - pair2[0]
+            else:
+                return -1
+        elif pair2[0] == pair2[1]:
+            return 1
+        else:
+            return pair1[0] - pair2[0] or pair1[1] - pair2[1]
 
     # add first
     dict_node_community2 = g2.nodes
@@ -255,22 +265,22 @@ def add_del_edges_community(year1:int, year2:int, version:str = "0101") -> None:
         else:
             dict_community_pair_count[pair_community] += 1
 
+    # community(g2) info
+    dict_community_len = {num:len(asList) for num,asList in readCommunity(f"{year2}{version}").items()}
+    # num_community = len(dict_community_len)
+    ofile_community = open(f'playEgOnData/results/{year2}{version}/community_order','w')
+    # dictDegree = sorted(dictDegree.items(), key=lambda x:x[0])
+    order = 1
+    for k,v in sorted(dict_community_len.items(), key = lambda x:x[1]):
+        ofile_community.write(str(k) + ":"+str(order)+'\n')
+        order += 1
+    ofile_community.close()
+
 
     ofile = open(f'playEgOnData/results/{year2}{version}/added_ASR_community_distribution','w')
-    def compare(pair1, pair2):
-        if pair1[0] == pair1[1]:
-            if pair2[0] == pair2[1]:
-                return pair1[0] <= pair2[0]
-            else:
-                return True 
-        elif pair2[0] == pair2[1]:
-            return False 
-        else:
-            return pair1[0] <= pair2[0]
     from functools import cmp_to_key
     for pa in sorted(dict_community_pair_count.keys(), key = cmp_to_key(compare)):
-        ic(pa)
-        # ofile.write(f"{pa[0]},{pa[1]}:{dict_community_pair_count[pa]}\n")
+        ofile.write(f"{pa[0]},{pa[1]}:{dict_community_pair_count[pa]}:{dict_community_len[pa[0]]},{dict_community_len[pa[1]]}\n")
     ofile.close()
 
 
