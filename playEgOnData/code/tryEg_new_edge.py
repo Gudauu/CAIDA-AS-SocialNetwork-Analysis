@@ -267,20 +267,26 @@ def add_del_edges_community(year1:int, year2:int, version:str = "0101") -> None:
 
     # community(g2) info
     dict_community_len = {num:len(asList) for num,asList in readCommunity(f"{year2}{version}").items()}
-    # num_community = len(dict_community_len)
+    dict_community_len = dict(sorted(dict_community_len.items(), key = lambda x:-x[1]))
+
+    # community:order
+    dict_community_order = {}
+    order = 1
+    for community in dict_community_len:
+        dict_community_order[community] = order
+        order += 1
+
     ofile_community = open(f'playEgOnData/results/{year2}{version}/community_order','w')
     # dictDegree = sorted(dictDegree.items(), key=lambda x:x[0])
-    order = 1
-    for k,v in sorted(dict_community_len.items(), key = lambda x:x[1]):
-        ofile_community.write(str(k) + ":"+str(order)+'\n')
-        order += 1
+    for k,v in dict_community_order.items():
+        ofile_community.write(str(k) + ":"+str(v)+'\n')
     ofile_community.close()
 
 
     ofile = open(f'playEgOnData/results/{year2}{version}/added_ASR_community_distribution','w')
     from functools import cmp_to_key
     for pa in sorted(dict_community_pair_count.keys(), key = cmp_to_key(compare)):
-        ofile.write(f"{pa[0]},{pa[1]}:{dict_community_pair_count[pa]}:{dict_community_len[pa[0]]},{dict_community_len[pa[1]]}\n")
+        ofile.write(f"{pa[0]},{pa[1]}:{dict_community_pair_count[pa]}:{dict_community_order[pa[0]]},{dict_community_order[pa[1]]}\n")
     ofile.close()
 
 
