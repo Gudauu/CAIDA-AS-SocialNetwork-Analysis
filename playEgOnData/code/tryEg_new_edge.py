@@ -400,7 +400,7 @@ if __name__ == '__main__':
     # for year in range(2000, 2022 +1):
     #     add_del_edges_community(year,year + 1, flag_add=False)
     #     add_del_edges_community(year,year + 1, flag_add=True)
-    fluc_dege_node_relation_across_years(2000,2020)
-    fluc_dege_node_relation_across_years(2010,2020)
+    # fluc_dege_node_relation_across_years(2000,2020)
+    fluc_dege_node_relation_across_years(2002,2022)
     # fluc_dege_node_relation_across_years(2002,2022)
 
