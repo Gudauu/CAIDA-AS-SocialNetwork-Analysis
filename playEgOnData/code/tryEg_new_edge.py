@@ -306,7 +306,7 @@ def add_del_edges_community(year1:int, year2:int, version:str = "0101", flag_add
     ofile.close()
 
 # if delta edges come from delta nodes
-def add_del_edges_nodes_relation(year1:int, year2:int, version:str = "0101") -> None:
+def add_del_edges_nodes_relation(year1:int, year2:int, version:str = "0101") -> list:
     g1 = getG(f"{year1}{version}",flag_community=True)
     g2 = getG(f"{year2}{version}",flag_community=True)
     set_node1 = set(g1.nodes)
@@ -330,8 +330,10 @@ def add_del_edges_nodes_relation(year1:int, year2:int, version:str = "0101") -> 
             count_both_end += 1
         elif flag_a or flag_b:
             count_one_end += 1
+    add_ratio = count_one_end/len(set_edge_added)
+    add_ratio_both = count_both_end/len(set_edge_added)
     pct_added = len(set_node_added)/len(set_node2)
-    ic(count_one_end/len(set_edge_added), pct_added, count_one_end, len(set_node_added), len(set_node2),len(set_edge_added),len(set_edge2))
+    # ic(count_one_end/len(set_edge_added), pct_added)
     # ic(count_both_end/len(set_edge_added), pct_added*pct_added)
     # deleted
     count_one_end = 0
@@ -343,12 +345,37 @@ def add_del_edges_nodes_relation(year1:int, year2:int, version:str = "0101") -> 
             count_both_end += 1
         elif flag_a or flag_b:
             count_one_end += 1
+    del_ratio = count_one_end/len(set_edge_deleted)
+    del_ratio_both = count_both_end/len(set_edge_deleted)
     pct_del = len(set_node_deleted)/len(set_node1)
-    ic(count_one_end/len(set_edge_deleted), pct_del, count_one_end, len(set_node_deleted), len(set_node1),len(set_edge_deleted),len(set_edge1))
     # ic(count_both_end/len(set_edge_deleted), pct_del*pct_del)
 
+    return [add_ratio, pct_added, del_ratio, pct_del,
+        add_ratio_both, pct_added*pct_added, del_ratio_both, pct_del*pct_del]
 
-        
+
+def fluc_dege_node_relation_across_years(year_start:int, year_end:int,gap:int = 1) -> None:
+    list_add_ratio = []  # added edges with one end in added nodes
+    list_add_std = []
+    list_del_ratio = []
+    list_del_std = []
+
+    for year in range(year_start + 1, year_end + 1, gap):
+        list_add_std_del_std = add_del_edges_nodes_relation(year_start, year)
+        # ic(list_add_std_del_std)
+        list_add_ratio.append(str(list_add_std_del_std[0]))
+        list_add_std.append(str(list_add_std_del_std[1]))
+        list_del_ratio.append(str(list_add_std_del_std[2]))
+        list_del_std.append(str(list_add_std_del_std[3]))
+
+    ofile = open(f'report/R/node_edge_fluc_relation/middle/{year_start}_{year_end}','w')
+    for li in [list_add_ratio, list_add_std,list_del_ratio,list_del_std]:
+        ofile.write(",".join(li)+'\n')
+
+
+    
+
+      
 
 
 
@@ -369,7 +396,7 @@ if __name__ == '__main__':
     # for year in range(2000, 2022 +1):
     #     add_del_edges_community(year,year + 1, flag_add=False)
     #     add_del_edges_community(year,year + 1, flag_add=True)
-    add_del_edges_nodes_relation(2015, 2016)
-    add_del_edges_nodes_relation(2015, 2017)
-    add_del_edges_nodes_relation(2015, 2018)
-    add_del_edges_nodes_relation(2015, 2019)
+    fluc_dege_node_relation_across_years(2000,2010)
+    fluc_dege_node_relation_across_years(2010,2020)
+    fluc_dege_node_relation_across_years(2002,2022)
+
