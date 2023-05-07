@@ -350,14 +350,16 @@ def add_del_edges_nodes_relation(year1:int, year2:int, version:str = "0101") -> 
     pct_del = len(set_node_deleted)/len(set_node1)
     # ic(count_both_end/len(set_edge_deleted), pct_del*pct_del)
 
-    return [add_ratio, pct_added, del_ratio, pct_del,
-        add_ratio_both, pct_added*pct_added, del_ratio_both, pct_del*pct_del]
+    return [add_ratio, pct_added, del_ratio, pct_del, add_ratio_both,del_ratio_both]
+        #add_ratio_both, pct_added*pct_added, del_ratio_both, pct_del*pct_del]
 
 
 def fluc_dege_node_relation_across_years(year_start:int, year_end:int,gap:int = 1) -> None:
     list_add_ratio = []  # added edges with one end in added nodes
+    list_add_ratio_both = []  # added edges with no end in added nodes
     list_add_std = []
     list_del_ratio = []
+    list_del_ratio_both = []
     list_del_std = []
 
     for year in range(year_start + 1, year_end + 1, gap):
@@ -367,9 +369,11 @@ def fluc_dege_node_relation_across_years(year_start:int, year_end:int,gap:int = 
         list_add_std.append(str(list_add_std_del_std[1]))
         list_del_ratio.append(str(list_add_std_del_std[2]))
         list_del_std.append(str(list_add_std_del_std[3]))
+        list_add_ratio_both.append(str(list_add_std_del_std[4]))
+        list_del_ratio_both.append(str(list_add_std_del_std[5]))
 
     ofile = open(f'report/R/node_edge_fluc_relation/middle/{year_start}_{year_end}','w')
-    for li in [list_add_ratio, list_add_std,list_del_ratio,list_del_std]:
+    for li in [list_add_ratio, list_add_std,list_del_ratio,list_del_std,list_add_ratio_both,list_del_ratio_both]:
         ofile.write(",".join(li)+'\n')
 
 
@@ -396,7 +400,7 @@ if __name__ == '__main__':
     # for year in range(2000, 2022 +1):
     #     add_del_edges_community(year,year + 1, flag_add=False)
     #     add_del_edges_community(year,year + 1, flag_add=True)
-    fluc_dege_node_relation_across_years(2000,2010)
+    fluc_dege_node_relation_across_years(2000,2020)
     fluc_dege_node_relation_across_years(2010,2020)
-    fluc_dege_node_relation_across_years(2002,2022)
+    # fluc_dege_node_relation_across_years(2002,2022)
 
