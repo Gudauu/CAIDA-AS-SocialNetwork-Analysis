@@ -305,6 +305,48 @@ def add_del_edges_community(year1:int, year2:int, version:str = "0101", flag_add
         ofile.write(f"{pa[0]}:{pa[1]}:{dict_communityPair_count[pa]}:{dict_community_order[pa[0]]}:{dict_community_order[pa[1]]}\n")
     ofile.close()
 
+# if delta edges come from delta nodes
+def add_del_edges_nodes_relation(year1:int, year2:int, version:str = "0101") -> None:
+    g1 = getG(f"{year1}{version}",flag_community=True)
+    g2 = getG(f"{year2}{version}",flag_community=True)
+    set_node1 = set(g1.nodes)
+    set_node2 = set(g2.nodes)
+    set_node_added = set_node2 - set_node1
+    set_node_deleted = set_node1 - set_node2
+
+
+    set_edge1 = set([(na,nb) for na,nb,_ in g1.edges])
+    set_edge2 = set([(na,nb) for na,nb,_ in g2.edges])
+    set_edge_added = set_edge2 - set_edge1
+    set_edge_deleted = set_edge1 - set_edge2
+
+    # added
+    count_one_end = 0
+    count_both_end = 0
+    for na,nb in set_edge_added:
+        flag_a = na in set_node_added
+        flag_b = nb in set_node_added
+        if flag_a and flag_b:
+            count_both_end += 1
+        elif flag_a or flag_b:
+            count_one_end += 1
+    pct_added = len(set_node_added)/len(set_node2)
+    ic(count_one_end/len(set_edge_added), pct_added, count_one_end, len(set_node_added), len(set_node2),len(set_edge_added),len(set_edge2))
+    # ic(count_both_end/len(set_edge_added), pct_added*pct_added)
+    # deleted
+    count_one_end = 0
+    count_both_end = 0
+    for na,nb in set_edge_deleted:
+        flag_a = na in set_node_deleted
+        flag_b = nb in set_node_deleted
+        if flag_a and flag_b:
+            count_both_end += 1
+        elif flag_a or flag_b:
+            count_one_end += 1
+    pct_del = len(set_node_deleted)/len(set_node1)
+    ic(count_one_end/len(set_edge_deleted), pct_del, count_one_end, len(set_node_deleted), len(set_node1),len(set_edge_deleted),len(set_edge1))
+    # ic(count_both_end/len(set_edge_deleted), pct_del*pct_del)
+
 
         
 
@@ -324,6 +366,10 @@ if __name__ == '__main__':
     # ratio_delete_add()
     # add_del_nodes_degree()
     # add_del_nodes_degree_aggregated()
-    for year in range(2000, 2022 +1):
-        add_del_edges_community(year,year + 1, flag_add=False)
-        add_del_edges_community(year,year + 1, flag_add=True)
+    # for year in range(2000, 2022 +1):
+    #     add_del_edges_community(year,year + 1, flag_add=False)
+    #     add_del_edges_community(year,year + 1, flag_add=True)
+    add_del_edges_nodes_relation(2015, 2016)
+    add_del_edges_nodes_relation(2015, 2017)
+    add_del_edges_nodes_relation(2015, 2018)
+    add_del_edges_nodes_relation(2015, 2019)
