@@ -1,29 +1,38 @@
 library(igraph)
 library(ggplot2)
 library(ggforce)
+library(scales)
 
 function_ego_visualize <- function(year,version,asn){
-    # Read the graph from the GraphML file
     mygraph <- read_graph(paste0("report/R/AS_ego_network/middle/",asn,"_",year,version,".graphml"), format = "graphml")
 
-    # Convert the igraph object to data frames
-    node_df <- as_data_frame(mygraph, "vertices")
-    edge_df <- as_data_frame(mygraph, "edges")
+    dictionary_degree <- read.table(paste0("report/R/AS_ego_network/middle/degree_",asn,"_",year,version), sep = ":", col.names = c("ID", "degree"))
 
-    # Plot the graph using ggplot2
-    ggplot() +
-      geom_link(data = edge_df, aes(x = x, y = y, alpha = weight), color = "gray50") +
-      geom_point(data = node_df, aes(x = x, y = y, size = degree, color = name)) +
-      geom_text(data = node_df, aes(x = x, y = y, label = name), vjust = 1.5) +
-      scale_size_continuous(range = c(5, 15)) +
-      scale_color_discrete(guide = FALSE) +
-      theme_void()
+    V(mygraph)$degree <- dictionary_degree$degree[match(V(mygraph)$id, dictionary_degree$ID)]
 
-    # Save the plot using ggsave
-    ggsave(paste0("report/R/AS_ego_network/results/ego_",asn,"_",year,version, ".png"), width = 8, height = 8, device = "png")
+    V(mygraph)$scaled_degree <- rescale(V(mygraph)$degree, to = c(8, 20))
 
+    # mylayout <- layout_with_fr(mygraph, area = 100 * vcount(mygraph))
+    # test_layout <- layout_(g,with_dh(weight.edge.lengths = edge_density(g)/1000))
+
+    pdf(paste0("report/R/AS_ego_network/results/ego_",asn,"_",year,version, ".pdf"), width = 8, height = 8)
+    plot(mygraph,
+         vertex.label = paste(V(mygraph)$id, V(mygraph)$degree, sep="\n"),
+         vertex.size = V(mygraph)$scaled_degree,
+         vertex.color = ifelse(V(mygraph)$id == asn, "red", "#d2b145"),
+         vertex.label.cex = 0.3, vertex.label.dist = 0,
+         vertex.label.color = "black",
+         vertex.label.family = "Helvetica",
+         edge.arrow.size = 0.5) #,
+        #  layout = test_layout)
+    dev.off()
 }
 
-function_ego_visualize(2000,"0101",200)
+asn <- 855 #6295
+# asn <- 9186
+years <- seq(2000,2023,1)
+for(year in years) {
+    function_ego_visualize(year,"0101", asn)
+}
 
 

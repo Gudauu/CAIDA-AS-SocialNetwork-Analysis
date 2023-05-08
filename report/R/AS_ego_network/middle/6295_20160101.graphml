@@ -1,0 +1,69 @@
+<?xml version='1.0' encoding='utf-8'?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
+  <graph edgedefault="directed">
+    <node id="17318" />
+    <node id="13739" />
+    <node id="5645" />
+    <node id="3853" />
+    <node id="40272" />
+    <node id="11666" />
+    <node id="852" />
+    <node id="6295" />
+    <node id="36696" />
+    <node id="6939" />
+    <node id="3549" />
+    <node id="36351" />
+    <edge source="13739" target="852" />
+    <edge source="13739" target="6939" />
+    <edge source="13739" target="11666" />
+    <edge source="5645" target="6295" />
+    <edge source="5645" target="11666" />
+    <edge source="5645" target="36351" />
+    <edge source="11666" target="852" />
+    <edge source="11666" target="5645" />
+    <edge source="11666" target="6295" />
+    <edge source="11666" target="6939" />
+    <edge source="11666" target="13739" />
+    <edge source="11666" target="36351" />
+    <edge source="11666" target="36696" />
+    <edge source="852" target="6295" />
+    <edge source="852" target="6939" />
+    <edge source="852" target="11666" />
+    <edge source="852" target="13739" />
+    <edge source="852" target="36351" />
+    <edge source="852" target="36696" />
+    <edge source="6295" target="852" />
+    <edge source="6295" target="3549" />
+    <edge source="6295" target="5645" />
+    <edge source="6295" target="3853" />
+    <edge source="6295" target="6939" />
+    <edge source="6295" target="11666" />
+    <edge source="6295" target="13739" />
+    <edge source="6295" target="17318" />
+    <edge source="6295" target="36351" />
+    <edge source="6295" target="36696" />
+    <edge source="6295" target="40272" />
+    <edge source="36696" target="852" />
+    <edge source="36696" target="6939" />
+    <edge source="36696" target="11666" />
+    <edge source="36696" target="36351" />
+    <edge source="6939" target="852" />
+    <edge source="6939" target="3549" />
+    <edge source="6939" target="6295" />
+    <edge source="6939" target="5645" />
+    <edge source="6939" target="11666" />
+    <edge source="6939" target="13739" />
+    <edge source="6939" target="36351" />
+    <edge source="6939" target="36696" />
+    <edge source="3549" target="6295" />
+    <edge source="3549" target="6939" />
+    <edge source="3549" target="36351" />
+    <edge source="36351" target="852" />
+    <edge source="36351" target="3549" />
+    <edge source="36351" target="5645" />
+    <edge source="36351" target="6295" />
+    <edge source="36351" target="6939" />
+    <edge source="36351" target="11666" />
+    <edge source="36351" target="36696" />
+  </graph>
+</graphml>

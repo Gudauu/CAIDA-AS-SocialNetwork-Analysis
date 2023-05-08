@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='utf-8'?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
+  <graph edgedefault="directed">
+    <node id="17318" />
+    <node id="1798" />
+    <node id="53467" />
+    <node id="6295" />
+    <node id="6939" />
+    <node id="2044" />
+    <node id="36351" />
+    <edge source="1798" target="2044" />
+    <edge source="1798" target="6295" />
+    <edge source="1798" target="6939" />
+    <edge source="1798" target="36351" />
+    <edge source="6295" target="1798" />
+    <edge source="6295" target="2044" />
+    <edge source="6295" target="6939" />
+    <edge source="6295" target="17318" />
+    <edge source="6295" target="36351" />
+    <edge source="6295" target="53467" />
+    <edge source="6939" target="1798" />
+    <edge source="6939" target="6295" />
+    <edge source="6939" target="2044" />
+    <edge source="6939" target="17318" />
+    <edge source="6939" target="36351" />
+    <edge source="2044" target="1798" />
+    <edge source="2044" target="6295" />
+    <edge source="2044" target="36351" />
+    <edge source="36351" target="1798" />
+    <edge source="36351" target="2044" />
+    <edge source="36351" target="6295" />
+    <edge source="36351" target="6939" />
+  </graph>
+</graphml>

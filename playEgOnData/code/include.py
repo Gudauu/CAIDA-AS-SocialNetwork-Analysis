@@ -142,7 +142,7 @@ def getG(version,DEBUG = False,flag_directed = True, flag_nx = False, flag_commu
             
         else:  
             fn = 'dataCAIDA/AS_relationships/raw/'+version+'.as-rel.txt'
-            G = buildAsRelGraph_nx(fn,flag_directed, flag_community)
+            G = buildAsRelGraph_nx(fn,flag_directed)
     else:  # eg
         if DEBUG:
             G = eg.DiGraph() if flag_directed else eg.Graph()
