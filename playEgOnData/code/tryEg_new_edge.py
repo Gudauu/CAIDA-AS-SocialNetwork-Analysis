@@ -106,7 +106,7 @@ def across_months(year:str) -> None:
 
         cur_version = f"{year}{get_version(month)}"
         nxt_version = f"{year}{get_version(month + 1)}"
-        list_fluc = node_edge_diff(cur_version, nxt_version)
+        list_fluc = node_edge_diff_count(cur_version, nxt_version)
         list_node_new.append(str(list_fluc[0]))
         list_node_gone.append(str(list_fluc[1]))
         list_edge_new.append(str(list_fluc[2]))
@@ -400,7 +400,9 @@ if __name__ == '__main__':
     # for year in range(2000, 2022 +1):
     #     add_del_edges_community(year,year + 1, flag_add=False)
     #     add_del_edges_community(year,year + 1, flag_add=True)
+    across_months(2015)
+    across_months(2016)
     # fluc_dege_node_relation_across_years(2000,2020)
-    fluc_dege_node_relation_across_years(2002,2022)
+    # fluc_dege_node_relation_across_years(2002,2022)
     # fluc_dege_node_relation_across_years(2002,2022)
 

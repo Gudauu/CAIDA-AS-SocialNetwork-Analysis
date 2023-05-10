@@ -28,9 +28,9 @@ function_ego_visualize <- function(year,version,asn){
     dev.off()
 }
 
-asn <- 855 #6295
+asn <- 1 #6295
 # asn <- 9186
-years <- seq(2000,2023,1)
+years <- seq(2010,2023,1)
 for(year in years) {
     function_ego_visualize(year,"0101", asn)
 }

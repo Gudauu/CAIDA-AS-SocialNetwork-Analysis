@@ -2,7 +2,8 @@ library(ggplot2)
 
 
 # ID <- c(701,1239,3561,7018,3257,6461,1,209,3549,2914) # 2001 top 10
-ID <- c(701,1239,7018,209,3356,8220,4589,3303,6730,6461) # 2004 top 10
+ID <- c(1)
+# ID <- c(701,1239,7018,209,3356,8220,4589,3303,6730,6461) # 2004 top 10
 # ID <- c(61568,6939,1828,35280,24482,51185,3356,58511,174,137409) # 2023 top 10
 # ID <- c(39120,3356,58511,174,137409,199524)
 # ID <- c(209,22822,12389,174,701,13030,7018,3356,9002) # 2010 except 6939
@@ -49,7 +50,7 @@ for(id in ID){
 
 }
 # p <- p + scale_color_manual(values = palette, labels = ID)
-ggsave("AS_2004_top_10_degree_rank.png", path = "report/R/AS_top_10_trend/results",plot = p, width = 8, height = 6, dpi = 300, device = "png")
+ggsave("ASN1_degree_rank.png", path = "report/R/AS_sample_10_trend/results",plot = p, width = 8, height = 6, dpi = 300, device = "png")
 
 
 

@@ -18,9 +18,13 @@ def get_ego(asn:int, year:int,version:str="0101"):
 
 
 if __name__ == '__main__':
-    asn = 855 #6295 # 9186
+    asn = 1 #6295 # 9186
     for year in range(2000,2023 + 1):
-        get_ego(asn, year)  #12683 49102
+        try:
+            get_ego(asn, year)  #12683 49102
+        except Exception as e:
+            ic(year, e)
+            pass
     # test()
 
 

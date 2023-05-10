@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='utf-8'?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
+  <graph edgedefault="directed">
+    <node id="1" />
+    <node id="8641" />
+    <node id="50818" />
+    <node id="37157" />
+    <node id="50377" />
+    <node id="51705" />
+    <node id="198126" />
+    <node id="16143" />
+    <node id="51728" />
+    <node id="11537" />
+    <node id="1299" />
+    <node id="59572" />
+    <node id="204887" />
+    <node id="12345" />
+    <node id="5467" />
+    <edge source="1" target="11537" />
+    <edge source="1" target="50377" />
+    <edge source="1" target="198126" />
+    <edge source="1" target="204887" />
+    <edge source="1" target="12345" />
+    <edge source="1" target="59572" />
+    <edge source="1" target="51728" />
+    <edge source="1" target="5467" />
+    <edge source="1" target="51705" />
+    <edge source="1" target="1299" />
+    <edge source="1" target="37157" />
+    <edge source="1" target="8641" />
+    <edge source="1" target="16143" />
+    <edge source="1" target="50818" />
+    <edge source="8641" target="1" />
+    <edge source="50818" target="204887" />
+    <edge source="50818" target="198126" />
+    <edge source="50818" target="1" />
+    <edge source="37157" target="1" />
+    <edge source="51705" target="1" />
+    <edge source="16143" target="1" />
+    <edge source="51728" target="1" />
+    <edge source="11537" target="1" />
+    <edge source="1299" target="8641" />
+    <edge source="1299" target="16143" />
+    <edge source="1299" target="1" />
+    <edge source="59572" target="1" />
+    <edge source="12345" target="1" />
+    <edge source="5467" target="1" />
+  </graph>
+</graphml>

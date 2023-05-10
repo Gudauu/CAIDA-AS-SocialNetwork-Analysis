@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='utf-8'?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
+  <graph edgedefault="directed">
+    <node id="1" />
+    <node id="56964" />
+    <node id="42405" />
+    <node id="41387" />
+    <node id="34732" />
+    <node id="21616" />
+    <node id="11537" />
+    <node id="44912" />
+    <node id="61974" />
+    <node id="327926" />
+    <node id="43647" />
+    <edge source="1" target="11537" />
+    <edge source="1" target="21616" />
+    <edge source="1" target="34732" />
+    <edge source="1" target="41387" />
+    <edge source="1" target="42405" />
+    <edge source="1" target="43647" />
+    <edge source="1" target="44912" />
+    <edge source="1" target="56964" />
+    <edge source="1" target="61974" />
+    <edge source="1" target="327926" />
+    <edge source="11537" target="1" />
+    <edge source="327926" target="1" />
+  </graph>
+</graphml>

@@ -30,7 +30,7 @@ function_degree_CDF <- function(year){
         plot = p, width = 8, height = 6, dpi = 300)
 }
 
-years <- seq(2000, 2023, 1)
+years <- seq(2023, 2023, 1)
 for (year in years){
     function_degree_CDF(year)
 }
