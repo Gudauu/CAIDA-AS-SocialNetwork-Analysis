@@ -1,12 +1,34 @@
 from include import readList
 import numpy as np
 from scipy.optimize import curve_fit
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 from sklearn.metrics import r2_score
 
 # Define the exponential function
 def exponential_func(x, a, b, c):
     return a * np.exp(-b * x) + c
+
+def calc_linear_AS():
+    list_node_size = []
+    for year in range(2000,2023+1):
+        ifile_name = f'playEgOnData/results/{year}0101/basic'
+        with open(ifile_name,'r') as ifile:
+            ilines = ifile.readlines()
+            node_size = int(ilines[0][:-1].split(': ')[1])
+            list_node_size.append(node_size)
+    y = np.array(list_node_size)
+    # Define the x-axis values
+    x = np.arange(len(y))
+    # Fit data to a linear formula y = mx + b
+    m, b = np.polyfit(x, y, 1)
+
+    # Calculate the R-squared value
+    y_pred = m * x + b
+    r2 = r2_score(y, y_pred)
+
+    print("Linear formula: y = {:.2f}x + {:.2f}".format(m, b))
+    print("R-squared value:", r2)
+
 
 def calc_exponential_draw_pic(version:"0101"):
     list_edge_size = []
@@ -39,32 +61,33 @@ def calc_exponential_draw_pic(version:"0101"):
     # print(popt)
 
     # Plot the data and the fitted function
-    plt.plot(year_values, data, 'bo', label='data')
-    plt.plot(year_values, y_pred, 'r-', label='fit')
+    # plt.plot(year_values, data, 'bo', label='data')
+    # plt.plot(year_values, y_pred, 'r-', label='fit')
 
-    # Annotate the equation on the plot
-    equation = f'y = {popt[0]:.2f} * exp({-1*popt[1]:.2f} * x) + ({popt[2]:.2f})'
-    # Calculate and print the R-squared value
-    r2 = r2_score(data, y_pred)
-    # print(f"R-squared: {r2:.4f}")
-    annotation_R_square = f'R-square: {r2}'
-    plt.annotate(equation, xy=(0.05, 0.7), xycoords='axes fraction',fontsize=11)
-    plt.annotate(annotation_R_square, xy=(0.05, 0.6), xycoords='axes fraction',fontsize=10)
+    # # Annotate the equation on the plot
+    # equation = f'y = {popt[0]:.2f} * exp({-1*popt[1]:.2f} * x) + ({popt[2]:.2f})'
+    # # Calculate and print the R-squared value
+    # r2 = r2_score(data, y_pred)
+    # # print(f"R-squared: {r2:.4f}")
+    # annotation_R_square = f'R-square: {r2}'
+    # plt.annotate(equation, xy=(0.05, 0.7), xycoords='axes fraction',fontsize=11)
+    # plt.annotate(annotation_R_square, xy=(0.05, 0.6), xycoords='axes fraction',fontsize=10)
 
-    # Add legend and axis labels
-    plt.legend()
-    plt.xlabel('year')
-    plt.ylabel('ASR count')
+    # # Add legend and axis labels
+    # plt.legend()
+    # plt.xlabel('year')
+    # plt.ylabel('ASR count')
 
-    # Save the figure
-    plt.savefig(outfile_name)
-    plt.clf()
+    # # Save the figure
+    # plt.savefig(outfile_name)
+    # plt.clf()
 
     # Show the plot
     # plt.show()
 
 if __name__ == '__main__':
-    calc_exponential_draw_pic(version = "0101")
+    # calc_exponential_draw_pic(version = "0101")
+    calc_linear_AS()
 
 
 
