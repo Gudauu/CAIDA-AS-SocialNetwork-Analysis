@@ -35,6 +35,16 @@ def annotate_center(dict_asn_info, year:int, version:str= '0101') -> None:
         ofile.write(f'{asn}:{dict_asn_info[asn]}\n')
     ofile.close()
 
+def calc_eccentricity(year:int, version:str= '0101') -> list:
+    g = getG(f"{year}{version}",flag_directed=False, flag_nx=True)
+
+    with open(f'playEgOnData/results/{year}{version}/center','r')as ifile:
+        line_first = ifile.readline().strip('\n')
+    list_center = line_first.split(',')
+    ecc = nx.eccentricity(g, int(list_center[0]))
+    with open(f'playEgOnData/results/{year}{version}/center','a')as ofile:
+        ofile.write(f'{ecc}\n')
+
 
 
 
@@ -42,13 +52,13 @@ def annotate_center(dict_asn_info, year:int, version:str= '0101') -> None:
 if __name__ == '__main__':
     dict_asn_info = readDict('dataCAIDA/ASN_lookup/ASN_lookup')
     ofile_exception = open('playEgOnData/results/log_exception','w')
-    for year in range(2000,2000+1):
+    for year in range(2000,2023+1):
         try:
             # calc_attributes(year)
-            annotate_center(dict_asn_info, year, version = '0101')
+            calc_eccentricity(year, version = '0101')
         except Exception as e:
             ic(e)
-            ofile_exception.write(f'{e}\n')
+            ofile_exception.write(f'{year}:{e}\n')
             pass
     ofile_exception.close()
 
