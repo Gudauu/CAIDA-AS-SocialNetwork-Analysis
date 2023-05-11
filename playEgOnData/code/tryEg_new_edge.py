@@ -184,7 +184,7 @@ def add_del_nodes_degree(version:str = "0101") -> None:
         ofile_add.close()
 
 def add_del_nodes_degree_aggregated(version:str = "0101") -> None:
-    for year in range(2023,2023+1):
+    for year in range(2001,2023+1):
         dict_standards = {
             1: "<= 1",
             2: "<= 2",
@@ -456,7 +456,7 @@ if __name__ == '__main__':
     #     across_months(year)
     # ratio_delete_add()
     # add_del_nodes_degree()
-    # add_del_nodes_degree_aggregated()
+    add_del_nodes_degree_aggregated()
     # for year in range(2000, 2022 +1):
     #     add_del_edges_community(year,year + 1, flag_add=False)
     #     add_del_edges_community(year,year + 1, flag_add=True)
