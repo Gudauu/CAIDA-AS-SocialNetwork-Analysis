@@ -377,9 +377,67 @@ def fluc_dege_node_relation_across_years(year_start:int, year_end:int,gap:int = 
         ofile.write(",".join(li)+'\n')
 
 
-    
+def check_fluc_nodes(year:str, mon_s:int,mon_e:int) -> None:
+    dict_asn_info = readDict('dataCAIDA/ASN_lookup/ASN_lookup')
 
-      
+    for month in range(mon_s,mon_e+1):
+        def get_version(month:int):
+            if month < 10:
+                return f"0{month}01"
+            else:
+                return f"{month}01"
+
+        old_version = f"{year}{get_version(month - 1)}"
+        new_version = f"{year}{get_version(month)}"
+        g1 = getG(old_version)
+        g2 = getG(new_version)
+        set_node1 = set(g1.nodes)
+        set_node2 = set(g2.nodes)
+
+        set_node_new = set_node2 - set_node1
+        set_node_gone = set_node1 - set_node2
+
+        ofile_directory = f'playEgOnData/results/{year}'
+        Path(ofile_directory).mkdir(parents=True, exist_ok=True)
+        ofile = open(f"{ofile_directory}/add_nodes_{year}{get_version(month)}",'w')
+        # gone
+        for node in set_node_new:
+            if str(node) in dict_asn_info:
+                info = dict_asn_info[str(node)]
+            else:
+                info = 'NA'
+            ofile.write(f'{node}:{info}\n')
+        ofile.close()
+
+def check_fluc_nodes_overlap(year1:str,year2:str, mon1:int,mon2:int,flag_add:bool) -> None:
+    dict_asn_info = readDict('dataCAIDA/ASN_lookup/ASN_lookup')
+
+    def get_version(month:int):
+        if month < 10:
+            return f"0{month}01"
+        else:
+            return f"{month}01"
+
+    old_version = f"{year1}{get_version(mon1)}"
+    new_version = f"{year2}{get_version(mon2)}"
+    if flag_add:
+        ifile1 = f"playEgOnData/results/{year1}/add_nodes_{old_version}"
+        ifile2 = f"playEgOnData/results/{year2}/del_nodes_{new_version}"
+    else:
+        ifile1 = f"playEgOnData/results/{year1}/del_nodes_{old_version}"
+        ifile2 = f"playEgOnData/results/{year2}/add_nodes_{new_version}"
+
+    dict_1 = readDict(ifile1)
+    dict_2 = readDict(ifile2)
+
+
+    set_node1 = set(dict_1.keys())
+    set_node2 = set(dict_2.keys())
+
+    set_node_common = set_node2.intersection(set_node1)
+
+    ic(mon1,mon2,len(set_node1),len(set_node2), len(set_node_common))
+        
 
 
 
@@ -391,6 +449,8 @@ def fluc_dege_node_relation_across_years(year_start:int, year_end:int,gap:int = 
 
 
 if __name__ == '__main__':
+    # check_fluc_nodes(2015,2,3)
+    check_fluc_nodes_overlap(2014, 2015, 6, 2, flag_add=False)
     # across_2000_2023("0101")
     # for year in [2006, 2010, 2014, 2018]:
     #     across_months(year)
@@ -400,8 +460,11 @@ if __name__ == '__main__':
     # for year in range(2000, 2022 +1):
     #     add_del_edges_community(year,year + 1, flag_add=False)
     #     add_del_edges_community(year,year + 1, flag_add=True)
-    across_months(2015)
-    across_months(2016)
+    # list_count = [466,445,527,526,490,433,501,461,434,487,496]
+    # avg = sum(list_count)/len(list_count)
+    # ic(avg)
+    # across_months(2013)
+    # across_months(2016)
     # fluc_dege_node_relation_across_years(2000,2020)
     # fluc_dege_node_relation_across_years(2002,2022)
     # fluc_dege_node_relation_across_years(2002,2022)

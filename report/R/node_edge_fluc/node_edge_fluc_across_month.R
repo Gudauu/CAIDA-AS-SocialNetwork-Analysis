@@ -59,7 +59,7 @@ function_fluc_across_month <- function(year){
     ggsave(paste0("report/R/node_edge_fluc/result/across_month/ASR_", year, ".png"),plot = p, width = 8, height = 6, dpi = 300, device = "png")
 }
 
-years = c(2015, 2016)
+years = c(2013)
 for(year in years){
     function_fluc_across_month(year)
 }
