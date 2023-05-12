@@ -1,6 +1,5 @@
 
 from include import *
-from icecream import ic
 # 25462: gone after 2008, had a degree of 1174 
 
 def track_asn(asn:int,version_first:str,version_second:str,thresh:float):  # 776 6939:1576 | 630
