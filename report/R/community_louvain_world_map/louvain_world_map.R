@@ -29,7 +29,7 @@ function_visualize_louvain <- function(version,palette){
 
 
   # Load community louvain data
-  communities <- readLines(paste0("playEgOnData/results/",version,"/community_louvain"))
+  communities <- readLines(paste0("playEgOnData/results/",version,"/community_louvain_country"))
   # Read in coordinates file
   coordinates <- read.table("dataCAIDA/ASN_lookup/country_code_full_name_location", sep=":", header=FALSE, col.names=c("code", "country", "latitude", "longitude"))
 
@@ -40,10 +40,15 @@ function_visualize_louvain <- function(version,palette){
     countries <- strsplit(community, ",")[[1]]
     unique_codes <- c(unique_codes,countries)
   }
-
+  # print(countries)
+  # print(unique_codes)
+  # print(coordinates)
 
   # Merge coordinates with unique country codes
   coordinates <- merge(data.frame(code = unique_codes), coordinates, by = "code")
+
+  # print(coordinates)
+
 
   # Create a data frame with community and coordinates information
   df <- data.frame(code=coordinates$code, country=coordinates$country, community=NA, latitude=coordinates$latitude, longitude=coordinates$longitude, stringsAsFactors=FALSE)
@@ -82,7 +87,7 @@ function_visualize_louvain <- function(version,palette){
     # scale_x_continuous(breaks = seq(xmin, xmax, 5)) +
     labs(x = "Longitude", y = "Latitude", title = paste0("communities_",version,"")) +
     # hide title on color legend
-    guides(color = guide_legend(title = NULL))
+    guides(color = FALSE)
 
 
   # # save the plot

@@ -44,7 +44,7 @@ class louvain:
 
             # Add the node to the community
             self.communities[community_id].append(node)
-        ofile = open(f"{time_dir}/community_louvain","w")
+        ofile = open(f"{time_dir}/community_louvain_country","w")
         # Print the communities in an easy-to-read format
         for i, nodes in self.communities.items():
             ofile.write(f"{','.join(sorted(nodes))}\n")
@@ -53,7 +53,8 @@ class louvain:
 
 
 if __name__ == '__main__':
+    sol = louvain()
     for year in range(2000,2023+1):
-        community_detection(year,"0101")
+        sol.community_detection(year,"0101")
 
 
