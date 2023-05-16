@@ -2,3 +2,5 @@ useless/
 playEgOnData/code/__pycache__/
 EasyGraph/HyperGraph/Hyper-SAGNN
 dataCAIDA/AS_relationships/raw/
+*.xcf
+*~lock.text.docx#
