@@ -1,0 +1,12 @@
+Damien Magoni, Jean-Jacques Pansiot. Analysis of the Autonomous System Network Topology. Computer Communication Review, 2001, 31 (3), pp.26-37. 10.1145/505659.505663. hal-0034447
+Yue Zhang, Guozheng Yang, Zhihao Luo. Research on Topology Evolution of Autonomous System Network[J]. The 11th International Conference on Communication and Network Security, 2021: 66–79.
+Liu Xiao, Wang Jinfa, Jing Wei, de Jong Menno, Tummers Jeroen S, Zhao Hai. Evolution of the Internet AS-level topology: From nodes and edges to components. Chinese Physics B, 2018, 27(12): 120501
+L. Gao, On Inferring Autonomous System Relationships in the Internet, IEEE/ACM Transactions on Networking, December 2001. 
+L. Subramanian, S. Agarwal, J. Rexford, and R. H. Katz, Characterizing the Internet Hierarchy from Multiple Vantage Points, IEEE INFOCOM, 2002. 
+G. Di Battista, M. Patrignani, and M. Pizzonia, Computing the Types of the Relationships between Autonomous Systems, IEEE INFOCOM, 2003. 
+T. Erlebach, A. Hall, and T. Schank, Classifying Customer-Provider Relationships in the Internet, Proceedings of the IASTED International Conference on Communications and Computer Networks (CCN), 2002. 
+M. Luckie, B. Huffaker, k. claffy, A. Dhamdhere, and V. Giotsas, AS Relationships, Customer Cones, and Validation , in Internet Measurement Conference (IMC), Oct 2013, pp. 243--256. 
+The CAIDA AS Relationships Dataset, <19980101-20230101>
+ps://www.caida.org/catalog/datasets/as-relationships/
+https://bgp.potaroo.net/cidr/autnums.html
+
