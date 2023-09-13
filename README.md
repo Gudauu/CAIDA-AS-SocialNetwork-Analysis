@@ -1,4 +1,5 @@
 # CAIDA AS-SocialNetwork-Analysis
+The complete paper is at [graduate thesis.pdf](report/final/graduate_thesis_19307130284.pdf)
 
 ### Overview
 This repository hosts the graduate thesis project for my bachelor's degree at _Fudan University_, Shanghai. The project focuses on analyzing the **CAIDA AS Relationships Dataset** spanning from 1998 to 2023.
